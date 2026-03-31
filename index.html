@@ -135,11 +135,12 @@ const S = {
     pendingRole: null // 로그인 시도 중인 권한 임시 저장
   },
   admin: {
-    tab: 'interview', // interview | company | student | matching | progress
-    studentFilter: 'all', // 기업 필터링
-    matchingStatus: 'idle', // idle | running | success | fail
-    activeInterviewTarget: null // 면접 진행 탭에서 선택된 학생 정보
-  }
+  tab: 'interview', // interview | company | student | matching | progress
+  studentFilter: 'all', // 기업 필터링
+  matchingStatus: 'idle', // idle | running | success | fail
+  activeInterviewTarget: null, // 면접 진행 탭에서 선택된 학생 정보
+  selectedCompanyId: null // 기업 관리 상세보기용
+}
 };
 
 // =========================
@@ -155,15 +156,15 @@ const DB = {
       companyDeadline: '2025-08-15', studentDeadline: '2025-08-20', timeUnit: '10' }
   ],
   companies: [
-    { id: 'c1', programId: 'p1', name: '카카오', submitStatus: '완료', slots: [
-      { date: '2025-08-04', times: ['10:00', '10:15', '10:30', '11:00'] },
-      { date: '2025-08-05', times: ['14:00', '14:15', '14:30'] }
-    ]},
-    { id: 'c2', programId: 'p1', name: '네이버', submitStatus: '진행중', slots: [
-      { date: '2025-08-04', times: ['13:00', '13:15', '13:30'] }
-    ]},
-    { id: 'c3', programId: 'p1', name: '토스', submitStatus: '미제출', slots: []}
-  ],
+  { id: 'c1', programId: 'p1', name: '카카오', submitStatus: '완료', videoLink: 'https://meet.google.com/test-kakao', slots: [
+    { date: '2025-08-04', times: ['10:00', '10:15', '10:30', '11:00'] },
+    { date: '2025-08-05', times: ['14:00', '14:15', '14:30'] }
+  ]},
+  { id: 'c2', programId: 'p1', name: '네이버', submitStatus: '진행중', videoLink: 'https://meet.google.com/test-naver', slots: [
+    { date: '2025-08-04', times: ['13:00', '13:15', '13:30'] }
+  ]},
+  { id: 'c3', programId: 'p1', name: '토스', submitStatus: '미제출', videoLink: '', slots: []}
+],
   students: [
     { id: 's1', programId: 'p1', name: '김민준', companyId: 'c1', submitStatus: '완료', interviewStatus: '미정', link: 'https://meet.google.com/test' },
     { id: 's2', programId: 'p1', name: '이서연', companyId: 'c2', submitStatus: '완료', interviewStatus: '합격', link: 'https://meet.google.com/test' },
@@ -232,6 +233,28 @@ function logout() {
   S.route = { view: 'login' };
   S.auth = { user: null };
   S.admin.activeInterviewTarget = null;
+  render();
+}
+  function openCompanyDetail(companyId) {
+  S.admin.selectedCompanyId = companyId;
+  render();
+}
+
+function closeCompanyDetail() {
+  S.admin.selectedCompanyId = null;
+  render();
+}
+
+function editCompanyVideoLink(companyId) {
+  const company = DB.companies.find(c => c.id === companyId);
+  if (!company) return;
+
+  const currentLink = company.videoLink || '';
+  const nextLink = prompt('화상링크를 입력해주세요.', currentLink);
+
+  if (nextLink === null) return; // 취소
+  company.videoLink = nextLink.trim();
+  alert('화상링크가 수정되었습니다.');
   render();
 }
 
@@ -360,37 +383,86 @@ function renderAdminInterview(p) {
 // 요구사항 4. 기업 관리 메뉴 (날짜별 가능 시간 상세 조회 및 화상 링크 버튼)
 function renderAdminCompany() {
   const comps = getCompanies();
+  const selectedCompany = comps.find(c => c.id === S.admin.selectedCompanyId);
+
+  // 상세보기 화면
+  if (selectedCompany) {
+    return `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <div class="subtitle" style="margin-bottom:6px;">${selectedCompany.name} 상세</div>
+          <p style="font-size:14px; color:var(--text-sub); margin:0;">기업이 제출한 면접 가능 시간과 화상면접실 설정 정보입니다.</p>
+        </div>
+        <button class="btn btn-outline" onclick="closeCompanyDetail()">목록으로</button>
+      </div>
+
+      <div style="border:1px solid var(--border); border-radius:16px; overflow:hidden;">
+        <div style="padding:20px 24px; background:#FAFAFB; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <strong style="font-size:20px; color:var(--text-main);">${selectedCompany.name}</strong>
+            <span class="badge ${selectedCompany.submitStatus==='완료'?'badge-green':'badge-gray'}">${selectedCompany.submitStatus}</span>
+          </div>
+        </div>
+
+        <div style="padding:24px;">
+          <div style="margin-bottom:24px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:10px;">화상면접실 관리</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn" onclick="editCompanyVideoLink('${selectedCompany.id}')">화상링크 수정</button>
+              ${
+                selectedCompany.videoLink
+                  ? <a href="${selectedCompany.videoLink}" target="_blank" class="btn btn-outline">화상면접실 입장</a>
+                  : `<button class="btn btn-outline" onclick="editCompanyVideoLink('${selectedCompany.id}')">화상링크 등록</button>`
+              }
+            </div>
+          </div>
+
+          <div style="background: var(--white); border-radius: 12px; border: 1px solid var(--border); padding: 20px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:14px;">제출된 가용 시간</div>
+            ${
+              selectedCompany.slots.length > 0
+                ? selectedCompany.slots.map(slot => `
+                  <div style="display:flex; align-items:flex-start; margin-bottom:12px;">
+                    <span style="font-weight:700; font-size:14px; color:var(--text-main); display:inline-block; width:110px; padding-top:4px;">${slot.date}</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                      ${slot.times.map(t => `<span class="badge badge-gray" style="background:#F7F8FA; border:1px solid #E5E8EB; font-weight:500;">${t}</span>`).join('')}
+                    </div>
+                  </div>
+                `).join('')
+                : '<div style="font-size:14px; color:var(--text-sub); text-align:center; padding: 24px 0;">제출된 스케줄이 없습니다.</div>'
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+  }
+
+  // 목록 화면
   return `
   <div class="card">
     <div class="subtitle">기업별 가용 시간대 현황</div>
-    <p style="font-size:14px; color:var(--text-sub); margin-bottom:24px;">각 기업이 제출한 면접 가능 스케줄 및 면접실 링크입니다.</p>
-    ${comps.map(c => `
-      <div style="border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; background:#FAFAFB;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-          <div style="display:flex; align-items:center;">
-            <strong style="font-size:18px; margin-right:12px; color:var(--text-main);">${c.name}</strong>
-            <span class="badge ${c.submitStatus==='완료'?'badge-green':'badge-gray'}">${c.submitStatus}</span>
-          </div>
-          
-          <a href="https://meet.google.com/test" target="_blank" class="btn" style="padding: 8px 16px; font-size: 13px; background: #E8F3FF; color: var(--primary); border: 1px solid var(--primary);">
-            화상 면접실 바로가기
-          </a>
-          
-        </div>
-        
-        <div style="background: var(--white); border-radius: 8px; border: 1px solid var(--border); padding: 16px;">
-          <div style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:12px;">제출된 가용 시간</div>
-          ${c.slots.length > 0 ? c.slots.map(slot => `
-            <div style="display:flex; align-items:center; margin-bottom:10px;">
-              <span style="font-weight:700; font-size:14px; color:var(--text-main); display:inline-block; width:110px;">${slot.date}</span>
-              <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                ${slot.times.map(t => `<span class="badge badge-gray" style="background:#F7F8FA; border:1px solid #E5E8EB; font-weight:500;">${t}</span>`).join('')}
-              </div>
-            </div>
-          `).join('') : '<div style="font-size:14px; color:var(--text-sub); text-align:center; padding: 20px 0;">제출된 스케줄이 없습니다.</div>'}
-        </div>
-      </div>
-    `).join('')}
+    <p style="font-size:14px; color:var(--text-sub); margin-bottom:24px;">기업별 제출 현황을 확인하고 상세보기에서 화상면접실 정보를 관리할 수 있습니다.</p>
+
+    <table>
+      <tr>
+        <th>기업명</th>
+        <th>제출 상태</th>
+        <th>제출 일수</th>
+        <th style="width:120px;">관리</th>
+      </tr>
+      ${comps.map(c => `
+        <tr>
+          <td style="font-weight:600;">${c.name}</td>
+          <td><span class="badge ${c.submitStatus==='완료'?'badge-green':'badge-gray'}">${c.submitStatus}</span></td>
+          <td>${c.slots.length}일</td>
+          <td>
+            <button class="btn btn-outline" style="padding:8px 14px; font-size:13px;" onclick="openCompanyDetail('${c.id}')">상세보기</button>
+          </td>
+        </tr>
+      `).join('')}
+    </table>
   </div>
   `;
 }
