@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>면접 일정 자동 매칭 시스템</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F8FA;--card:#fff;--card2:#F2F4F6;--border:#E5E8EB;--border2:#D1D5DB;
+  --blue:#3182F6;--blue2:rgba(49,130,246,0.08);--blue3:rgba(49,130,246,0.15);
+  --t1:#191919;--t2:#6B7280;--t3:#B0B8C1;--t4:#E5E8EB;
+  --green:#17C964;--green2:rgba(23,201,100,0.1);
+  --red:#E85C5C;--red2:rgba(232,92,92,0.1);
+  --orange:#F59E0B;--orange2:rgba(245,158,11,0.1);
+  --purple:#7C3AED;--purple2:rgba(124,58,237,0.1);
+  --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+  --shadow2:0 2px 8px rgba(0,0,0,0.08),0 8px 32px rgba(0,0,0,0.06);
+  --r:8px;--r2:12px;--r3:16px;
+  --font:'Pretendard Variable','Pretendard','Noto Sans KR',-apple-system,sans-serif
+}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;font-size:14px;line-height:1.5}
+input,textarea,select,button{font-family:var(--font)}
+button{cursor:pointer;border:none;background:none}
+a{text-decoration:none}
+
+/* ─── Layout ─── */
+.app{display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:56px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800;letter-spacing:-0.4px;color:var(--t1)}
+.topbar-logo .dot{color:var(--blue)}
+.layout{display:flex;flex:1}
+.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);padding:16px 12px;flex-shrink:0;min-height:calc(100vh - 56px);position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.main{flex:1;padding:28px 32px;min-width:0}
+
+/* ─── Nav ─── */
+.nav-group{margin-bottom:20px}
+.nav-group-label{font-size:10.5px;font-weight:700;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;padding:0 8px;margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;transition:all .12s;border:1px solid transparent}
+.nav-item:hover{background:var(--card2);color:var(--t1)}
+.nav-item.active{background:var(--blue2);color:var(--blue);font-weight:700;border-color:rgba(49,130,246,.15)}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+
+/* ─── Cards ─── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:15px;font-weight:700;color:var(--t1)}
+.card-body{padding:20px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+/* ─── Buttons ─── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:36px;border-radius:var(--r);font-size:13px;font-weight:600;transition:all .12s;cursor:pointer;border:none;flex-shrink:0}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#2570e5}
+.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--card2);color:var(--t1)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(232,92,92,.3)}
+.btn-danger:hover{background:var(--red2)}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:#12b057}
+.btn-sm{height:28px;padding:0 10px;font-size:12px}
+.btn-lg{height:44px;padding:0 20px;font-size:14px;font-weight:700}
+
+/* ─── Form Elements ─── */
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:5px;display:block}
+.form-input{width:100%;height:40px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;transition:border .15s}
+.form-input:focus{border-color:var(--blue);background:var(--card)}
+.form-textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;resize:vertical;line-height:1.6;transition:border .15s;min-height:80px}
+.form-textarea:focus{border-color:var(--blue);background:var(--card)}
+.form-select{width:100%;height:40px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;transition:border .15s;appearance:none;cursor:pointer}
+.form-select:focus{border-color:var(--blue)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-hint{font-size:11.5px;color:var(--t3);margin-top:4px;line-height:1.5}
+
+/* ─── Toggle ─── */
+.toggle-wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--r);background:var(--card2);border:1px solid var(--border);margin-bottom:10px;cursor:pointer}
+.toggle-label{font-size:13px;font-weight:500;color:var(--t1)}
+.toggle{width:36px;height:20px;border-radius:10px;background:var(--t4);position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--blue)}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on::after{left:19px}
+
+/* ─── Segment Control ─── */
+.segment{display:flex;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--card2)}
+.segment-btn{flex:1;height:36px;font-size:13px;font-weight:500;color:var(--t2);background:transparent;border:none;cursor:pointer;transition:all .12s}
+.segment-btn.active{background:var(--blue);color:#fff;font-weight:700}
+
+/* ─── Badge / Tag ─── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:600;flex-shrink:0}
+.badge-blue{background:var(--blue2);color:var(--blue);border:1px solid rgba(49,130,246,.2)}
+.badge-green{background:var(--green2);color:#0ea05a;border:1px solid rgba(23,201,100,.2)}
+.badge-red{background:var(--red2);color:var(--red);border:1px solid rgba(232,92,92,.2)}
+.badge-orange{background:var(--orange2);color:#d97706;border:1px solid rgba(245,158,11,.2)}
+.badge-gray{background:var(--card2);color:var(--t2);border:1px solid var(--border)}
+.badge-purple{background:var(--purple2);color:var(--purple);border:1px solid rgba(124,58,237,.2)}
+
+/* ─── Table ─── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+td{font-size:13px;color:var(--t1);padding:12px 14px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+
+/* ─── Calendar ─── */
+.cal-wrap{border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;background:var(--card)}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--card2)}
+.cal-month{font-size:14px;font-weight:700;color:var(--t1)}
+.cal-nav{width:28px;height:28px;border-radius:var(--r);border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .12s}
+.cal-nav:hover{background:var(--blue2);border-color:var(--blue);color:var(--blue)}
+.cal-grid{padding:12px}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px}
+.cal-day-header{text-align:center;font-size:11px;font-weight:600;color:var(--t3);padding:4px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12.5px;border-radius:var(--r);cursor:pointer;transition:all .12s;border:1.5px solid transparent;position:relative;font-weight:400;color:var(--t1)}
+.cal-day.empty{pointer-events:none}
+.cal-day.other-month{color:var(--t3)}
+.cal-day.in-period{background:rgba(49,130,246,.05)}
+.cal-day.selectable:hover{background:var(--blue2);border-color:var(--blue);color:var(--blue)}
+.cal-day.selected{background:var(--blue);color:#fff;font-weight:700;border-color:var(--blue)}
+.cal-day.selected:hover{background:#2570e5}
+.cal-day.disabled{opacity:.3;pointer-events:none}
+.cal-day.sunday{color:#ef4444}
+.cal-day.saturday{color:var(--blue)}
+.cal-day.selected.sunday,.cal-day.selected.saturday{color:#fff}
+
+/* ─── Stats Row ─── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px;box-shadow:var(--shadow)}
+.stat-label{font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px}
+.stat-value{font-size:26px;font-weight:800;color:var(--t1);letter-spacing:-1px;line-height:1}
+.stat-sub{font-size:11.5px;color:var(--t2);margin-top:4px}
+
+/* ─── Login ─── */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0f4ff 0%,#F7F8FA 60%)}
+.login-card{width:420px;background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow2);padding:40px}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-text{font-size:24px;font-weight:900;color:var(--t1);letter-spacing:-1px}
+.login-logo-sub{font-size:13px;color:var(--t3);margin-top:4px}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px}
+.role-btn{padding:14px 8px;border-radius:var(--r2);border:2px solid var(--border);background:var(--card2);cursor:pointer;text-align:center;transition:all .15s}
+.role-btn:hover{border-color:var(--blue);background:var(--blue2)}
+.role-btn.selected{border-color:var(--blue);background:var(--blue2)}
+.role-btn .role-icon{font-size:22px;margin-bottom:5px}
+.role-btn .role-name{font-size:12.5px;font-weight:700;color:var(--t1)}
+.role-btn .role-desc{font-size:11px;color:var(--t3);margin-top:2px}
+.accounts-hint{background:var(--card2);border-radius:var(--r);padding:12px;margin-bottom:16px;font-size:12px;color:var(--t2);line-height:1.7}
+.accounts-hint strong{color:var(--blue);font-weight:700}
+
+/* ─── Modal ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--card);border-radius:var(--r3);box-shadow:0 20px 60px rgba(0,0,0,.15);width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-sm{max-width:380px}
+.modal-md{max-width:540px}
+.modal-lg{max-width:720px}
+.modal-xl{max-width:900px}
+.modal-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--card2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t3);transition:all .12s;z-index:10}
+.modal-close:hover{background:var(--red2);color:var(--red);border-color:var(--red)}
+.modal-header{padding:24px 24px 16px}
+.modal-title{font-size:18px;font-weight:800;color:var(--t1);letter-spacing:-.3px}
+.modal-subtitle{font-size:13px;color:var(--t3);margin-top:3px}
+.modal-body{padding:0 24px 24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+
+/* ─── Info Row ─── */
+.info-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{font-size:12px;font-weight:600;color:var(--t3);min-width:110px;padding-top:1px;flex-shrink:0}
+.info-val{font-size:13px;color:var(--t1);flex:1;line-height:1.5}
+.info-val a{color:var(--blue);text-decoration:underline}
+.info-section{background:var(--card2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px}
+
+/* ─── Status ─── */
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-green{background:var(--green)}
+.status-orange{background:var(--orange)}
+.status-red{background:var(--red)}
+.status-gray{background:var(--t3)}
+
+/* ─── Matching ─── */
+.match-progress{background:var(--card2);border-radius:var(--r2);padding:24px;text-align:center}
+.match-anim{width:56px;height:56px;border-radius:50%;border:3px solid var(--blue2);border-top-color:var(--blue);animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.result-row{display:grid;grid-template-columns:140px 160px 120px 100px 90px 100px;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px}
+.result-row:last-child{border-bottom:none}
+.result-header{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+
+/* ─── Date chip ─── */
+.date-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.date-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;background:var(--blue2);border:1px solid rgba(49,130,246,.2);font-size:12px;font-weight:600;color:var(--blue)}
+.date-chip .chip-x{cursor:pointer;font-size:14px;line-height:1;margin-left:2px;color:var(--blue);opacity:.6}
+.date-chip .chip-x:hover{opacity:1}
+
+/* ─── Step indicator ─── */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:28px}
+.step{display:flex;align-items:center;gap:8px}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.step.done .step-num{background:var(--green);color:#fff}
+.step.active .step-num{background:var(--blue);color:#fff}
+.step.pending .step-num{background:var(--card2);color:var(--t3);border:1.5px solid var(--border)}
+.step-label{font-size:12.5px;font-weight:600;white-space:nowrap}
+.step.done .step-label{color:var(--t2)}
+.step.active .step-label{color:var(--blue)}
+.step.pending .step-label{color:var(--t3)}
+.step-line{flex:1;height:1.5px;background:var(--border);margin:0 4px;min-width:20px}
+
+/* ─── Applicant Card ─── */
+.applicant-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px;cursor:pointer;transition:all .15s}
+.applicant-card:hover{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue2)}
+.applicant-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3182F6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
+.applicant-name{font-size:14px;font-weight:700;color:var(--t1)}
+.applicant-meta{font-size:12px;color:var(--t3);margin-top:2px}
+
+/* ─── Toast ─── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--t1);color:#fff;padding:10px 20px;border-radius:var(--r2);font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);display:flex;align-items:center;gap:8px;animation:toastIn .3s ease;white-space:nowrap}
+.toast.error{background:var(--red)}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ─── Page header ─── */
+.page-header{margin-bottom:24px}
+.page-title{font-size:22px;font-weight:900;color:var(--t1);letter-spacing:-.5px}
+.page-subtitle{font-size:13.5px;color:var(--t3);margin-top:4px}
+
+/* ─── Empty state ─── */
+.empty{text-align:center;padding:48px 24px;color:var(--t3)}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.empty-text{font-size:14px;font-weight:600;color:var(--t2)}
+.empty-sub{font-size:12.5px;color:var(--t3);margin-top:4px}
+
+/* ─── Program info card ─── */
+.prog-card{background:linear-gradient(135deg,#3182F6 0%,#6366f1 100%);border-radius:var(--r2);padding:20px 24px;color:#fff;margin-bottom:24px}
+.prog-card-name{font-size:20px;font-weight:900;letter-spacing:-.4px}
+.prog-card-period{font-size:13px;opacity:.85;margin-top:4px}
+.prog-card-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.prog-card-badge{padding:4px 10px;background:rgba(255,255,255,.2);border-radius:999px;font-size:12px;font-weight:600;color:#fff}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--t3)}
+
+/* ─── Utilities ─── */
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}
+.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}
+.text-xs{font-size:11.5px}.text-sm{font-size:12.5px}.text-base{font-size:14px}.text-lg{font-size:16px}
+.font-bold{font-weight:700}.font-black{font-weight:900}.text-blue{color:var(--blue)}.text-red{color:var(--red)}.text-muted{color:var(--t3)}
+.w-full{width:100%}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.p-3{padding:12px}.p-4{padding:16px}.rounded{border-radius:var(--r)}.rounded-lg{border-radius:var(--r2)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.link{color:var(--blue);cursor:pointer;font-weight:600;text-decoration:underline}
+.chip-tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--card2);color:var(--t2);border:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ─────────────────────────────────────────────────────
+// STATE & DATA
+// ─────────────────────────────────────────────────────
+const S = {
+  view: 'login',
+  tab: '',
+  user: null,
+  calYear: 2025,
+  calMonth: 7, // 0-indexed (7 = August)
+  modal: null,
+  matchResults: null,
+  matchStatus: 'idle', // idle | running | done
+  toast: null,
+  editingProgram: false,
+  programDraft: null,
+}
+
+const ACCOUNTS = {
+  'admin@intern.kr':   { role:'admin',   id:'admin',pw:'1234' },
+  'kakao@intern.kr':   { role:'company', id:'c1',   pw:'1234' },
+  'naver@intern.kr':   { role:'company', id:'c2',   pw:'1234' },
+  'krafton@intern.kr': { role:'company', id:'c3',   pw:'1234' },
+  'minjun@intern.kr':  { role:'student', id:'s1',   pw:'1234' },
+  'seoyeon@intern.kr': { role:'student', id:'s2',   pw:'1234' },
+  'jiho@intern.kr':    { role:'student', id:'s3',   pw:'1234' },
+  'yuna@intern.kr':    { role:'student', id:'s4',   pw:'1234' },
+  'dohyun@intern.kr':  { role:'student', id:'s5',   pw:'1234' },
+}
+
+const DB = {
+  program: {
+    id:'p1', name:'2025 하반기 인턴형 프로그램',
+    interviewStart:'2025-08-04', interviewEnd:'2025-08-15',
+    companyDeadline:'2025-07-28', studentDeadline:'2025-08-01',
+    slotMinutes:10, status:'active'
+  },
+  companies: [
+    { id:'c1', name:'카카오엔터테인먼트', industry:'IT/콘텐츠', email:'kakao@intern.kr',
+      mode:'online', type:'1on1', groupSize:1, link:'https://meet.google.com/kakao-xyz',
+      availDates:['2025-08-05','2025-08-06','2025-08-07'],
+      timeStart:'10:00', timeEnd:'17:00', submitted:true },
+    { id:'c2', name:'네이버웹툰', industry:'IT/플랫폼', email:'naver@intern.kr',
+      mode:'offline', type:'group', groupSize:3, link:'',
+      availDates:['2025-08-06','2025-08-08','2025-08-11'],
+      timeStart:'13:00', timeEnd:'18:00', submitted:true },
+    { id:'c3', name:'크래프톤', industry:'게임', email:'krafton@intern.kr',
+      mode:'online', type:'1on1', groupSize:1, link:'https://zoom.us/j/krafton123',
+      availDates:['2025-08-07','2025-08-08','2025-08-12'],
+      timeStart:'09:00', timeEnd:'16:00', submitted:true },
+  ],
+  students: [
+    { id:'s1', name:'김민준', birth:'2000-03-15', phone:'010-1234-5678', email:'minjun@intern.kr',
+      addr:'서울 강남구 역삼동', edLevel:'대학교 재학', school:'연세대학교', faculty:'공과대학', dept:'컴퓨터공학과',
+      appDate:'2025-07-10', motivation:'IT 서비스 기획 및 개발 역량을 실무에서 키우고 싶어 지원했습니다.',
+      vision:'3년 내 풀스택 개발자로 성장하여 사회에 임팩트를 주는 서비스를 만들고 싶습니다.',
+      experience:'교내 개발 동아리에서 웹 프로젝트 3건을 리딩했으며, 사이드 프로젝트로 앱 출시 경험이 있습니다.',
+      portfolio:'https://drive.google.com/portfolio/minjun', resume:'https://drive.google.com/resume/minjun',
+      apps:['c1','c2','c3'],
+      avail:{ c1:['2025-08-05','2025-08-07'], c2:['2025-08-06','2025-08-08'], c3:['2025-08-07','2025-08-08'] } },
+    { id:'s2', name:'이서연', birth:'2001-07-22', phone:'010-2345-6789', email:'seoyeon@intern.kr',
+      addr:'서울 마포구 합정동', edLevel:'대학교 재학', school:'홍익대학교', faculty:'예술대학', dept:'시각디자인학과',
+      appDate:'2025-07-12', motivation:'UX/UI 역량을 실제 서비스에 적용하고 싶어 지원합니다.',
+      vision:'사용자 중심의 디자이너로 성장하여 국내 최고의 프로덕트 디자이너가 되고 싶습니다.',
+      experience:'프리랜서로 앱 UI 디자인 5건을 수행했으며, 공모전 수상 경력이 있습니다.',
+      portfolio:'https://drive.google.com/portfolio/seoyeon', resume:'https://drive.google.com/resume/seoyeon',
+      apps:['c1','c2'],
+      avail:{ c1:['2025-08-06'], c2:['2025-08-06','2025-08-08'] } },
+    { id:'s3', name:'박지호', birth:'1999-11-05', phone:'010-3456-7890', email:'jiho@intern.kr',
+      addr:'경기 성남시 분당구', edLevel:'대학교 졸업', school:'KAIST', faculty:'공과대학', dept:'전산학부',
+      appDate:'2025-07-08', motivation:'게임 개발에 관심이 많아 크래프톤에서 실무 경험을 쌓고 싶습니다.',
+      vision:'게임 엔진 개발 전문가로 성장하여 세계적인 게임을 만들고 싶습니다.',
+      experience:'인디 게임 2편 개발 및 출시, Unity/Unreal 엔진 능숙하게 사용 가능합니다.',
+      portfolio:'https://drive.google.com/portfolio/jiho', resume:'https://drive.google.com/resume/jiho',
+      apps:['c2','c3'],
+      avail:{ c2:['2025-08-11'], c3:['2025-08-07','2025-08-12'] } },
+    { id:'s4', name:'최유나', birth:'2001-04-18', phone:'010-4567-8901', email:'yuna@intern.kr',
+      addr:'서울 서초구 반포동', edLevel:'대학교 재학', school:'이화여자대학교', faculty:'경영대학', dept:'경영학과',
+      appDate:'2025-07-15', motivation:'IT 기업의 비즈니스 운영 방식을 배우고 싶어 지원합니다.',
+      vision:'테크 기업의 BM 전략가로 성장하여 글로벌 시장에서 활약하고 싶습니다.',
+      experience:'마케팅 인턴 경험 및 데이터 분석 스터디 운영, 관련 자격증 보유.',
+      portfolio:'https://drive.google.com/portfolio/yuna', resume:'https://drive.google.com/resume/yuna',
+      apps:['c1','c3'],
+      avail:{ c1:['2025-08-05','2025-08-06'], c3:['2025-08-07'] } },
+    { id:'s5', name:'정도현', birth:'2000-09-30', phone:'010-5678-9012', email:'dohyun@intern.kr',
+      addr:'서울 동작구 사당동', edLevel:'대학교 재학', school:'서강대학교', faculty:'공과대학', dept:'소프트웨어학부',
+      appDate:'2025-07-20', motivation:'카카오의 서비스 개발 프로세스를 배우고 싶습니다.',
+      vision:'백엔드 개발 전문가가 되어 대규모 트래픽을 처리하는 시스템을 구축하고 싶습니다.',
+      experience:'오픈소스 기여 경험 및 교내 해커톤 우승, Spring/Node.js 백엔드 개발 가능.',
+      portfolio:'https://drive.google.com/portfolio/dohyun', resume:'https://drive.google.com/resume/dohyun',
+      apps:['c1'],
+      avail:{ c1:['2025-08-07'] } },
+  ],
+}
+
+// ─────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────
+const WEEKDAYS = ['일','월','화','수','목','금','토']
+const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+
+function fmtDate(d) {
+  if (!d) return ''
+  const dt = new Date(d + 'T00:00:00')
+  return `${dt.getMonth()+1}월 ${dt.getDate()}일(${WEEKDAYS[dt.getDay()]})`
+}
+function fmtDateShort(d) {
+  if (!d) return ''
+  const dt = new Date(d + 'T00:00:00')
+  return `${dt.getMonth()+1}/${dt.getDate()}`
+}
+function modeName(m) { return m === 'online' ? '비대면(화상)' : '대면' }
+function typeName(t) { return t === '1on1' ? '1:1 면접' : '그룹 면접' }
+function modeColor(m) { return m === 'online' ? 'badge-blue' : 'badge-green' }
+function typeColor(t) { return t === '1on1' ? 'badge-purple' : 'badge-orange' }
+
+function getCompany(id) { return DB.companies.find(c=>c.id===id) }
+function getStudent(id) { return DB.students.find(s=>s.id===id) }
+
+function showToast(msg, type='ok') {
+  S.toast = { msg, type }
+  render()
+  setTimeout(()=>{ S.toast=null; render() }, 2800)
+}
+
+function generateSlots(timeStart, timeEnd, slotMin) {
+  const slots = []
+  let [h,m] = timeStart.split(':').map(Number)
+  const [eh,em] = timeEnd.split(':').map(Number)
+  while (h*60+m+slotMin <= eh*60+em) {
+    slots.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`)
+    m += slotMin
+    if (m >= 60) { h++; m -= 60 }
+  }
+  return slots
+}
+
+function runMatchingAlgo() {
+  const prog = DB.program
+  const results = []
+  const failed = []
+
+  DB.companies.forEach(co => {
+    const applicants = DB.students.filter(s => s.apps.includes(co.id))
+    const usedSlots = {} // date -> [time, ...]
+
+    if (co.type === '1on1') {
+      const withIntersection = applicants.map(s => {
+        const inter = co.availDates.filter(d => (s.avail[co.id]||[]).includes(d))
+        return { s, inter }
+      }).sort((a,b) => a.inter.length - b.inter.length)
+
+      withIntersection.forEach(({ s, inter }) => {
+        if (inter.length === 0) {
+          failed.push({ co, s, reason:'겹치는 날짜 없음' })
+          return
+        }
+        for (const date of inter) {
+          const slots = generateSlots(co.timeStart, co.timeEnd, prog.slotMinutes)
+          const used = usedSlots[date] || []
+          const avail = slots.find(sl => !used.includes(sl))
+          if (avail) {
+            if (!usedSlots[date]) usedSlots[date] = []
+            usedSlots[date].push(avail)
+            results.push({ co, students:[s], date, time:avail, type:'1:1', mode:co.mode })
+            break
+          }
+        }
+      })
+    } else {
+      // Group interview
+      const sz = co.groupSize || 3
+      const dateMap = {}
+      const noMatch = []
+
+      applicants.forEach(s => {
+        const inter = co.availDates.filter(d => (s.avail[co.id]||[]).includes(d))
+        if (inter.length === 0) {
+          noMatch.push(s)
+          return
+        }
+        // put on best date
+        for (const d of inter) {
+          if (!dateMap[d]) dateMap[d] = []
+          dateMap[d].push(s)
+          break
+        }
+      })
+
+      noMatch.forEach(s => failed.push({ co, s, reason:'겹치는 날짜 없음' }))
+
+      Object.entries(dateMap).forEach(([date, studs]) => {
+        const slots = generateSlots(co.timeStart, co.timeEnd, prog.slotMinutes)
+        let slotIdx = 0
+        for (let i=0; i<studs.length; i+=sz) {
+          const grp = studs.slice(i,i+sz)
+          if (slotIdx < slots.length) {
+            results.push({ co, students:grp, date, time:slots[slotIdx], type:`그룹(${grp.length}명)`, mode:co.mode })
+            slotIdx++
+          }
+        }
+      })
+    }
+  })
+
+  S.matchResults = { results, failed }
+  S.matchStatus = 'done'
+  render()
+}
+
+// ─────────────────────────────────────────────────────
+// CALENDAR COMPONENT
+// ─────────────────────────────────────────────────────
+function renderCalendar({ id, selected=[], highlight=[], year, month, readonly=false }) {
+  const first = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month+1, 0).getDate()
+  const prog = DB.program
+  const pStart = prog.interviewStart
+  const pEnd = prog.interviewEnd
+
+  const cells = [...Array(first).fill(null), ...Array.from({length:daysInMonth},(_,i)=>i+1)]
+  while (cells.length % 7 !== 0) cells.push(null)
+
+  const prevM = month === 0 ? 11 : month - 1
+  const prevY = month === 0 ? year - 1 : year
+  const nextM = month === 11 ? 0 : month + 1
+  const nextY = month === 11 ? year + 1 : year
+
+  const rows = cells.reduce((acc,c,i)=>{ if(i%7===0) acc.push([]); acc[acc.length-1].push(c); return acc },[])
+
+  return `
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calNav(${prevY},${prevM},'${id}')">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 4l-4 4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="cal-month">${year}년 ${MONTHS[month]}</div>
+      <button class="cal-nav" onclick="calNav(${nextY},${nextM},'${id}')">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-days-header">
+        ${WEEKDAYS.map((d,i)=>`<div class="cal-day-header" style="color:${i===0?'#ef4444':i===6?'var(--blue)':'var(--t3)'}">${d}</div>`).join('')}
+      </div>
+      <div class="cal-days">
+        ${rows.flat().map((d,i) => {
+          if (!d) return `<div class="cal-day empty"></div>`
+          const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+          const isSelected = selected.includes(dateStr)
+          const isHighlight = highlight.includes(dateStr)
+          const inPeriod = dateStr >= pStart && dateStr <= pEnd
+          const dow = i % 7
+          let cls = 'cal-day'
+          if (!inPeriod) cls += ' disabled'
+          else cls += ' selectable in-period'
+          if (isSelected) cls += ' selected'
+          if (isHighlight && !isSelected) cls += ' in-period'
+          if (dow === 0) cls += ' sunday'
+          if (dow === 6) cls += ' saturday'
+          if (readonly) cls = cls.replace('selectable','').replace('cursor:pointer','')
+          return `<div class="${cls}" title="${fmtDate(dateStr)}" ${!readonly&&inPeriod?`onclick="calToggle('${id}','${dateStr}')"`:''}>
+            ${d}
+            ${isHighlight&&!isSelected?`<div style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--blue);opacity:.6"></div>`:''}
+          </div>`
+        }).join('')}
+      </div>
+    </div>
+  </div>`
+}
+
+// Cal state per calendar id
+const CAL_STATE = {}
+
+function calNav(y, m, id) {
+  CAL_STATE[id] = { year:y, month:m }
+  render()
+}
+
+function calToggle(id, dateStr) {
+  if (id === 'company-cal') {
+    const co = getCompany(S.user.companyId)
+    const idx = co.availDates.indexOf(dateStr)
+    if (idx === -1) co.availDates.push(dateStr)
+    else co.availDates.splice(idx, 1)
+  } else if (id.startsWith('student-cal-')) {
+    const coId = id.replace('student-cal-','')
+    const st = getStudent(S.user.studentId)
+    if (!st.avail[coId]) st.avail[coId] = []
+    const idx = st.avail[coId].indexOf(dateStr)
+    if (idx === -1) {
+      st.avail[coId].push(dateStr)
+    } else {
+      st.avail[coId].splice(idx, 1)
+    }
+  }
+  render()
+}
+
+function getCalState(id) {
+  if (!CAL_STATE[id]) CAL_STATE[id] = { year:2025, month:7 }
+  return CAL_STATE[id]
+}
+
+// ─────────────────────────────────────────────────────
+// LOGIN VIEW
+// ─────────────────────────────────────────────────────
+let loginRole = 'admin'
+let loginEmail = ''
+let loginPw = ''
+let loginErr = ''
+
+function renderLogin() {
+  const hints = {
+    admin:   [['운영진','admin@intern.kr','1234']],
+    company: [['카카오엔터테인먼트','kakao@intern.kr','1234'],['네이버웹툰','naver@intern.kr','1234'],['크래프톤','krafton@intern.kr','1234']],
+    student: [['김민준(c1,c2,c3)','minjun@intern.kr','1234'],['이서연(c1,c2)','seoyeon@intern.kr','1234'],['박지호(c2,c3)','jiho@intern.kr','1234']],
+  }
+  return `
+  <div class="login-page">
+    <div class="login-card">
+      <div class="login-logo">
+        <div style="display:flex;justify-content:center;margin-bottom:10px">
+          <div style="width:44px;height:44px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3m-1-4H9a1 1 0 0 0-1 1v3h8V4a1 1 0 0 0-1-1z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12v4m-2-2h4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="login-logo-text">면접 일정 매칭<span class="dot">.</span></div>
+        <div class="login-logo-sub">인턴형 프로그램 면접 자동 매칭 시스템</div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div class="form-label">역할 선택</div>
+        <div class="role-grid">
+          ${[['admin','🛠️','운영진','프로그램 관리'],['company','🏢','기업','면접 일정 설정'],['student','🎓','학생','날짜 선택']].map(([r,icon,name,desc])=>`
+          <div class="role-btn ${loginRole===r?'selected':''}" onclick="setLoginRole('${r}')">
+            <div class="role-icon">${icon}</div>
+            <div class="role-name">${name}</div>
+            <div class="role-desc">${desc}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="accounts-hint">
+        <strong>테스트 계정</strong><br>
+        ${hints[loginRole].map(([n,e,p])=>`${n}: <strong>${e}</strong> / ${p}`).join('<br>')}
+        ${loginRole==='student'?'<br>등...':''}
+      </div>
+      <div class="form-group">
+        <label class="form-label">이메일</label>
+        <input class="form-input" type="email" id="login-email" value="${loginEmail}" placeholder="이메일을 입력하세요" oninput="loginEmail=this.value">
+      </div>
+      <div class="form-group">
+        <label class="form-label">비밀번호</label>
+        <input class="form-input" type="password" id="login-pw" value="${loginPw}" placeholder="비밀번호 입력" oninput="loginPw=this.value" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      ${loginErr?`<div style="background:var(--red2);border:1px solid rgba(232,92,92,.3);border-radius:var(--r);padding:9px 12px;font-size:12.5px;color:var(--red);margin-bottom:12px">${loginErr}</div>`:''}
+      <button class="btn btn-primary btn-lg w-full" onclick="doLogin()">로그인</button>
+    </div>
+  </div>`
+}
+
+function setLoginRole(r) { loginRole=r; loginErr=''; render() }
+
+function doLogin() {
+  const acc = ACCOUNTS[loginEmail.trim()]
+  if (!acc || acc.pw !== loginPw) { loginErr='이메일 또는 비밀번호가 올바르지 않아요.'; render(); return }
+  if (acc.role !== loginRole) { loginErr=`선택한 역할(${loginRole==='admin'?'운영진':loginRole==='company'?'기업':'학생'})과 계정 유형이 다릅니다.`; render(); return }
+  S.user = { ...acc }
+  if (acc.role === 'company') S.user.companyId = acc.id
+  if (acc.role === 'student') S.user.studentId = acc.id
+  S.view = acc.role
+  S.tab = acc.role==='admin'?'program':acc.role==='company'?'co-settings':'st-status'
+  loginErr = ''
+  render()
+}
+
+// ─────────────────────────────────────────────────────
+// TOPBAR & SIDEBAR WRAPPER
+// ─────────────────────────────────────────────────────
+function renderApp(sidebar, main) {
+  return `
+  <div class="app">
+    <div class="topbar">
+      <div class="topbar-logo">
+        <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="var(--blue)"/><path d="M7 9h8M7 14h14M7 19h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        면접 매칭<span class="dot">.</span>
+      </div>
+      <div style="flex:1"></div>
+      ${S.view==='admin'?`<span class="badge badge-blue">운영진</span>`:''}
+      ${S.view==='company'?`<span style="font-size:13px;font-weight:700;color:var(--t1)">${getCompany(S.user.companyId)?.name||''}</span><span class="badge badge-green ml-2">기업</span>`:''}
+      ${S.view==='student'?`<span style="font-size:13px;font-weight:700;color:var(--t1)">${getStudent(S.user.studentId)?.name||''}</span><span class="badge badge-purple ml-2">학생</span>`:''}
+      <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">로그아웃</button>
+    </div>
+    <div class="layout">
+      <div class="sidebar">${sidebar}</div>
+      <div class="main">${main}</div>
+    </div>
+  </div>
+  ${S.modal ? renderModal() : ''}
+  ${S.toast ? `<div class="toast ${S.toast.type==='error'?'error':''}">
+    ${S.toast.type==='error'?'✗':'✓'} ${S.toast.msg}
+  </div>` : ''}`
+}
+
+function doLogout() { S.view='login'; S.user=null; S.matchResults=null; S.matchStatus='idle'; render() }
+function setTab(t) { S.tab=t; render() }
+
+// ─────────────────────────────────────────────────────
+// ADMIN VIEW
+// ─────────────────────────────────────────────────────
+function renderAdmin() {
+  const navItems = [
+    ['program','프로그램 관리',`<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a1 1 0 0 0-1 1v0a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v0a1 1 0 0 0-1-1H9z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`],
+    ['co-manage','기업 관리',`<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`],
+    ['st-manage','학생 관리',`<circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 21h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5.5 21a7 7 0 0 1 13 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`],
+    ['matching','매칭 실행',`<path d="M18 4L6 20M6 4l12 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="6" cy="4" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="4" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="20" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="20" r="2" stroke="currentColor" stroke-width="1.8"/>`],
+    ['results','매칭 결과',`<path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`],
+  ]
+  const sidebar = `
+  <div class="nav-group">
+    <div class="nav-group-label">운영 관리</div>
+    ${navItems.map(([id,label,path])=>`
+    <div class="nav-item ${S.tab===id?'active':''}" onclick="setTab('${id}')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">${path}</svg>
+      ${label}
+    </div>`).join('')}
+  </div>`
+  let main = ''
+  if (S.tab==='program') main = renderAdminProgram()
+  else if (S.tab==='co-manage') main = renderAdminCompanies()
+  else if (S.tab==='st-manage') main = renderAdminStudents()
+  else if (S.tab==='matching') main = renderAdminMatching()
+  else if (S.tab==='results') main = renderAdminResults()
+  return renderApp(sidebar, main)
+}
+
+function renderAdminProgram() {
+  const p = DB.program
+  const coReady = DB.companies.filter(c=>c.submitted).length
+  const stReady = DB.students.filter(s=>Object.keys(s.avail).length > 0).length
+  return `
+  <div class="page-header">
+    <div class="page-title">프로그램 관리</div>
+    <div class="page-subtitle">면접 기간 및 슬롯 설정을 관리합니다</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">참여 기업</div><div class="stat-value">${DB.companies.length}</div><div class="stat-sub">개사</div></div>
+    <div class="stat-card"><div class="stat-label">참여 학생</div><div class="stat-value">${DB.students.length}</div><div class="stat-sub">명</div></div>
+    <div class="stat-card"><div class="stat-label">기업 일정 완료</div><div class="stat-value" style="color:var(--blue)">${coReady}</div><div class="stat-sub">/ ${DB.companies.length}개사</div></div>
+    <div class="stat-card"><div class="stat-label">학생 일정 완료</div><div class="stat-value" style="color:var(--green)">${stReady}</div><div class="stat-sub">/ ${DB.students.length}명</div></div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header">
+      <div class="card-title">📋 프로그램 정보</div>
+      <button class="btn btn-ghost btn-sm" onclick="openEditProgram()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        수정
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="prog-card">
+        <div class="prog-card-name">${p.name}</div>
+        <div class="prog-card-period">면접 기간: ${fmtDate(p.interviewStart)} ~ ${fmtDate(p.interviewEnd)}</div>
+        <div class="prog-card-badges">
+          <span class="prog-card-badge">⏱ 슬롯 ${p.slotMinutes}분</span>
+          <span class="prog-card-badge">🏢 기업 마감 ${fmtDate(p.companyDeadline)}</span>
+          <span class="prog-card-badge">🎓 학생 마감 ${fmtDate(p.studentDeadline)}</span>
+          <span class="prog-card-badge">✅ 진행중</span>
+        </div>
+      </div>
+      <div class="grid-2 mt-4">
+        <div>
+          <div class="form-label">기업 일정 제출 현황</div>
+          <div style="background:var(--card2);border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
+            ${DB.companies.map(c=>`
+            <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border)">
+              <div class="status-dot ${c.submitted?'status-green':'status-orange'}"></div>
+              <span style="font-size:13px;font-weight:600">${c.name}</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--t3)">${c.submitted?c.availDates.length+'일 선택':'미제출'}</span>
+              <span class="badge ${c.submitted?'badge-green':'badge-orange'}">${c.submitted?'완료':'대기'}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div>
+          <div class="form-label">학생 일정 제출 현황</div>
+          <div style="background:var(--card2);border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
+            ${DB.students.map(s=>{
+              const done = Object.values(s.avail).some(arr=>arr.length>0)
+              return `
+              <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border)">
+                <div class="status-dot ${done?'status-green':'status-orange'}"></div>
+                <span style="font-size:13px;font-weight:600">${s.name}</span>
+                <span style="margin-left:auto;font-size:12px;color:var(--t3)">${s.apps.length}개 기업 지원</span>
+                <span class="badge ${done?'badge-green':'badge-orange'}">${done?'완료':'대기'}</span>
+              </div>`
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex gap-3">
+    <button class="btn btn-success btn-lg" onclick="setTab('matching')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 4L6 20M6 4l12 16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      매칭 실행하기
+    </button>
+    <button class="btn btn-ghost" onclick="openProgramNotice()">일정 안내 발송</button>
+  </div>`
+}
+
+function openEditProgram() {
+  S.modal = { type: 'edit-program' }
+  render()
+}
+
+function openProgramNotice() {
+  showToast('안내 메일이 기업 및 학생에게 발송되었습니다!')
+}
+
+function renderAdminCompanies() {
+  return `
+  <div class="page-header flex justify-between items-center">
+    <div><div class="page-title">기업 관리</div><div class="page-subtitle">참여 기업 목록 및 면접 설정 현황</div></div>
+    <button class="btn btn-primary" onclick="openAddCompany()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>기업 추가
+    </button>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>기업명</th><th>산업</th><th>면접 방식</th><th>면접 형태</th><th>가능 날짜</th><th>시간</th><th>지원자</th><th>상태</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${DB.companies.map(c=>`
+          <tr>
+            <td style="font-weight:700">${c.name}</td>
+            <td><span class="chip-tag">${c.industry}</span></td>
+            <td><span class="badge ${modeColor(c.mode)}">${modeName(c.mode)}</span></td>
+            <td><span class="badge ${typeColor(c.type)}">${typeName(c.type)}${c.type==='group'?` (${c.groupSize}명)`:''}</span></td>
+            <td>${c.availDates.map(d=>`<span class="badge badge-gray" style="margin:1px;font-size:11px">${fmtDateShort(d)}</span>`).join('')}</td>
+            <td style="font-size:12.5px;color:var(--t2)">${c.timeStart} ~ ${c.timeEnd}</td>
+            <td><span class="badge badge-blue">${DB.students.filter(s=>s.apps.includes(c.id)).length}명</span></td>
+            <td><span class="badge ${c.submitted?'badge-green':'badge-orange'}">${c.submitted?'제출완료':'대기'}</span></td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openCompanyDetail('${c.id}')">상세</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`
+}
+
+function openAddCompany() {
+  S.modal = { type: 'add-company' }
+  render()
+}
+
+function openCompanyDetail(id) {
+  S.modal = { type: 'company-detail', id }
+  render()
+}
+
+function renderAdminStudents() {
+  return `
+  <div class="page-header flex justify-between items-center">
+    <div><div class="page-title">학생 관리</div><div class="page-subtitle">참여 학생 목록 및 지원 현황 (1인 최대 3개 기업)</div></div>
+    <button class="btn btn-primary" onclick="openAddStudent()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>학생 추가
+    </button>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>이름</th><th>학교/학과</th><th>지원 기업</th><th>일정 제출</th><th>신청일</th><th></th></tr>
+        </thead>
+        <tbody>
+          ${DB.students.map(s=>{
+            const submitted = s.apps.every(cid => (s.avail[cid]||[]).length>0)
+            return `
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div class="applicant-avatar" style="width:32px;height:32px;font-size:13px">${s.name[0]}</div>
+                  <div>
+                    <div style="font-weight:700;font-size:13px">${s.name}</div>
+                    <div style="font-size:11.5px;color:var(--t3)">${s.email}</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:12.5px;color:var(--t2)">${s.school} · ${s.dept}</td>
+              <td>${s.apps.map(cid=>`<span class="badge badge-blue" style="margin:1px">${getCompany(cid)?.name||''}</span>`).join('')}</td>
+              <td><span class="badge ${submitted?'badge-green':'badge-orange'}">${submitted?'완료':'일부미제출'}</span></td>
+              <td style="font-size:12.5px;color:var(--t2)">${s.appDate}</td>
+              <td><button class="btn btn-ghost btn-sm" onclick="openStudentDetail('${s.id}')">상세</button></td>
+            </tr>`
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`
+}
+
+function openAddStudent() { S.modal={type:'add-student'}; render() }
+
+function renderAdminMatching() {
+  const coReady = DB.companies.filter(c=>c.submitted).length
+  const stReady = DB.students.filter(s=>Object.values(s.avail).some(a=>a.length>0)).length
+  const canMatch = coReady > 0 && stReady > 0
+
+  return `
+  <div class="page-header">
+    <div class="page-title">매칭 실행</div>
+    <div class="page-subtitle">모든 가능 날짜가 선택되면 자동 매칭을 실행합니다</div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header"><div class="card-title">📊 매칭 준비 현황</div></div>
+    <div class="card-body">
+      <div class="grid-2 mb-4">
+        <div style="background:var(--card2);border-radius:var(--r2);padding:16px 20px;border:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px">기업 일정 제출</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span style="font-size:28px;font-weight:900;color:${coReady===DB.companies.length?'var(--green)':'var(--orange)'}">${coReady}</span>
+            <span style="font-size:14px;color:var(--t2)">/ ${DB.companies.length}</span>
+          </div>
+          <div style="height:6px;background:var(--border);border-radius:3px;margin-top:8px;overflow:hidden">
+            <div style="height:100%;width:${coReady/DB.companies.length*100}%;background:${coReady===DB.companies.length?'var(--green)':'var(--orange)'};border-radius:3px;transition:width .5s"></div>
+          </div>
+        </div>
+        <div style="background:var(--card2);border-radius:var(--r2);padding:16px 20px;border:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px">학생 일정 제출</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span style="font-size:28px;font-weight:900;color:${stReady===DB.students.length?'var(--green)':'var(--orange)'}">${stReady}</span>
+            <span style="font-size:14px;color:var(--t2)">/ ${DB.students.length}</span>
+          </div>
+          <div style="height:6px;background:var(--border);border-radius:3px;margin-top:8px;overflow:hidden">
+            <div style="height:100%;width:${stReady/DB.students.length*100}%;background:${stReady===DB.students.length?'var(--green)':'var(--orange)'};border-radius:3px;transition:width .5s"></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--card2);border-radius:var(--r);padding:14px;border:1px solid var(--border);margin-bottom:16px">
+        <div style="font-size:13px;font-weight:600;color:var(--t1);margin-bottom:8px">⚙️ 매칭 설정</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div><div style="font-size:11.5px;color:var(--t3)">슬롯 단위</div><div style="font-size:14px;font-weight:700;color:var(--t1)">${DB.program.slotMinutes}분</div></div>
+          <div><div style="font-size:11.5px;color:var(--t3)">알고리즘</div><div style="font-size:14px;font-weight:700;color:var(--t1)">Greedy (최소 유연)</div></div>
+          <div><div style="font-size:11.5px;color:var(--t3)">면접 기간</div><div style="font-size:14px;font-weight:700;color:var(--t1)">${fmtDate(DB.program.interviewStart)} ~</div></div>
+        </div>
+      </div>
+      ${S.matchStatus === 'running' ? `
+        <div class="match-progress">
+          <div class="match-anim"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--t1)">매칭 진행 중...</div>
+          <div style="font-size:12.5px;color:var(--t3);margin-top:4px">날짜 교집합 계산 및 슬롯 배정 중</div>
+        </div>` : `
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn btn-primary btn-lg ${!canMatch?'disabled':''}" ${!canMatch?'disabled':''} onclick="startMatching()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z" fill="white"/></svg>
+            자동 매칭 실행
+          </button>
+          ${!canMatch?`<span style="font-size:12.5px;color:var(--red)">⚠ 기업 또는 학생의 일정 제출이 완료되지 않았습니다</span>`:''}
+          ${S.matchStatus==='done'?`<span class="badge badge-green">✓ 매칭 완료 — 결과 탭에서 확인하세요</span>`:''}
+        </div>`}
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">📅 기업별 면접 가능 날짜 요약</div></div>
+    <div class="card-body">
+      ${DB.companies.map(c=>`
+      <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:13.5px;font-weight:700">${c.name}</span>
+          <span class="badge ${modeColor(c.mode)}">${modeName(c.mode)}</span>
+          <span class="badge ${typeColor(c.type)}">${typeName(c.type)}</span>
+        </div>
+        <div class="date-chips">
+          ${c.availDates.map(d=>`<div class="date-chip">${fmtDate(d)}</div>`).join('')}
+        </div>
+        <div style="font-size:11.5px;color:var(--t3);margin-top:6px">시간: ${c.timeStart} ~ ${c.timeEnd} · 지원자 ${DB.students.filter(s=>s.apps.includes(c.id)).length}명</div>
+      </div>`).join('')}
+    </div>
+  </div>`
+}
+
+function startMatching() {
+  S.matchStatus = 'running'
+  render()
+  setTimeout(()=>{
+    runMatchingAlgo()
+    S.tab = 'results'
+    showToast('매칭이 완료되었습니다!')
+    render()
+  }, 1800)
+}
+
+function renderAdminResults() {
+  if (!S.matchResults) {
+    return `
+    <div class="page-header"><div class="page-title">매칭 결과</div></div>
+    <div class="empty"><div class="empty-icon">📋</div><div class="empty-text">아직 매칭이 실행되지 않았습니다</div><div class="empty-sub">매칭 실행 탭에서 자동 매칭을 먼저 실행해주세요</div>
+    <button class="btn btn-primary mt-4" onclick="setTab('matching')">매칭 실행하러 가기</button></div>`
+  }
+  const { results, failed } = S.matchResults
+  return `
+  <div class="page-header flex justify-between items-center">
+    <div><div class="page-title">매칭 결과</div><div class="page-subtitle">자동 매칭이 완료된 면접 일정입니다</div></div>
+    <div class="flex gap-2">
+      <button class="btn btn-ghost" onclick="confirmAndSend()">전체 확정 및 안내 발송</button>
+      <button class="btn btn-ghost btn-sm" onclick="S.matchResults=null;S.matchStatus='idle';render()">결과 초기화</button>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">매칭 성공</div><div class="stat-value" style="color:var(--green)">${results.length}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card"><div class="stat-label">매칭 실패</div><div class="stat-value" style="color:var(--red)">${failed.length}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card"><div class="stat-label">1:1 면접</div><div class="stat-value">${results.filter(r=>r.type==='1:1').length}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card"><div class="stat-label">그룹 면접</div><div class="stat-value">${results.filter(r=>r.type.startsWith('그룹')).length}</div><div class="stat-sub">건</div></div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header"><div class="card-title">✅ 매칭 성공 (${results.length}건)</div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>기업</th><th>면접자</th><th>날짜</th><th>시간</th><th>유형</th><th>방식</th><th>링크/장소</th>
+        </tr></thead>
+        <tbody>
+          ${results.map(r=>`
+          <tr>
+            <td style="font-weight:700">${r.co.name}</td>
+            <td>${r.students.map(s=>`<span class="chip-tag">${s.name}</span>`).join(' ')}</td>
+            <td style="font-weight:600">${fmtDate(r.date)}</td>
+            <td><span class="badge badge-blue">${r.time}</span></td>
+            <td><span class="badge ${r.type==='1:1'?'badge-purple':'badge-orange'}">${r.type}</span></td>
+            <td><span class="badge ${modeColor(r.mode)}">${modeName(r.mode)}</span></td>
+            <td style="font-size:12px;color:var(--t2)">${r.mode==='online'?(r.co.link||'링크 미등록'):'현장 대면'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  ${failed.length>0?`
+  <div class="card">
+    <div class="card-header" style="border-left:3px solid var(--red)"><div class="card-title" style="color:var(--red)">⚠ 매칭 실패 (${failed.length}건) — 수동 조정 필요</div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>기업</th><th>학생</th><th>실패 사유</th><th>조치</th></tr></thead>
+        <tbody>
+          ${failed.map(f=>`
+          <tr>
+            <td style="font-weight:700">${f.co.name}</td>
+            <td>${f.s.name}</td>
+            <td><span class="badge badge-red">${f.reason}</span></td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openManualMatch('${f.co.id}','${f.s.id}')">수동 배정</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`:''}
+  `
+}
+
+function confirmAndSend() { showToast('전체 면접 일정이 확정되었습니다. 기업 및 학생에게 안내 메일을 발송했습니다.') }
+
+function openManualMatch(coId, stId) {
+  S.modal = { type:'manual-match', coId, stId }
+  render()
+}
+
+// ─────────────────────────────────────────────────────
+// COMPANY VIEW
+// ─────────────────────────────────────────────────────
+function renderCompany() {
+  const co = getCompany(S.user.companyId)
+  const navItems = [
+    ['co-settings','면접 설정','<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'],
+    ['co-dates','가능 날짜','<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8"/>'],
+    ['co-applicants','지원자 목록','<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'],
+    ['co-schedule','확정 일정','<path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'],
+  ]
+  const sidebar = `
+  <div style="padding:14px 8px 12px;margin-bottom:8px;border-bottom:1px solid var(--border)">
+    <div style="font-size:13.5px;font-weight:800;color:var(--t1)">${co.name}</div>
+    <div style="font-size:11.5px;color:var(--t3);margin-top:2px">${co.industry}</div>
+    <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
+      <span class="badge ${modeColor(co.mode)}">${modeName(co.mode)}</span>
+      <span class="badge ${typeColor(co.type)}">${typeName(co.type)}</span>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">기업 메뉴</div>
+    ${navItems.map(([id,label,path])=>`
+    <div class="nav-item ${S.tab===id?'active':''}" onclick="setTab('${id}')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">${path}</svg>
+      ${label}
+    </div>`).join('')}
+  </div>`
+  let main = ''
+  if (S.tab==='co-settings') main = renderCoSettings()
+  else if (S.tab==='co-dates') main = renderCoDates()
+  else if (S.tab==='co-applicants') main = renderCoApplicants()
+  else if (S.tab==='co-schedule') main = renderCoSchedule()
+  return renderApp(sidebar, main)
+}
+
+function renderCoSettings() {
+  const co = getCompany(S.user.companyId)
+  return `
+  <div class="page-header"><div class="page-title">면접 설정</div><div class="page-subtitle">면접 방식과 형태를 설정하세요</div></div>
+  <div style="max-width:560px">
+    <div class="card mb-4">
+      <div class="card-header"><div class="card-title">📋 기본 설정</div></div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">면접 방식</label>
+          <div class="segment" style="max-width:280px">
+            <button class="segment-btn ${co.mode==='offline'?'active':''}" onclick="setCoMode('offline')">🏢 대면</button>
+            <button class="segment-btn ${co.mode==='online'?'active':''}" onclick="setCoMode('online')">💻 비대면(화상)</button>
+          </div>
+        </div>
+        ${co.mode==='online'?`
+        <div class="form-group">
+          <label class="form-label">화상 미팅 링크</label>
+          <input class="form-input" type="url" value="${co.link}" placeholder="https://meet.google.com/..." oninput="updateCoLink(this.value)">
+          <div class="form-hint">Zoom, Google Meet, Microsoft Teams 링크를 입력하세요</div>
+        </div>`:''}
+        <div class="form-group">
+          <label class="form-label">면접 형태</label>
+          <div class="segment" style="max-width:280px">
+            <button class="segment-btn ${co.type==='1on1'?'active':''}" onclick="setCoType('1on1')">👤 1:1 면접</button>
+            <button class="segment-btn ${co.type==='group'?'active':''}" onclick="setCoType('group')">👥 그룹 면접</button>
+          </div>
+        </div>
+        ${co.type==='group'?`
+        <div class="form-group">
+          <label class="form-label">그룹당 최대 인원</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            ${[2,3,4,5].map(n=>`
+            <button onclick="setCoGroupSize(${n})" style="width:44px;height:44px;border-radius:var(--r);border:2px solid ${co.groupSize===n?'var(--blue)':'var(--border)'};background:${co.groupSize===n?'var(--blue2)':'var(--card2)'};font-size:15px;font-weight:800;color:${co.groupSize===n?'var(--blue)':'var(--t2)'};cursor:pointer;transition:all .12s">${n}</button>`).join('')}
+            <span style="font-size:12.5px;color:var(--t3)">명</span>
+          </div>
+        </div>`:''}
+        <div class="form-group">
+          <label class="form-label">면접 가능 시간대</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input class="form-input" type="time" value="${co.timeStart}" oninput="updateCoTime('start',this.value)" style="width:130px">
+            <span style="color:var(--t3);font-weight:600">~</span>
+            <input class="form-input" type="time" value="${co.timeEnd}" oninput="updateCoTime('end',this.value)" style="width:130px">
+          </div>
+          <div class="form-hint">슬롯 단위 ${DB.program.slotMinutes}분 기준 — 가능한 슬롯 수: ${Math.floor((timeToMin(co.timeEnd)-timeToMin(co.timeStart))/DB.program.slotMinutes)}개</div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-header"><div class="card-title">ℹ️ 현재 설정 요약</div></div>
+      <div class="card-body">
+        <div class="info-section">
+          <div class="info-row"><div class="info-key">면접 방식</div><div class="info-val"><span class="badge ${modeColor(co.mode)}">${modeName(co.mode)}</span></div></div>
+          ${co.mode==='online'?`<div class="info-row"><div class="info-key">화상 링크</div><div class="info-val"><a href="${co.link}" target="_blank">${co.link||'미입력'}</a></div></div>`:''}
+          <div class="info-row"><div class="info-key">면접 형태</div><div class="info-val"><span class="badge ${typeColor(co.type)}">${typeName(co.type)}${co.type==='group'?` (최대 ${co.groupSize}명)`:''}</span></div></div>
+          <div class="info-row"><div class="info-key">가능 시간</div><div class="info-val">${co.timeStart} ~ ${co.timeEnd}</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-lg" onclick="saveCoSettings()">
+      설정 저장 완료
+    </button>
+  </div>`
+}
+
+function timeToMin(t) { const [h,m]=t.split(':').map(Number); return h*60+m }
+function setCoMode(v) { getCompany(S.user.companyId).mode=v; render() }
+function setCoType(v) { getCompany(S.user.companyId).type=v; render() }
+function setCoGroupSize(n) { getCompany(S.user.companyId).groupSize=n; render() }
+function updateCoLink(v) { getCompany(S.user.companyId).link=v }
+function updateCoTime(t,v) { const co=getCompany(S.user.companyId); if(t==='start') co.timeStart=v; else co.timeEnd=v; render() }
+function saveCoSettings() { getCompany(S.user.companyId).submitted=true; showToast('면접 설정이 저장되었습니다!'); setTab('co-dates') }
+
+function renderCoDates() {
+  const co = getCompany(S.user.companyId)
+  const cs = getCalState('company-cal')
+  return `
+  <div class="page-header"><div class="page-title">가능 날짜 선택</div><div class="page-subtitle">면접 기간(${fmtDate(DB.program.interviewStart)} ~ ${fmtDate(DB.program.interviewEnd)}) 내에서 가능한 날짜를 선택하세요</div></div>
+  <div style="display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start">
+    <div>
+      ${renderCalendar({ id:'company-cal', selected:co.availDates, year:cs.year, month:cs.month })}
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">선택된 날짜 (${co.availDates.length}일)</div></div>
+        <div class="card-body">
+          ${co.availDates.length===0?`<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">날짜를 선택해주세요</div></div>`:`
+          <div style="display:flex;flex-direction:column;gap:6px">
+            ${co.availDates.sort().map(d=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--blue2);border:1px solid rgba(49,130,246,.2);border-radius:var(--r)">
+              <div>
+                <div style="font-size:13.5px;font-weight:700;color:var(--blue)">${fmtDate(d)}</div>
+                <div style="font-size:11.5px;color:var(--t2);margin-top:2px">${co.timeStart} ~ ${co.timeEnd} · ${Math.floor((timeToMin(co.timeEnd)-timeToMin(co.timeStart))/DB.program.slotMinutes)}개 슬롯</div>
+              </div>
+              <button onclick="calToggle('company-cal','${d}')" style="width:24px;height:24px;border-radius:50%;border:none;background:rgba(49,130,246,.15);cursor:pointer;color:var(--blue);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s" onmouseover="this.style.background='var(--red2)';this.style.color='var(--red)'" onmouseout="this.style.background='rgba(49,130,246,.15)';this.style.color='var(--blue)'">×</button>
+            </div>`).join('')}
+          </div>
+          <div class="divider"></div>
+          <div style="font-size:12.5px;color:var(--t3)">총 ${co.availDates.length * Math.floor((timeToMin(co.timeEnd)-timeToMin(co.timeStart))/DB.program.slotMinutes)}개 슬롯 제공 가능</div>
+          `}
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-primary btn-lg w-full" onclick="submitCoDates()" ${co.availDates.length===0?'disabled':''}>
+          날짜 선택 제출하기 (${co.availDates.length}일)
+        </button>
+      </div>
+    </div>
+  </div>`
+}
+
+function submitCoDates() {
+  const co = getCompany(S.user.companyId)
+  if (co.availDates.length === 0) return
+  co.submitted = true
+  showToast('면접 가능 날짜가 제출되었습니다!')
+  setTab('co-applicants')
+}
+
+function renderCoApplicants() {
+  const co = getCompany(S.user.companyId)
+  const applicants = DB.students.filter(s=>s.apps.includes(co.id))
+  return `
+  <div class="page-header"><div class="page-title">지원자 목록</div><div class="page-subtitle">${co.name} 지원자 ${applicants.length}명</div></div>
+  <div class="card-grid">
+    ${applicants.map(s=>`
+    <div class="applicant-card" onclick="openStudentDetail('${s.id}')">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="applicant-avatar">${s.name[0]}</div>
+        <div>
+          <div class="applicant-name">${s.name}</div>
+          <div class="applicant-meta">${s.school} · ${s.dept}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:var(--t2)">
+        <div>📅 신청일: ${s.appDate}</div>
+        <div>📚 학력: ${s.edLevel}</div>
+        <div>📞 ${s.phone}</div>
+        <div>✉️ ${s.email.split('@')[0]}@...</div>
+      </div>
+      <div class="divider"></div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        ${(s.avail[co.id]||[]).map(d=>`<span class="badge badge-blue">${fmtDateShort(d)}</span>`).join('')}
+        ${!(s.avail[co.id]||[]).length?`<span class="badge badge-orange">날짜 미선택</span>`:''}
+      </div>
+      <div style="margin-top:8px;display:flex;gap:4px">
+        <a href="${s.portfolio}" target="_blank" onclick="event.stopPropagation()" class="btn btn-ghost btn-sm">포트폴리오</a>
+        <a href="${s.resume}" target="_blank" onclick="event.stopPropagation()" class="btn btn-ghost btn-sm">이력서</a>
+      </div>
+    </div>`).join('')}
+  </div>`
+}
+
+function renderCoSchedule() {
+  if (!S.matchResults) {
+    return `<div class="page-header"><div class="page-title">확정 일정</div></div>
+    <div class="empty"><div class="empty-icon">⏳</div><div class="empty-text">아직 매칭이 진행되지 않았습니다</div><div class="empty-sub">운영진이 매칭을 실행한 후 확정 일정이 표시됩니다</div></div>`
+  }
+  const co = getCompany(S.user.companyId)
+  const myResults = S.matchResults.results.filter(r=>r.co.id===co.id)
+  const myFailed = S.matchResults.failed.filter(f=>f.co.id===co.id)
+  return `
+  <div class="page-header"><div class="page-title">확정 면접 일정</div><div class="page-subtitle">총 ${myResults.length}건 매칭 완료</div></div>
+  <div class="card mb-4">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>날짜</th><th>시간</th><th>면접자</th><th>유형</th><th>방식</th>${co.mode==='online'?'<th>링크</th>':''}</tr></thead>
+        <tbody>
+          ${myResults.map(r=>`
+          <tr>
+            <td style="font-weight:700">${fmtDate(r.date)}</td>
+            <td><span class="badge badge-blue">${r.time}</span></td>
+            <td>${r.students.map(s=>`<span class="chip-tag">${s.name}</span>`).join(' ')}</td>
+            <td><span class="badge ${r.type==='1:1'?'badge-purple':'badge-orange'}">${r.type}</span></td>
+            <td><span class="badge ${modeColor(r.mode)}">${modeName(r.mode)}</span></td>
+            ${co.mode==='online'?`<td><a href="${co.link}" target="_blank" style="color:var(--blue);font-size:12.5px">링크 열기 →</a></td>`:``}
+          </tr>`).join('')}
+          ${myResults.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--t3);padding:24px">매칭된 일정이 없습니다</td></tr>`:''}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  ${myFailed.length>0?`<div class="card" style="border-color:var(--red)">
+    <div class="card-header"><div class="card-title" style="color:var(--red)">⚠ 매칭 실패 (${myFailed.length}건)</div></div>
+    <div class="card-body">${myFailed.map(f=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-weight:600">${f.s.name}</span>
+      <span class="badge badge-red">${f.reason}</span>
+      <span style="font-size:12px;color:var(--t3)">운영진에게 수동 배정 요청 예정</span>
+    </div>`).join('')}</div>
+  </div>`:''}
+  `
+}
+
+// ─────────────────────────────────────────────────────
+// STUDENT VIEW
+// ─────────────────────────────────────────────────────
+function renderStudent() {
+  const st = getStudent(S.user.studentId)
+  const navItems = [
+    ['st-status','지원 현황','<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a1 1 0 0 0-1 1v0a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v0a1 1 0 0 0-1-1H9z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'],
+    ['st-dates','날짜 선택','<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8"/>'],
+    ['st-schedule','확정 일정','<path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'],
+  ]
+  const sidebar = `
+  <div style="padding:14px 8px 12px;margin-bottom:8px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="applicant-avatar" style="width:36px;height:36px;font-size:14px">${st.name[0]}</div>
+      <div><div style="font-size:13.5px;font-weight:800">${st.name}</div><div style="font-size:11.5px;color:var(--t3)">${st.school}</div></div>
+    </div>
+    <div style="margin-top:8px;font-size:11.5px;color:var(--t3)">${st.apps.length}/3개 기업 지원중</div>
+    <div style="margin-top:4px;height:4px;background:var(--card2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${st.apps.length/3*100}%;background:var(--blue);border-radius:2px"></div></div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">학생 메뉴</div>
+    ${navItems.map(([id,label,path])=>`
+    <div class="nav-item ${S.tab===id?'active':''}" onclick="setTab('${id}')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">${path}</svg>
+      ${label}
+    </div>`).join('')}
+  </div>`
+  let main = ''
+  if (S.tab==='st-status') main = renderStStatus()
+  else if (S.tab==='st-dates') main = renderStDates()
+  else if (S.tab==='st-schedule') main = renderStSchedule()
+  return renderApp(sidebar, main)
+}
+
+function renderStStatus() {
+  const st = getStudent(S.user.studentId)
+  const steps = ['st-status','st-dates','st-schedule']
+  const stepLabels = ['지원 확인','날짜 선택','일정 확인']
+  const doneStep = S.matchResults ? 2 : (st.apps.some(cid=>(st.avail[cid]||[]).length>0) ? 1 : 0)
+  return `
+  <div class="page-header"><div class="page-title">지원 현황</div><div class="page-subtitle">인턴형 프로그램 면접 신청 현황입니다</div></div>
+  <div class="steps mb-6">
+    ${stepLabels.map((l,i)=>`
+    <div class="step ${i<doneStep?'done':i===doneStep?'active':'pending'}">
+      <div class="step-num">${i<doneStep?'✓':i+1}</div>
+      <div class="step-label">${l}</div>
+    </div>
+    ${i<stepLabels.length-1?`<div class="step-line"></div>`:''}`).join('')}
+  </div>
+  <div class="prog-card mb-6">
+    <div class="prog-card-name">${DB.program.name}</div>
+    <div class="prog-card-period">면접 기간: ${fmtDate(DB.program.interviewStart)} ~ ${fmtDate(DB.program.interviewEnd)}</div>
+    <div class="prog-card-badges">
+      <span class="prog-card-badge">학생 마감: ${fmtDate(DB.program.studentDeadline)}</span>
+      <span class="prog-card-badge">슬롯: ${DB.program.slotMinutes}분</span>
+    </div>
+  </div>
+  <div style="margin-bottom:20px">
+    <div style="font-size:13.5px;font-weight:700;color:var(--t1);margin-bottom:10px">지원한 기업 (${st.apps.length}/3)</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${st.apps.map(cid=>{
+        const co = getCompany(cid)
+        const myDates = st.avail[cid]||[]
+        return `
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--shadow)">
+          <div style="width:40px;height:40px;border-radius:var(--r);background:linear-gradient(135deg,var(--blue2),var(--blue3));display:flex;align-items:center;justify-content:center;font-size:18px">🏢</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700">${co.name}</div>
+            <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">
+              <span class="badge ${modeColor(co.mode)}">${modeName(co.mode)}</span>
+              <span class="badge ${typeColor(co.type)}">${typeName(co.type)}</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11.5px;color:var(--t3)">내가 선택한 날짜</div>
+            <div style="font-size:13px;font-weight:700;color:${myDates.length>0?'var(--blue)':'var(--orange)'}">${myDates.length}일 선택</div>
+          </div>
+          <span class="badge ${myDates.length>0?'badge-green':'badge-orange'}">${myDates.length>0?'제출완료':'미제출'}</span>
+        </div>`
+      }).join('')}
+    </div>
+  </div>
+  <button class="btn btn-primary btn-lg" onclick="setTab('st-dates')">
+    날짜 선택하러 가기 →
+  </button>`
+}
+
+function renderStDates() {
+  const st = getStudent(S.user.studentId)
+  const [activeCo, setActiveCo_] = [S.activeStCo || st.apps[0], null]
+  if (!S.activeStCo) S.activeStCo = st.apps[0]
+  const coid = S.activeStCo
+  const co = getCompany(coid)
+  const cs = getCalState(`student-cal-${coid}`)
+  const myDates = st.avail[coid] || []
+
+  return `
+  <div class="page-header"><div class="page-title">면접 가능 날짜 선택</div><div class="page-subtitle">기업이 선택한 날짜 중 가능한 날짜를 선택하세요</div></div>
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+    ${st.apps.map(cid=>{
+      const co2 = getCompany(cid)
+      const cnt = (st.avail[cid]||[]).length
+      return `<button onclick="S.activeStCo='${cid}';render()" style="padding:8px 14px;border-radius:var(--r);border:2px solid ${coid===cid?'var(--blue)':'var(--border)'};background:${coid===cid?'var(--blue2)':'var(--card2)'};font-size:13px;font-weight:${coid===cid?'700':'500'};color:${coid===cid?'var(--blue)':'var(--t2)'};cursor:pointer;transition:all .12s">
+        ${co2.name} <span style="font-size:11px;background:${coid===cid?'var(--blue)':'var(--border2)'};color:${coid===cid?'white':'var(--t2)'};padding:1px 7px;border-radius:999px;margin-left:4px">${cnt}</span>
+      </button>`
+    }).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start">
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px">기업 가능 날짜 (파란 배경)</div>
+      ${renderCalendar({ id:`student-cal-${coid}`, selected:myDates, highlight:co.availDates, year:cs.year, month:cs.month })}
+      <div style="margin-top:10px;font-size:12px;color:var(--t3);background:var(--card2);padding:10px 12px;border-radius:var(--r);border:1px solid var(--border)">
+        💡 면접 기간 내 <strong style="color:var(--blue)">${co.name}</strong>이 선택한 날짜 중에서 가능한 날짜를 선택하세요
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">${co.name}</div>
+          <span class="badge ${modeColor(co.mode)}">${modeName(co.mode)}</span>
+        </div>
+        <div class="card-body">
+          <div class="info-row"><div class="info-key">면접 방식</div><div class="info-val"><span class="badge ${modeColor(co.mode)}">${modeName(co.mode)}</span></div></div>
+          <div class="info-row"><div class="info-key">면접 형태</div><div class="info-val"><span class="badge ${typeColor(co.type)}">${typeName(co.type)}</span></div></div>
+          <div class="info-row"><div class="info-key">가능 날짜</div><div class="info-val">${co.availDates.map(d=>`<span class="badge badge-gray" style="margin:2px">${fmtDate(d)}</span>`).join('')}</div></div>
+          <div class="info-row"><div class="info-key">시간</div><div class="info-val">${co.timeStart} ~ ${co.timeEnd}</div></div>
+          ${co.mode==='online'?`<div class="info-row"><div class="info-key">화상 링크</div><div class="info-val"><a href="${co.link}" target="_blank" class="link">미팅 링크 →</a></div></div>`:''}
+          <div class="divider"></div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">내가 선택한 날짜 (${myDates.length}일)</div>
+          ${myDates.length===0?`<div style="font-size:12.5px;color:var(--t3)">아직 날짜를 선택하지 않았습니다. 달력에서 선택해주세요.</div>`:`
+          <div class="date-chips">
+            ${myDates.sort().map(d=>`<div class="date-chip">${fmtDate(d)}<span class="chip-x" onclick="calToggle('student-cal-${coid}','${d}')">×</span></div>`).join('')}
+          </div>`}
+        </div>
+      </div>
+      <button class="btn btn-primary btn-lg w-full mt-4" onclick="submitStDates('${coid}')" ${myDates.length===0?'disabled':''}>
+        ${co.name} 날짜 제출 (${myDates.length}일)
+      </button>
+    </div>
+  </div>`
+}
+
+function submitStDates(coid) {
+  const st = getStudent(S.user.studentId)
+  if ((st.avail[coid]||[]).length === 0) return
+  const allDone = st.apps.every(cid => (st.avail[cid]||[]).length > 0)
+  if (allDone) { showToast('모든 기업 날짜 제출이 완료되었습니다!') }
+  else { showToast(`${getCompany(coid).name} 날짜가 제출되었습니다`) }
+  render()
+}
+
+function renderStSchedule() {
+  const st = getStudent(S.user.studentId)
+  if (!S.matchResults) {
+    return `<div class="page-header"><div class="page-title">확정 일정</div></div>
+    <div class="empty"><div class="empty-icon">⏳</div><div class="empty-text">아직 매칭이 완료되지 않았습니다</div><div class="empty-sub">운영진이 매칭을 실행한 후 확정 일정이 안내됩니다</div></div>`
+  }
+  const mySlots = S.matchResults.results.filter(r=>r.students.some(s=>s.id===st.id))
+  const myFailed = S.matchResults.failed.filter(f=>f.s.id===st.id)
+  return `
+  <div class="page-header"><div class="page-title">확정 면접 일정</div><div class="page-subtitle">${st.name}님의 면접 일정입니다</div></div>
+  ${mySlots.length===0&&myFailed.length===0?`<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">배정된 면접이 없습니다</div></div>`:''}
+  ${mySlots.map(r=>{
+    const co = r.co
+    return `
+    <div class="card mb-4" style="border-left:4px solid var(--blue)">
+      <div class="card-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:18px;font-weight:900;color:var(--t1)">${co.name}</div>
+          <div style="display:flex;gap:6px">
+            <span class="badge ${modeColor(r.mode)}">${modeName(r.mode)}</span>
+            <span class="badge ${typeColor(r.type)}">${typeName(r.type==='1:1'?'1on1':'group')}</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;background:var(--blue2);border-radius:var(--r);padding:16px;border:1px solid rgba(49,130,246,.15)">
+          <div><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:3px">날짜</div><div style="font-size:16px;font-weight:800;color:var(--blue)">${fmtDate(r.date)}</div></div>
+          <div><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:3px">시간</div><div style="font-size:16px;font-weight:800;color:var(--blue)">${r.time}</div></div>
+          <div><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:3px">형태</div><div style="font-size:16px;font-weight:800;color:var(--blue)">${r.type}</div></div>
+        </div>
+        ${r.mode==='online'?`
+        <div style="margin-top:12px;padding:12px;background:var(--card2);border-radius:var(--r);border:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--t3);margin-bottom:4px">화상 미팅 링크</div>
+          <a href="${co.link}" target="_blank" style="color:var(--blue);font-size:13.5px;font-weight:700">${co.link}</a>
+        </div>`:`
+        <div style="margin-top:12px;padding:12px;background:var(--card2);border-radius:var(--r);border:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--t3);margin-bottom:4px">면접 방식</div>
+          <div style="font-size:13.5px;font-weight:700;color:var(--t1)">🏢 대면 면접 — 장소 별도 안내 예정</div>
+        </div>`}
+        ${r.type.startsWith('그룹')?`
+        <div style="margin-top:10px;font-size:12px;color:var(--t3)">
+          같은 시간 면접자: ${r.students.filter(s=>s.id!==st.id).map(s=>s.name).join(', ')||'없음'}
+        </div>`:''}
+      </div>
+    </div>`}).join('')}
+  ${myFailed.map(f=>`
+  <div class="card" style="border-left:4px solid var(--red)">
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="badge badge-red">매칭 실패</span>
+        <span style="font-size:14px;font-weight:700">${f.co.name}</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--t2);margin-top:6px">사유: ${f.reason}. 운영진이 수동으로 배정할 예정입니다.</div>
+    </div>
+  </div>`).join('')}
+  `
+}
+
+// ─────────────────────────────────────────────────────
+// MODALS
+// ─────────────────────────────────────────────────────
+function renderModal() {
+  const m = S.modal
+  if (!m) return ''
+  let content = ''
+  if (m.type === 'student-detail') content = renderStudentDetailModal(m.id)
+  else if (m.type === 'edit-program') content = renderEditProgramModal()
+  else if (m.type === 'company-detail') content = renderCompanyDetailModal(m.id)
+  else if (m.type === 'add-company') content = renderAddCompanyModal()
+  else if (m.type === 'add-student') content = renderAddStudentModal()
+  else if (m.type === 'manual-match') content = renderManualMatchModal(m.coId, m.stId)
+  return `<div class="modal-overlay" onclick="closeModal(event)">${content}</div>`
+}
+
+function closeModal(e) { if (e.target.classList.contains('modal-overlay')||e.target.classList.contains('modal-close')) { S.modal=null; render() } }
+
+function openStudentDetail(id) { S.modal={type:'student-detail',id}; render() }
+
+function renderStudentDetailModal(id) {
+  const s = getStudent(id)
+  return `
+  <div class="modal modal-xl" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="S.modal=null;render()">×</button>
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="applicant-avatar" style="width:52px;height:52px;font-size:20px">${s.name[0]}</div>
+        <div>
+          <div class="modal-title">${s.name}</div>
+          <div class="modal-subtitle">${s.school} · ${s.faculty} · ${s.dept}</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">기본 정보</div>
+          <div class="info-section">
+            <div class="info-row"><div class="info-key">생년월일</div><div class="info-val">${s.birth}</div></div>
+            <div class="info-row"><div class="info-key">연락처</div><div class="info-val">${s.phone}</div></div>
+            <div class="info-row"><div class="info-key">이메일</div><div class="info-val">${s.email}</div></div>
+            <div class="info-row"><div class="info-key">주소</div><div class="info-val">${s.addr}</div></div>
+            <div class="info-row"><div class="info-key">신청일</div><div class="info-val">${s.appDate}</div></div>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin:16px 0 8px">학력 정보</div>
+          <div class="info-section">
+            <div class="info-row"><div class="info-key">학력 구분</div><div class="info-val">${s.edLevel}</div></div>
+            <div class="info-row"><div class="info-key">학교명</div><div class="info-val">${s.school}</div></div>
+            <div class="info-row"><div class="info-key">단과대학</div><div class="info-val">${s.faculty}</div></div>
+            <div class="info-row"><div class="info-key">학과</div><div class="info-val">${s.dept}</div></div>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin:16px 0 8px">첨부 자료</div>
+          <div style="display:flex;gap:8px">
+            <a href="${s.portfolio}" target="_blank" class="btn btn-primary btn-sm">📁 포트폴리오</a>
+            <a href="${s.resume}" target="_blank" class="btn btn-ghost btn-sm">📄 이력서</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">지원 내용</div>
+          <div style="margin-bottom:12px">
+            <div style="font-size:12.5px;font-weight:600;color:var(--t2);margin-bottom:5px">지원 동기</div>
+            <div style="padding:12px;background:var(--card2);border-radius:var(--r);font-size:13px;color:var(--t1);line-height:1.7;border:1px solid var(--border)">${s.motivation}</div>
+          </div>
+          <div style="margin-bottom:12px">
+            <div style="font-size:12.5px;font-weight:600;color:var(--t2);margin-bottom:5px">향후 비전 및 포부</div>
+            <div style="padding:12px;background:var(--card2);border-radius:var(--r);font-size:13px;color:var(--t1);line-height:1.7;border:1px solid var(--border)">${s.vision}</div>
+          </div>
+          <div style="margin-bottom:12px">
+            <div style="font-size:12.5px;font-weight:600;color:var(--t2);margin-bottom:5px">관련 경험</div>
+            <div style="padding:12px;background:var(--card2);border-radius:var(--r);font-size:13px;color:var(--t1);line-height:1.7;border:1px solid var(--border)">${s.experience}</div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">지원 현황</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              ${s.apps.map(cid=>{
+                const co=getCompany(cid); const myD=s.avail[cid]||[]
+                return `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card2);border-radius:var(--r);border:1px solid var(--border)">
+                  <span style="font-size:13px;font-weight:600;flex:1">${co.name}</span>
+                  ${myD.map(d=>`<span class="badge badge-blue">${fmtDateShort(d)}</span>`).join('')}
+                  <span class="badge ${myD.length>0?'badge-green':'badge-orange'}">${myD.length>0?'제출':'미제출'}</span>
+                </div>`}).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="S.modal=null;render()">닫기</button>
+    </div>
+  </div>`
+}
+
+function renderEditProgramModal() {
+  const p = DB.program
+  return `
+  <div class="modal modal-md" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="S.modal=null;render()">×</button>
+    <div class="modal-header"><div class="modal-title">프로그램 수정</div></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">프로그램명</label>
+        <input class="form-input" id="ep-name" value="${p.name}">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">면접 시작일</label>
+          <input class="form-input" type="date" id="ep-start" value="${p.interviewStart}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">면접 종료일</label>
+          <input class="form-input" type="date" id="ep-end" value="${p.interviewEnd}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">기업 마감일</label>
+          <input class="form-input" type="date" id="ep-codeadline" value="${p.companyDeadline}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">학생 마감일</label>
+          <input class="form-input" type="date" id="ep-stdeadline" value="${p.studentDeadline}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">슬롯 단위 (분)</label>
+        <div style="display:flex;gap:8px">
+          ${[5,10,15,20,30].map(n=>`
+          <button onclick="document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');DB.program.slotMinutes=${n}" 
+            class="slot-btn" style="padding:8px 14px;border-radius:var(--r);border:2px solid ${p.slotMinutes===n?'var(--blue)':'var(--border)'};background:${p.slotMinutes===n?'var(--blue2)':'var(--card2)'};font-size:13px;font-weight:${p.slotMinutes===n?'700':'500'};color:${p.slotMinutes===n?'var(--blue)':'var(--t2)'};cursor:pointer">${n}분</button>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="S.modal=null;render()">취소</button>
+      <button class="btn btn-primary" onclick="saveProgram()">저장</button>
+    </div>
+  </div>`
+}
+
+function saveProgram() {
+  DB.program.name = document.getElementById('ep-name').value
+  DB.program.interviewStart = document.getElementById('ep-start').value
+  DB.program.interviewEnd = document.getElementById('ep-end').value
+  DB.program.companyDeadline = document.getElementById('ep-codeadline').value
+  DB.program.studentDeadline = document.getElementById('ep-stdeadline').value
+  S.modal = null; showToast('프로그램 정보가 수정되었습니다!')
+}
+
+function renderCompanyDetailModal(id) {
+  const co = getCompany(id)
+  const applicants = DB.students.filter(s=>s.apps.includes(id))
+  return `
+  <div class="modal modal-lg" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="S.modal=null;render()">×</button>
+    <div class="modal-header">
+      <div class="modal-title">${co.name}</div>
+      <div class="modal-subtitle">${co.industry} · ${co.email}</div>
+    </div>
+    <div class="modal-body">
+      <div class="info-section">
+        <div class="info-row"><div class="info-key">면접 방식</div><div class="info-val"><span class="badge ${modeColor(co.mode)}">${modeName(co.mode)}</span></div></div>
+        <div class="info-row"><div class="info-key">면접 형태</div><div class="info-val"><span class="badge ${typeColor(co.type)}">${typeName(co.type)}${co.type==='group'?` (${co.groupSize}명)`:''}</span></div></div>
+        ${co.mode==='online'?`<div class="info-row"><div class="info-key">화상 링크</div><div class="info-val"><a href="${co.link}" target="_blank" class="link">${co.link||'미등록'}</a></div></div>`:''}
+        <div class="info-row"><div class="info-key">가능 시간</div><div class="info-val">${co.timeStart} ~ ${co.timeEnd}</div></div>
+        <div class="info-row"><div class="info-key">가능 날짜</div><div class="info-val">${co.availDates.map(d=>`<span class="badge badge-blue" style="margin:2px">${fmtDate(d)}</span>`).join('')}</div></div>
+      </div>
+      <div style="font-size:13.5px;font-weight:700;margin:14px 0 8px">지원자 (${applicants.length}명)</div>
+      ${applicants.map(s=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--card2);border-radius:var(--r);margin-bottom:6px;border:1px solid var(--border)">
+        <div class="applicant-avatar" style="width:32px;height:32px;font-size:12px">${s.name[0]}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700">${s.name}</div><div style="font-size:11.5px;color:var(--t3)">${s.school} · ${s.dept}</div></div>
+        ${(s.avail[id]||[]).map(d=>`<span class="badge badge-blue">${fmtDateShort(d)}</span>`).join('')}
+        <button class="btn btn-ghost btn-sm" onclick="S.modal={type:'student-detail',id:'${s.id}'};render()">보기</button>
+      </div>`).join('')}
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="S.modal=null;render()">닫기</button></div>
+  </div>`
+}
+
+function renderAddCompanyModal() {
+  return `
+  <div class="modal modal-md" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="S.modal=null;render()">×</button>
+    <div class="modal-header"><div class="modal-title">기업 추가</div></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">기업명</label><input class="form-input" id="nc-name" placeholder="예) 카카오"></div>
+        <div class="form-group"><label class="form-label">산업</label><input class="form-input" id="nc-industry" placeholder="예) IT"></div>
+      </div>
+      <div class="form-group"><label class="form-label">로그인 이메일</label><input class="form-input" id="nc-email" type="email" placeholder="company@intern.kr"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">비밀번호</label><input class="form-input" id="nc-pw" type="password" value="1234"></div>
+        <div class="form-group"><label class="form-label">면접 방식</label>
+          <select class="form-select" id="nc-mode"><option value="offline">대면</option><option value="online">비대면(화상)</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="S.modal=null;render()">취소</button>
+      <button class="btn btn-primary" onclick="addCompany()">기업 추가</button>
+    </div>
+  </div>`
+}
+
+function addCompany() {
+  const name = document.getElementById('nc-name').value.trim()
+  const industry = document.getElementById('nc-industry').value.trim()
+  const email = document.getElementById('nc-email').value.trim()
+  const mode = document.getElementById('nc-mode').value
+  if (!name||!email) { showToast('기업명과 이메일을 입력하세요','error'); return }
+  const id = 'c' + Date.now()
+  DB.companies.push({ id, name, industry, email, mode, type:'1on1', groupSize:1, link:'', availDates:[], timeStart:'10:00', timeEnd:'17:00', submitted:false })
+  ACCOUNTS[email] = { role:'company', id, pw:'1234' }
+  S.modal = null; showToast(`${name}이 추가되었습니다!`)
+}
+
+function renderAddStudentModal() {
+  return `
+  <div class="modal modal-md" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="S.modal=null;render()">×</button>
+    <div class="modal-header"><div class="modal-title">학생 추가</div></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">이름</label><input class="form-input" id="ns-name" placeholder="홍길동"></div>
+        <div class="form-group"><label class="form-label">생년월일</label><input class="form-input" type="date" id="ns-birth"></div>
+      </div>
+      <div class="form-group"><label class="form-label">이메일 (로그인 ID)</label><input class="form-input" id="ns-email" type="email" placeholder="student@intern.kr"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">연락처</label><input class="form-input" id="ns-phone" placeholder="010-0000-0000"></div>
+        <div class="form-group"><label class="form-label">주소</label><input class="form-input" id="ns-addr" placeholder="서울 강남구"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">학교명</label><input class="form-input" id="ns-school" placeholder="연세대학교"></div>
+        <div class="form-group"><label class="form-label">학과</label><input class="form-input" id="ns-dept" placeholder="컴퓨터공학과"></div>
+      </div>
+      <div class="form-group"><label class="form-label">지원 기업 (최대 3개)</label>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${DB.companies.map(c=>`<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+            <input type="checkbox" class="ns-co-cb" value="${c.id}"> ${c.name}
+          </label>`).join('')}
+        </div>
+        <div class="form-hint">최대 3개까지 선택 가능합니다</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="S.modal=null;render()">취소</button>
+      <button class="btn btn-primary" onclick="addStudent()">학생 추가</button>
+    </div>
+  </div>`
+}
+
+function addStudent() {
+  const name = document.getElementById('ns-name').value.trim()
+  const email = document.getElementById('ns-email').value.trim()
+  if (!name||!email) { showToast('이름과 이메일을 입력하세요','error'); return }
+  const selected = [...document.querySelectorAll('.ns-co-cb:checked')].map(c=>c.value)
+  if (selected.length > 3) { showToast('기업은 최대 3개까지 선택 가능합니다','error'); return }
+  const id = 's' + Date.now()
+  DB.students.push({
+    id, name, birth: document.getElementById('ns-birth').value, phone: document.getElementById('ns-phone').value,
+    email, addr: document.getElementById('ns-addr').value, edLevel:'대학교 재학',
+    school: document.getElementById('ns-school').value, faculty:'', dept: document.getElementById('ns-dept').value,
+    appDate: new Date().toISOString().split('T')[0], motivation:'', vision:'', experience:'',
+    portfolio:'', resume:'', apps: selected, avail:{}
+  })
+  ACCOUNTS[email] = { role:'student', id, pw:'1234' }
+  S.modal = null; showToast(`${name} 학생이 추가되었습니다!`)
+}
+
+function renderManualMatchModal(coId, stId) {
+  const co = getCompany(coId), st = getStudent(stId)
+  const slots = generateSlots(co.timeStart, co.timeEnd, DB.program.slotMinutes)
+  return `
+  <div class="modal modal-md" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="S.modal=null;render()">×</button>
+    <div class="modal-header">
+      <div class="modal-title">수동 배정</div>
+      <div class="modal-subtitle">${co.name} ← ${st.name}</div>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--red2);border:1px solid rgba(232,92,92,.2);border-radius:var(--r);padding:12px;font-size:12.5px;color:var(--red);margin-bottom:16px">
+        ⚠ 겹치는 날짜가 없어 자동 매칭에 실패했습니다. 날짜와 시간을 직접 지정해주세요.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">면접 날짜</label>
+          <input class="form-input" type="date" id="mm-date" min="${DB.program.interviewStart}" max="${DB.program.interviewEnd}" value="${DB.program.interviewStart}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">면접 시간</label>
+          <select class="form-select" id="mm-time">
+            ${slots.slice(0,20).map(s=>`<option value="${s}">${s}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="S.modal=null;render()">취소</button>
+      <button class="btn btn-primary" onclick="doManualMatch('${coId}','${stId}')">배정 확정</button>
+    </div>
+  </div>`
+}
+
+function doManualMatch(coId, stId) {
+  const co = getCompany(coId), st = getStudent(stId)
+  const date = document.getElementById('mm-date').value
+  const time = document.getElementById('mm-time').value
+  if (!S.matchResults) S.matchResults = { results:[], failed:[] }
+  S.matchResults.failed = S.matchResults.failed.filter(f=>!(f.co.id===coId&&f.s.id===stId))
+  S.matchResults.results.push({ co, students:[st], date, time, type:'1:1', mode:co.mode })
+  S.modal = null; showToast(`${st.name} 수동 배정 완료!`)
+}
+
+// ─────────────────────────────────────────────────────
+// MAIN RENDER
+// ─────────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById('app')
+  if (S.view === 'login') app.innerHTML = renderLogin()
+  else if (S.view === 'admin') app.innerHTML = renderAdmin()
+  else if (S.view === 'company') app.innerHTML = renderCompany()
+  else if (S.view === 'student') app.innerHTML = renderStudent()
+  
+  // Auto-fill login
+  const emailEl = document.getElementById('login-email')
+  const pwEl = document.getElementById('login-pw')
+  if (emailEl) emailEl.value = loginEmail
+  if (pwEl) pwEl.value = loginPw
+}
+
+render()
+</script>
+</body>
+</html>
