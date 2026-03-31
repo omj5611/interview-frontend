@@ -31,34 +31,38 @@
   /* 공통 컴포넌트 */
   .card {
     background: var(--white);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
     border: 1px solid var(--border);
   }
-  .title { font-size: 22px; font-weight: 800; margin-bottom: 16px; }
-  .subtitle { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+  .title { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+  .subtitle { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); }
   
   .btn {
     background: var(--primary);
     color: var(--white);
-    padding: 10px 16px;
+    padding: 12px 20px;
     border-radius: 8px;
     cursor: pointer;
     border: none;
     font-size: 14px;
     font-weight: 600;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
   }
-  .btn:hover { background: var(--primary-hover); }
+  .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
   .btn-outline { background: var(--white); color: var(--text-sub); border: 1px solid var(--border); }
-  .btn-outline:hover { background: var(--bg); }
+  .btn-outline:hover { background: var(--bg); color: var(--text-main); }
   
   .badge {
     font-size: 12px;
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: 6px 12px;
+    border-radius: 6px;
     margin-right: 4px;
     font-weight: 600;
     display: inline-block;
@@ -70,44 +74,48 @@
   .badge-yellow { background: #FEF5E5; color: var(--warning); }
 
   /* 테이블 */
-  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-  th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-  th { background: var(--bg); font-weight: 600; color: var(--text-sub); }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; }
+  th, td { text-align: left; padding: 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  th { background: var(--bg); font-weight: 600; color: var(--text-sub); border-radius: 4px 4px 0 0; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background-color: #FAFAFB; }
   
   /* 탭 메뉴 */
-  .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 30px; gap: 8px; }
   .tab {
-    padding: 12px 20px;
+    padding: 14px 24px;
     cursor: pointer;
     font-weight: 600;
     color: var(--text-sub);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
+    border-bottom: 3px solid transparent;
+    transition: 0.2s;
   }
-  .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+  .tab:hover { color: var(--text-main); }
+  .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
   /* 폼 요소 */
-  .form-group { margin-bottom: 16px; }
-  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-sub); margin-bottom: 8px; }
   .form-group input, .form-group select {
-    width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-family: inherit;
+    width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: 0.2s;
   }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   
   /* 모달 (다이얼로그) */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100;
   }
-  .modal-content { background: var(--white); border-radius: 16px; padding: 32px; width: 400px; max-width: 90%; }
+  .modal-content { background: var(--white); border-radius: 20px; padding: 40px; width: 440px; max-width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
   .program-list-item {
-    padding: 16px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
+    padding: 20px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
   }
-  .program-list-item:hover { border-color: var(--primary); background: #F9FBFF; }
+  .program-list-item:hover { border-color: var(--primary); background: #F9FBFF; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(49, 130, 246, 0.08); }
   
   /* 면접 진행 화면 레이아웃 */
-  .interview-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-  .video-container { background: #000; border-radius: 12px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: white; position: relative; }
+  .interview-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+  .video-container { background: #000; border-radius: 12px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: white; position: relative; overflow: hidden; }
   .video-container span { z-index: 2; font-size: 18px; color: rgba(255,255,255,0.8); }
 </style>
 </head>
@@ -232,12 +240,12 @@ function logout() {
 // =========================
 function renderLogin() {
   return `
-  <div class="container" style="max-width:400px; margin-top:100px;">
-    <div class="card" style="text-align:center;">
-      <div class="title">통합 면접 매칭 시스템</div>
-      <p style="color:var(--text-sub); margin-bottom:30px; font-size:14px;">역할을 선택하여 로그인해주세요.</p>
-      <button class="btn" style="width:100%; margin-bottom:10px; padding:14px;" onclick="initiateLogin('admin')">운영진(관리자) 로그인</button>
-      <button class="btn btn-outline" style="width:100%; padding:14px;" onclick="initiateLogin('company')">기업 담당자 로그인</button>
+  <div class="container" style="max-width:440px; margin-top:12vh;">
+    <div class="card" style="text-align:center; padding: 48px 32px;">
+      <div class="title" style="margin-bottom: 8px;">통합 면접 매칭 시스템</div>
+      <p style="color:var(--text-sub); margin-bottom:40px; font-size:15px;">역할을 선택하여 로그인해주세요.</p>
+      <button class="btn" style="width:100%; margin-bottom:12px; padding:16px;" onclick="initiateLogin('admin')">운영진(관리자) 로그인</button>
+      <button class="btn btn-outline" style="width:100%; padding:16px;" onclick="initiateLogin('company')">기업 담당자 로그인</button>
     </div>
   </div>
   ${S.ui.programModalOpen ? renderProgramModal() : ''}
@@ -249,13 +257,13 @@ function renderProgramModal() {
   return `
   <div class="modal-overlay" onclick="closeProgramModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="title" style="margin-bottom:24px;">진행할 교육과정 선택</div>
+      <div class="title" style="margin-bottom:28px;">진행할 교육과정 선택</div>
       ${DB.programs.map(p => `
         <div class="program-list-item" onclick="selectProgram('${p.id}')">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-weight:700; color:var(--text-main);">${p.name}</div>
-              <div style="font-size:13px; color:var(--text-sub); margin-top:4px;">${p.type}</div>
+              <div style="font-weight:700; color:var(--text-main); font-size: 16px;">${p.name}</div>
+              <div style="font-size:13px; color:var(--text-sub); margin-top:6px;">${p.type}</div>
             </div>
             <span class="badge ${p.status==='active'?'badge-green':'badge-gray'}">
               ${p.status==='active'?'진행중':'종료/준비'}
@@ -263,8 +271,8 @@ function renderProgramModal() {
           </div>
         </div>
       `).join('')}
-      <div style="text-align:right; margin-top:16px;">
-        <button class="btn btn-outline" onclick="closeProgramModal()">닫기</button>
+      <div style="text-align:right; margin-top:24px;">
+        <button class="btn btn-outline" style="padding: 10px 20px;" onclick="closeProgramModal()">닫기</button>
       </div>
     </div>
   </div>
@@ -276,7 +284,7 @@ function renderAdminDashboard() {
   const p = getProgram();
   return `
   <div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
       <div class="title" style="margin:0;">[운영진] ${p.name}</div>
       <button class="btn btn-outline" onclick="logout()">로그아웃</button>
     </div>
@@ -306,7 +314,7 @@ function renderAdminInterview(p) {
   <div class="card">
     <div class="subtitle">기본 설정</div>
     <div class="grid-2">
-      <div class="form-group"><label>프로그램명</label><input type="text" value="${p.name}" disabled></div>
+      <div class="form-group"><label>프로그램명</label><input type="text" value="${p.name}" disabled style="background:#F2F4F6;"></div>
       <div class="form-group">
         <label>면접 시간 단위</label>
         <select>
@@ -321,14 +329,14 @@ function renderAdminInterview(p) {
       <div class="form-group"><label>기업 시간제출 마감일</label><input type="date" value="${p.companyDeadline}"></div>
       <div class="form-group"><label>지원자 선택 마감일</label><input type="date" value="${p.studentDeadline}"></div>
     </div>
-    <div style="text-align:right;"><button class="btn">설정 저장</button></div>
+    <div style="text-align:right; margin-top: 8px;"><button class="btn">설정 저장</button></div>
   </div>
 
   <div class="grid-2">
     <div class="card">
       <div class="subtitle">기업 제출 현황</div>
-      <div style="font-size:24px; font-weight:800; color:var(--primary); margin-bottom:12px;">
-        ${comps.filter(c=>c.submitStatus==='완료').length} / ${comps.length}
+      <div style="font-size:32px; font-weight:800; color:var(--primary); margin-bottom:20px;">
+        ${comps.filter(c=>c.submitStatus==='완료').length} <span style="font-size:18px; color:var(--text-sub); font-weight:600;">/ ${comps.length}</span>
       </div>
       <table>
         <tr><th>기업명</th><th>상태</th></tr>
@@ -337,8 +345,8 @@ function renderAdminInterview(p) {
     </div>
     <div class="card">
       <div class="subtitle">지원자 제출 현황</div>
-      <div style="font-size:24px; font-weight:800; color:var(--primary); margin-bottom:12px;">
-        ${stus.filter(s=>s.submitStatus==='완료').length} / ${stus.length}
+      <div style="font-size:32px; font-weight:800; color:var(--primary); margin-bottom:20px;">
+        ${stus.filter(s=>s.submitStatus==='완료').length} <span style="font-size:18px; color:var(--text-sub); font-weight:600;">/ ${stus.length}</span>
       </div>
       <table>
         <tr><th>지원자명</th><th>상태</th></tr>
@@ -349,25 +357,38 @@ function renderAdminInterview(p) {
   `;
 }
 
-// 요구사항 4. 기업 관리 메뉴 (날짜별 가능 시간 상세 조회)
+// 요구사항 4. 기업 관리 메뉴 (날짜별 가능 시간 상세 조회 및 화상 링크 버튼)
 function renderAdminCompany() {
   const comps = getCompanies();
   return `
   <div class="card">
     <div class="subtitle">기업별 가용 시간대 현황</div>
-    <p style="font-size:13px; color:var(--text-sub); margin-bottom:16px;">각 기업이 제출한 면접 가능 스케줄입니다.</p>
+    <p style="font-size:14px; color:var(--text-sub); margin-bottom:24px;">각 기업이 제출한 면접 가능 스케줄 및 면접실 링크입니다.</p>
     ${comps.map(c => `
-      <div style="border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <strong style="font-size:16px;">${c.name}</strong>
-          <span class="badge ${c.submitStatus==='완료'?'badge-green':'badge-gray'}">${c.submitStatus}</span>
-        </div>
-        ${c.slots.length > 0 ? c.slots.map(slot => `
-          <div style="background:var(--bg); padding:8px 12px; border-radius:6px; margin-bottom:8px;">
-            <span style="font-weight:600; font-size:13px; color:var(--primary); display:inline-block; width:100px;">${slot.date}</span>
-            ${slot.times.map(t => `<span class="badge badge-gray" style="background:#fff; border:1px solid #ddd;">${t}</span>`).join('')}
+      <div style="border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; background:#FAFAFB;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="display:flex; align-items:center;">
+            <strong style="font-size:18px; margin-right:12px; color:var(--text-main);">${c.name}</strong>
+            <span class="badge ${c.submitStatus==='완료'?'badge-green':'badge-gray'}">${c.submitStatus}</span>
           </div>
-        `).join('') : '<div style="font-size:13px; color:var(--text-sub);">제출된 스케줄이 없습니다.</div>'}
+          
+          <a href="https://meet.google.com/test" target="_blank" class="btn" style="padding: 8px 16px; font-size: 13px; background: #E8F3FF; color: var(--primary); border: 1px solid var(--primary);">
+            화상 면접실 바로가기
+          </a>
+          
+        </div>
+        
+        <div style="background: var(--white); border-radius: 8px; border: 1px solid var(--border); padding: 16px;">
+          <div style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:12px;">제출된 가용 시간</div>
+          ${c.slots.length > 0 ? c.slots.map(slot => `
+            <div style="display:flex; align-items:center; margin-bottom:10px;">
+              <span style="font-weight:700; font-size:14px; color:var(--text-main); display:inline-block; width:110px;">${slot.date}</span>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                ${slot.times.map(t => `<span class="badge badge-gray" style="background:#F7F8FA; border:1px solid #E5E8EB; font-weight:500;">${t}</span>`).join('')}
+              </div>
+            </div>
+          `).join('') : '<div style="font-size:14px; color:var(--text-sub); text-align:center; padding: 20px 0;">제출된 스케줄이 없습니다.</div>'}
+        </div>
       </div>
     `).join('')}
   </div>
@@ -380,9 +401,9 @@ function renderAdminStudent() {
   const stus = getStudents();
   return `
   <div class="card">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <div class="subtitle" style="margin:0;">지원자 목록</div>
-      <select onchange="setStudentFilter(this.value)" style="padding:8px; border-radius:6px; border:1px solid var(--border);">
+      <select onchange="setStudentFilter(this.value)" style="padding:10px 14px; border-radius:8px; border:1px solid var(--border); min-width: 200px; font-family: inherit;">
         <option value="all" ${S.admin.studentFilter==='all'?'selected':''}>모든 기업 보기</option>
         ${comps.map(c=>`<option value="${c.id}" ${S.admin.studentFilter===c.id?'selected':''}>${c.name} 지원자</option>`).join('')}
       </select>
@@ -392,10 +413,10 @@ function renderAdminStudent() {
       ${stus.map(s => {
         const companyName = comps.find(c=>c.id===s.companyId)?.name || '-';
         return `<tr>
-          <td>${s.name}</td>
+          <td style="font-weight: 500;">${s.name}</td>
           <td>${companyName}</td>
           <td><span class="badge ${s.submitStatus==='완료'?'badge-green':'badge-gray'}">${s.submitStatus}</span></td>
-          <td>${s.interviewStatus}</td>
+          <td><span style="font-weight: 600; color: ${s.interviewStatus==='합격'?'var(--primary)':s.interviewStatus==='불합격'?'var(--danger)':'inherit'}">${s.interviewStatus}</span></td>
         </tr>`;
       }).join('')}
     </table>
@@ -408,31 +429,33 @@ function renderAdminMatching() {
   let content = '';
   if (S.admin.matchingStatus === 'idle') {
     content = `
-      <div style="text-align:center; padding:40px 0;">
+      <div style="text-align:center; padding:60px 0;">
         <div style="font-size:16px; color:var(--text-sub); margin-bottom:24px;">기업과 지원자의 제출 정보를 바탕으로 자동 매칭을 실행합니다.</div>
-        <button class="btn" onclick="runMatching(false)">자동 매칭 실행</button>
-        <button class="btn btn-outline" style="margin-left:8px;" onclick="runMatching(true)">매칭 실패 테스트(시뮬레이션)</button>
+        <button class="btn" style="padding: 14px 24px; font-size: 15px;" onclick="runMatching(false)">자동 매칭 실행</button>
+        <button class="btn btn-outline" style="margin-left:8px; padding: 14px 24px; font-size: 15px;" onclick="runMatching(true)">매칭 실패 테스트(시뮬레이션)</button>
       </div>`;
   } else if (S.admin.matchingStatus === 'running') {
-    content = `<div style="text-align:center; padding:40px 0; color:var(--primary); font-weight:bold;">알고리즘 최적화 및 스케줄 배정 중입니다...</div>`;
+    content = `<div style="text-align:center; padding:60px 0; color:var(--primary); font-size: 16px; font-weight:700;">알고리즘 최적화 및 스케줄 배정 중입니다...</div>`;
   } else if (S.admin.matchingStatus === 'success') {
     content = `
-      <div style="background:var(--secondary); padding:20px; border-radius:12px; text-align:center; margin-bottom:20px;">
-        <span class="badge badge-green">성공</span>
-        <h3 style="margin:10px 0;">매칭이 성공적으로 완료되었습니다. (매칭률 100%)</h3>
-        <p style="font-size:13px; color:var(--text-sub);">모든 학생이 1~2순위 시간대로 배정되었습니다.</p>
+      <div style="background:#E8F9F0; padding:32px 20px; border-radius:12px; text-align:center; margin-bottom:24px; border: 1px solid #C3EEDB;">
+        <span class="badge badge-green" style="margin-bottom: 12px; padding: 6px 14px; font-size: 14px;">성공</span>
+        <h3 style="margin:0 0 12px 0; color: #0D9648;">매칭이 성공적으로 완료되었습니다. (매칭률 100%)</h3>
+        <p style="font-size:14px; color:var(--text-sub); margin: 0;">모든 학생이 1~2순위 시간대로 배정되었습니다.</p>
       </div>
       <div style="text-align:right;"><button class="btn btn-outline" onclick="S.admin.matchingStatus='idle'; render();">다시 매칭하기</button></div>
     `;
   } else if (S.admin.matchingStatus === 'fail') {
     content = `
-      <div style="background:#FFF1F2; padding:20px; border-radius:12px; margin-bottom:20px; border:1px solid #FFE4E6;">
-        <span class="badge badge-red">매칭 실패 (충돌 발생)</span>
-        <h3 style="margin:10px 0; color:var(--danger);">일부 스케줄이 충돌하여 자동 매칭을 완료하지 못했습니다. (매칭률 85%)</h3>
+      <div style="background:#FFF1F2; padding:32px 24px; border-radius:12px; margin-bottom:24px; border:1px solid #FFE4E6;">
+        <div style="display:flex; align-items:center; margin-bottom: 16px;">
+          <span class="badge badge-red" style="padding: 6px 14px; font-size: 14px; margin-right: 12px;">매칭 실패 (충돌 발생)</span>
+          <h3 style="margin:0; color:var(--danger); font-size: 18px;">일부 스케줄이 충돌하여 자동 매칭을 완료하지 못했습니다. (매칭률 85%)</h3>
+        </div>
         
-        <div style="background:white; padding:16px; border-radius:8px; margin-top:16px;">
-          <strong>[수동 배정 프로세스 진행 안내]</strong>
-          <ol style="font-size:14px; color:var(--text-sub); margin-top:10px; padding-left:20px; line-height:1.6;">
+        <div style="background:rgba(255,255,255,0.8); padding:20px; border-radius:8px;">
+          <strong style="color:var(--text-main); font-size:15px;">[수동 배정 프로세스 진행 안내]</strong>
+          <ol style="font-size:14px; color:var(--text-sub); margin:12px 0 0 0; padding-left:24px; line-height:1.7;">
             <li>아래 미배정 명단을 확인합니다.</li>
             <li>[기업 관리] 탭에서 기업의 잔여 가용 시간을 확인합니다.</li>
             <li>지원자에게 개별 연락하여 남은 시간 중 조율을 진행합니다.</li>
@@ -440,11 +463,11 @@ function renderAdminMatching() {
           </ol>
         </div>
       </div>
-      <div class="card">
+      <div class="card" style="box-shadow: none;">
         <div class="subtitle">미배정 명단 (조율 필요)</div>
         <table>
           <tr><th>지원자</th><th>지망 기업</th><th>충돌 사유</th><th>조치</th></tr>
-          <tr><td>최유리</td><td>토스</td><td>기업 가용 시간 부족</td><td><button class="btn btn-outline" style="padding:4px 8px; font-size:12px;">수동 배정</button></td></tr>
+          <tr><td>최유리</td><td>토스</td><td style="color: var(--danger);">기업 가용 시간 부족</td><td><button class="btn btn-outline" style="padding:6px 12px; font-size:13px;">수동 배정</button></td></tr>
         </table>
       </div>
       <div style="text-align:right;"><button class="btn btn-outline" onclick="S.admin.matchingStatus='idle'; render();">초기화</button></div>
@@ -462,32 +485,32 @@ function renderAdminProgress() {
   return `
   <div class="interview-layout">
     <div class="card" style="padding:0; overflow:hidden; display:flex; flex-direction:column;">
-      <div style="padding:16px; border-bottom:1px solid var(--border); background:var(--bg); font-weight:700;">
+      <div style="padding:20px 24px; border-bottom:1px solid var(--border); background:var(--bg); font-weight:700; font-size: 16px;">
         화상 면접 진행 창
       </div>
-      <div style="flex:1; background:#000; min-height:400px; position:relative;">
+      <div style="flex:1; background:#000; min-height:480px; position:relative;">
         ${target 
           ? `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=0" 
                  style="width:100%; height:100%; border:none; pointer-events:none;" 
                  allow="camera; microphone; fullscreen"></iframe>
-             <div style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.6); color:white; padding:6px 12px; border-radius:4px; font-size:13px;">
+             <div style="position:absolute; bottom:24px; left:24px; background:rgba(0,0,0,0.7); backdrop-filter: blur(4px); color:white; padding:8px 16px; border-radius:8px; font-size:14px; font-weight:600;">
                 현재 면접자: ${target.name}
              </div>` 
-          : `<div style="display:flex; height:100%; align-items:center; justify-content:center; color:rgba(255,255,255,0.5);">우측 명단에서 면접에 참여할 학생을 선택해주세요.</div>`
+          : `<div style="display:flex; height:100%; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size: 15px;">우측 명단에서 면접에 참여할 학생을 선택해주세요.</div>`
         }
       </div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:16px;">
+    <div style="display:flex; flex-direction:column; gap:20px;">
       <div class="card" style="margin-bottom:0;">
         <div class="subtitle">면접 대상자 목록</div>
-        <div style="max-height:200px; overflow-y:auto;">
+        <div style="max-height:240px; overflow-y:auto; padding-right: 4px;">
           ${stus.map(s => `
             <div onclick="startInterview('${s.id}')" 
-                 style="padding:10px; border:1px solid ${target && target.id===s.id ? 'var(--primary)' : 'var(--border)'}; 
-                        border-radius:6px; margin-bottom:8px; cursor:pointer; background:${target && target.id===s.id ? '#F0F6FF' : '#FFF'};">
-              <div style="font-weight:600; font-size:14px;">${s.name}</div>
-              <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">상태: ${s.interviewStatus}</div>
+                 style="padding:14px; border:1px solid ${target && target.id===s.id ? 'var(--primary)' : 'var(--border)'}; 
+                        border-radius:8px; margin-bottom:10px; cursor:pointer; background:${target && target.id===s.id ? '#F0F6FF' : '#FFF'}; transition: 0.2s;">
+              <div style="font-weight:700; font-size:15px; color: ${target && target.id===s.id ? 'var(--primary)' : 'var(--text-main)'};">${s.name}</div>
+              <div style="font-size:13px; color:var(--text-sub); margin-top:6px;">상태: <strong style="color:var(--text-main);">${s.interviewStatus}</strong></div>
             </div>
           `).join('')}
         </div>
@@ -496,20 +519,20 @@ function renderAdminProgress() {
       ${target ? `
       <div class="card" style="flex:1; margin-bottom:0;">
         <div class="subtitle">지원자 평가</div>
-        <table style="margin-bottom:16px;">
-          <tr><th style="width:70px;">이름</th><td>${target.name}</td></tr>
-          <tr><th>지원기업</th><td>${getCompanies().find(c=>c.id===target.companyId)?.name}</td></tr>
-        </table>
+        <div style="background: var(--bg); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+          <div style="display:flex; margin-bottom: 8px;"><span style="width:70px; color:var(--text-sub); font-size:13px;">이름</span><strong style="font-size:14px;">${target.name}</strong></div>
+          <div style="display:flex;"><span style="width:70px; color:var(--text-sub); font-size:13px;">지원기업</span><strong style="font-size:14px;">${getCompanies().find(c=>c.id===target.companyId)?.name}</strong></div>
+        </div>
         
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom:0;">
           <label>면접 상태 기록</label>
-          <select id="statusSelect_${target.id}" style="margin-bottom:10px;">
+          <select id="statusSelect_${target.id}" style="margin-bottom:16px;">
             <option value="미정" ${target.interviewStatus==='미정'?'selected':''}>미정</option>
             <option value="합격" ${target.interviewStatus==='합격'?'selected':''}>합격</option>
             <option value="예비 합격" ${target.interviewStatus==='예비 합격'?'selected':''}>예비 합격</option>
             <option value="불합격" ${target.interviewStatus==='불합격'?'selected':''}>불합격</option>
           </select>
-          <button class="btn" style="width:100%;" onclick="updateInterviewStatus('${target.id}', document.getElementById('statusSelect_${target.id}').value)">평가 저장</button>
+          <button class="btn" style="width:100%; padding: 14px;" onclick="updateInterviewStatus('${target.id}', document.getElementById('statusSelect_${target.id}').value)">평가 저장하기</button>
         </div>
       </div>
       ` : ''}
@@ -523,13 +546,13 @@ function renderCompanyDashboard() {
   const p = getProgram();
   return `
   <div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
       <div class="title" style="margin:0;">[기업] ${p.name} 스케줄 관리</div>
       <button class="btn btn-outline" onclick="logout()">로그아웃</button>
     </div>
-    <div class="card">
-      <div class="subtitle">기업 전용 기능은 1차 프로토타입과 동일하게 유지됩니다.</div>
-      <p style="color:var(--text-sub); font-size:14px;">(운영진 기능을 중점적으로 업데이트 하였습니다.)</p>
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+      <div class="subtitle" style="margin-bottom: 12px;">기업 전용 기능은 1차 프로토타입과 동일하게 유지됩니다.</div>
+      <p style="color:var(--text-sub); font-size:15px; margin:0;">(운영진 기능을 중점적으로 업데이트 하였습니다.)</p>
     </div>
   </div>
   `;
