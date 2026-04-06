@@ -56,10 +56,12 @@ a{text-decoration:none;color:inherit}
 .btn-lg{height:44px;padding:0 22px;font-size:14px;font-weight:700}
 
 /* === FORM === */
-.fg{margin-bottom:14px}
-.fl{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:5px;display:block}
-.fi{width:100%;height:40px;padding:0 11px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;transition:border .15s}
+.fg{margin-bottom:18px}
+.fl{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:6px;display:block}
+.fi{width:100%;height:40px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;transition:border .15s}
 .fi:focus{border-color:var(--blue);background:var(--card)}
+.fs{width:100%;height:40px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;cursor:pointer;appearance:none}
+.fs:focus{border-color:var(--blue);background:var(--card)}
 
 /* === CARD === */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--sh)}
@@ -68,18 +70,19 @@ a{text-decoration:none;color:inherit}
 .cb{padding:18px}
 
 /* === BADGE === */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:600;flex-shrink:0}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:999px;font-size:11.5px;font-weight:700;flex-shrink:0}
 .b-blue{background:var(--blue2);color:var(--blue);border:1px solid rgba(49,130,246,.2)}
 .b-green{background:var(--green2);color:#0ea05a;border:1px solid rgba(23,201,100,.2)}
 .b-orange{background:var(--orange2);color:#d97706;border:1px solid rgba(245,158,11,.2)}
+.b-red{background:var(--red2);color:var(--red);border:1px solid rgba(232,92,92,.2)}
 .b-gray{background:var(--card2);color:var(--t2);border:1px solid var(--border)}
 .b-purple{background:var(--purple2);color:var(--purple);border:1px solid rgba(124,58,237,.2)}
 
 /* === TABLE === */
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:9px 13px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;background:var(--card2)}
-td{font-size:13px;color:var(--t1);padding:11px 13px;border-bottom:1px solid var(--border)}
+th{font-size:11.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:12px 14px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;background:var(--card2)}
+td{font-size:13px;color:var(--t1);padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(49,130,246,.02)}
 
@@ -105,9 +108,25 @@ tr:hover td{background:rgba(49,130,246,.02)}
 .seg-btn{flex:1;height:36px;font-size:13px;font-weight:500;color:var(--t2);background:transparent;border:none;cursor:pointer;transition:all .12s}
 .seg-btn.on{background:var(--blue);color:#fff;font-weight:700}
 
+/* === TOGGLE SWITCH === */
+.tgl-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
+.tgl{width:36px;height:20px;border-radius:10px;background:var(--border2);position:relative;transition:background .2s;flex-shrink:0}
+.tgl.on{background:var(--blue)}
+.tgl::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl.on::after{left:19px}
+
+/* === EDITOR === */
+.editor-wrap{border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--card);transition:border .15s}
+.editor-wrap:focus-within{border-color:var(--blue)}
+.editor-toolbar{background:var(--card2);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center}
+.e-btn{width:28px;height:28px;border-radius:4px;border:none;background:transparent;color:var(--t2);font-size:14px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.e-btn:hover{background:var(--border);color:var(--t1)}
+.editor-content{min-height:300px;padding:16px;outline:none;font-size:14px;line-height:1.7;color:var(--t1)}
+.editor-content:empty::before{content:attr(placeholder);color:var(--t3);pointer-events:none;display:block}
+
 /* === MISC === */
 .ph{margin-bottom:22px}.ph-t{font-size:21px;font-weight:900;color:var(--t1);letter-spacing:-.5px}.ph-s{font-size:13px;color:var(--t3);margin-top:3px}
-.flex{display:flex}.aic{align-items:center}.jb{justify-content:space-between}.gap2{gap:8px}
+.flex{display:flex}.aic{align-items:center}.jb{justify-content:space-between}.gap2{gap:8px}.gap3{gap:12px}
 .w-full{width:100%}
 .empty{text-align:center;padding:44px 20px;color:var(--t3)}
 </style>
@@ -133,16 +152,16 @@ const PROGRAMS=[
    interviewStart:'2025-08-04',interviewEnd:'2025-08-15',status:'active'},
   {id:'p3',name:'2025 상반기 인턴형 프로그램',category:'인턴형',
    interviewStart:'2025-03-03',interviewEnd:'2025-03-14',status:'done'},
-  {id:'p2',name:'2025 하반기 프로젝트형 프로그램',category:'프로젝트형',
-   interviewStart:'2025-09-01',interviewEnd:'2025-09-10',status:'upcoming'},
-  {id:'p4',name:'2025 상반기 프로젝트형 멘토링',category:'프로젝트형',
-   interviewStart:'2025-04-01',interviewEnd:'2025-04-15',status:'done'},
 ]
 
 const DB={
   companies:[
     {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr',mode:'online',type:'1on1',submitted:true},
     {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr',mode:'offline',type:'group',submitted:true},
+  ],
+  notices:[
+    {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '면접 일정 가이드라인입니다...', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
+    {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: 'DB 서버 점검이 있습니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
   ]
 }
 
@@ -153,13 +172,17 @@ const S={
   view:'login', tab:'',
   user:null, prog:null,
   loginRole:'admin', loginEmail:'', loginPw:'', loginErr:'',
-  progTypeFilter:'인턴형', // 교육 유형 탭 상태 (기본값: 인턴형)
+  progTypeFilter:'인턴형',
+  // 공지사항 탭 서브 뷰 상태 (list or write)
+  noticeView: 'list', 
+  // 임시 작성중인 공지 데이터
+  draftNotice: { target: 'all', title: '', content: '', pinned: false, visibility: 'public' }
 }
 
-const fmtDate=d=>{if(!d)return'';const dt=new Date(d+'T00:00:00');return`${dt.getMonth()+1}월 ${dt.getDate()}일(${WEEKDAYS[dt.getDay()]})`}
+const fmtDate=d=>{if(!d)return'';const dt=new Date(d+'T00:00:00');return`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
 
 // ═══════════════════════════════════════════
-// LOGIN VIEW
+// LOGIN VIEW & PROG SELECT
 // ═══════════════════════════════════════════
 const HINTS={
   admin:[['운영진','admin@intern.kr','1234']],
@@ -203,159 +226,139 @@ function doLogin(){
   if(!acc||acc.pw!==S.loginPw){S.loginErr='이메일 또는 비밀번호가 올바르지 않습니다.';render();return}
   if(acc.role!==S.loginRole){S.loginErr='선택한 역할과 계정 유형이 다릅니다.';render();return}
   
-  S.user = {...acc};
-  S.loginErr = '';
-
-  // 운영진인 경우 교육과정 선택 화면(prog-select)으로 바로 이동
-  if(acc.role === 'admin') {
-    S.view = 'prog-select';
-    S.progTypeFilter = '인턴형'; // 초기 세팅
-  } else {
-    // 기업/학생은 우선 기존 로직 유지 (프로그램 p1 강제 지정 후 대시보드 진입)
-    S.prog = PROGRAMS[0];
-    S.view = acc.role;
-    S.tab = acc.role==='company'?'co-settings':'st-status';
-  }
+  S.user = {...acc}; S.loginErr = '';
+  if(acc.role === 'admin') { S.view = 'prog-select'; S.progTypeFilter = '인턴형'; } 
+  else { S.prog = PROGRAMS[0]; S.view = acc.role; S.tab = acc.role==='company'?'co-settings':'st-status'; }
   render()
 }
+function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,loginEmail:'',loginPw:'',loginErr:'',noticeView:'list'});render()}
 
-function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,loginEmail:'',loginPw:'',loginErr:''});render()}
-
-// ═══════════════════════════════════════════
-// ADMIN - PROGRAM SELECT VIEW (교육 유형 및 과정 선택)
-// ═══════════════════════════════════════════
 function renderProgSelectView(){
   const statusLabel={active:'진행중',upcoming:'예정',done:'완료'}
   const statusColor={active:'b-green',upcoming:'b-blue',done:'b-gray'}
   const filteredProgs = PROGRAMS.filter(p => p.category === S.progTypeFilter)
-
   return `<div class="login-wrap" style="align-items:flex-start; padding-top:10vh">
     <div style="width:540px; max-width:90%">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
-        <div>
-          <div style="font-size:22px; font-weight:900; letter-spacing:-.5px; color:var(--t1)">교육과정 선택</div>
-          <div style="font-size:13px; color:var(--t3); margin-top:3px">관리할 교육 유형과 과정을 선택해주세요</div>
-        </div>
+        <div><div style="font-size:22px; font-weight:900; letter-spacing:-.5px; color:var(--t1)">교육과정 선택</div></div>
         <button class="btn btn-ghost btn-sm" onclick="doLogout()">로그아웃</button>
       </div>
-      
       <div class="seg mb4">
         <button class="seg-btn ${S.progTypeFilter==='인턴형'?'on':''}" onclick="S.progTypeFilter='인턴형';render()">🏢 인턴형</button>
         <button class="seg-btn ${S.progTypeFilter==='프로젝트형'?'on':''}" onclick="S.progTypeFilter='프로젝트형';render()">📋 프로젝트형</button>
       </div>
-
       <div style="display:flex; flex-direction:column; gap:10px">
         ${filteredProgs.map(p=>`
-        <div class="prog-sel-item" onclick="enterAdminDashboard('${p.id}')">
+        <div class="prog-sel-item" onclick="S.prog=PROGRAMS.find(x=>x.id==='${p.id}');S.view='admin';S.tab='notice';S.noticeView='list';render()">
           <div class="prog-sel-icon">${p.category==='인턴형'?'🏢':'📋'}</div>
           <div style="flex:1">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
-              <div class="prog-sel-name">${p.name}</div>
-              <span class="badge ${statusColor[p.status]}">${statusLabel[p.status]}</span>
-            </div>
-            <div class="prog-sel-meta">기간: ${fmtDate(p.interviewStart)} ~ ${fmtDate(p.interviewEnd)}</div>
-          </div>
-          <div style="color:var(--t3)">
-             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="prog-sel-name">${p.name}</div><span class="badge ${statusColor[p.status]}">${statusLabel[p.status]}</span></div>
+            <div class="prog-sel-meta">기간: ${p.interviewStart} ~ ${p.interviewEnd}</div>
           </div>
         </div>`).join('')}
-        
-        ${filteredProgs.length === 0 ? `<div class="empty"><div class="empty-ico">📁</div><div class="empty-t">등록된 교육과정이 없습니다.</div></div>` : ''}
       </div>
     </div>
   </div>`
 }
 
-function enterAdminDashboard(progId) {
-  const p = PROGRAMS.find(p => p.id === progId);
-  S.prog = p;
-  S.view = 'admin';
-  S.tab = 'notice'; // 대시보드 진입 시 첫 탭을 '공지'로 설정
-  render();
-}
-
 // ═══════════════════════════════════════════
-// APP SHELL (Top Bar + Sidebar 레이아웃)
+// APP SHELL
 // ═══════════════════════════════════════════
 function renderShell(sidebar,main){
   return`<div class="app">
     <div class="topbar">
       <div class="logo">
-        <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3M9 3h6a1 1 0 0 1 1 1v3H8V4a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-        면접 매칭
+        <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3M9 3h6a1 1 0 0 1 1 1v3H8V4a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>면접 매칭
       </div>
       ${S.prog?`<div style="height:20px;width:1px;background:var(--border)"></div>
         <div style="font-size:12px;font-weight:700;color:var(--blue);background:var(--blue2);padding:3px 10px;border-radius:999px;cursor:pointer" 
-             onclick="if(S.user.role==='admin'){S.view='prog-select';render()}">${S.prog.name} <span style="opacity:.7">▾</span></div>`:''}
+             onclick="if(S.user.role==='admin'){S.view='prog-select';render()}">${S.prog.name} ▾</div>`:''}
       <div style="flex:1"></div>
       ${S.view==='admin'?`<span class="badge b-teal">🛠 운영진</span>`:''}
       <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">로그아웃</button>
     </div>
-    <div class="layout">
-      <div class="sidebar">${sidebar}</div>
-      <div class="main">${main}</div>
-    </div>
+    <div class="layout"><div class="sidebar">${sidebar}</div><div class="main">${main}</div></div>
   </div>`
 }
 
 // ═══════════════════════════════════════════
 // ADMIN DASHBOARD
 // ═══════════════════════════════════════════
-// 요구사항에 맞춰 3개의 탭으로 개편
 const ADMIN_NAV=[
-  {id:'notice',label:'공지',
-   ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
-  {id:'companies',label:'참여기업',
-   ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
-  {id:'schedule',label:'면접일정',
-   ico:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
+  {id:'notice',label:'공지',ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
+  {id:'companies',label:'참여기업',ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
+  {id:'schedule',label:'면접일정',ico:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
 ]
 
 function renderAdmin(){
   const sidebar=`<div class="nav-section">
     <div class="nav-label">대시보드 메뉴</div>
-    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="setTab('${n.id}')">
-      <svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}
-    </div>`).join('')}
+    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="setTab('${n.id}')"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
   </div>`
   
   let main=''
-  if(S.tab==='notice') main=renderNotice()
+  if(S.tab==='notice') main = S.noticeView==='write' ? renderNoticeWrite() : renderNoticeList()
   else if(S.tab==='companies') main=renderCompanies()
   else if(S.tab==='schedule') main=renderSchedule()
   
   return renderShell(sidebar,main)
 }
 
-function setTab(t){S.tab=t;render()}
+function setTab(t){
+  S.tab=t; 
+  if(t==='notice') S.noticeView='list'; // 탭 변경시 항상 리스트로 복귀
+  render();
+}
 
-// ─── 1. 공지사항 뷰 (신규) ───────────────────────────────
-function renderNotice(){
+// ─── 1. 공지사항 리스트 뷰 ───────────────────────────────
+function renderNoticeList(){
+  const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
+  const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
+
+  // 정렬: 상단고정 우선, 그다음 ID 역순(최신순)
+  const sortedNotices = [...DB.notices].sort((a,b) => {
+    if(a.pinned === b.pinned) return b.id - a.id;
+    return a.pinned ? -1 : 1;
+  });
+
   return `<div>
     <div class="ph flex jb aic">
       <div><div class="ph-t">공지사항</div><div class="ph-s">프로그램 참여 기업 및 학생들에게 전달할 안내사항</div></div>
-      <button class="btn btn-blue">공지 등록</button>
+      <button class="btn btn-blue" onclick="openNoticeWrite()">
+         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="margin-right:2px"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg> 공지사항 작성
+      </button>
     </div>
     <div class="card">
       <div class="tw">
         <table>
-          <thead><tr><th>번호</th><th>분류</th><th style="width: 50%">제목</th><th>작성자</th><th>작성일</th></tr></thead>
+          <thead><tr>
+            <th style="width:60px; text-align:center">번호</th>
+            <th style="width:80px; text-align:center">노출여부</th>
+            <th style="width:80px; text-align:center">대상</th>
+            <th>제목</th>
+            <th style="width:120px">작성자</th>
+            <th style="width:100px">작성일</th>
+            <th style="width:80px; text-align:right">조회수</th>
+          </tr></thead>
           <tbody>
-            <tr>
-              <td>2</td>
-              <td><span class="badge b-red">필독</span></td>
-              <td style="font-weight: 700; cursor: pointer">[필독] 2025 ${S.prog.category} 면접 일정 관련 전체 안내</td>
-              <td>운영진</td>
-              <td>2025-07-20</td>
+            ${sortedNotices.length === 0 ? `<tr><td colspan="7" class="empty"><div class="empty-t">등록된 공지사항이 없습니다.</div></td></tr>` : ''}
+            ${sortedNotices.map(n => `
+            <tr style="${n.pinned ? 'background-color: var(--blue2);' : ''}">
+              <td style="text-align:center; color:var(--t3); font-weight:600">${n.pinned ? '—' : n.id}</td>
+              <td style="text-align:center"><span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span></td>
+              <td style="text-align:center"><span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]}</span></td>
+              <td>
+                <div class="flex aic gap2" style="cursor:pointer; font-weight:${n.pinned?'700':'500'}">
+                  ${n.pinned ? '<span style="color:var(--blue); font-size:12px">📌 [상단고정]</span>' : ''}
+                  ${n.title}
+                </div>
+              </td>
+              <td>${n.author}</td>
+              <td style="color:var(--t2)">${n.date}</td>
+              <td style="text-align:right; color:var(--t2)">${n.views.toLocaleString()}</td>
             </tr>
-            <tr>
-              <td>1</td>
-              <td><span class="badge b-gray">일반</span></td>
-              <td style="font-weight: 500; cursor: pointer">시스템 점검 안내 (7/25 새벽 2시~4시)</td>
-              <td>시스템관리자</td>
-              <td>2025-07-18</td>
-            </tr>
+            `).join('')}
           </tbody>
         </table>
       </div>
@@ -363,7 +366,107 @@ function renderNotice(){
   </div>`
 }
 
-// ─── 2. 참여기업 뷰 ───────────────────────────────
+// ─── 1-1. 공지사항 작성 뷰 (에디터) ─────────────────────────
+function openNoticeWrite(){
+  S.draftNotice = { target: 'all', title: '', content: '', pinned: false, visibility: 'public' };
+  S.noticeView = 'write';
+  render();
+}
+
+function toggleDraft(key) { S.draftNotice[key] = !S.draftNotice[key]; render(); }
+function setDraft(key, val) { S.draftNotice[key] = val; render(); }
+
+function saveNotice() {
+  const title = document.getElementById('notice-title').value.trim();
+  const content = document.getElementById('notice-content').innerHTML.trim();
+  
+  if(!title) { alert('제목을 입력해주세요.'); return; }
+  
+  const newId = DB.notices.length > 0 ? Math.max(...DB.notices.map(n=>n.id)) + 1 : 1;
+  const newNotice = {
+    id: newId,
+    title: title,
+    content: content,
+    author: '운영진',
+    date: fmtDate(new Date().toISOString().split('T')[0]),
+    visibility: S.draftNotice.visibility,
+    target: S.draftNotice.target,
+    pinned: S.draftNotice.pinned,
+    views: 0
+  };
+  
+  DB.notices.push(newNotice);
+  S.noticeView = 'list';
+  render();
+  // alert 대신 부드러운 알림을 위해 timeout 처리 생략
+}
+
+function renderNoticeWrite(){
+  const d = S.draftNotice;
+  return `<div>
+    <div class="ph flex jb aic">
+      <div><div class="ph-t">공지사항 작성</div><div class="ph-s">새로운 공지사항을 등록합니다.</div></div>
+      <div class="flex gap2">
+        <button class="btn btn-ghost" onclick="S.noticeView='list';render()">취소</button>
+        <button class="btn btn-blue" onclick="saveNotice()">등록 완료</button>
+      </div>
+    </div>
+    
+    <div class="card" style="max-width: 900px">
+      <div class="cb">
+        
+        <div class="flex gap3 mb4" style="flex-wrap:wrap">
+          <div style="flex:1; min-width:200px">
+            <label class="fl">노출 대상</label>
+            <select class="fs" onchange="setDraft('target', this.value)">
+              <option value="all" ${d.target==='all'?'selected':''}>전체 (기업 및 면접자)</option>
+              <option value="company" ${d.target==='company'?'selected':''}>기업만</option>
+              <option value="student" ${d.target==='student'?'selected':''}>면접자만</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:200px">
+            <label class="fl">노출 여부 (공개 설정)</label>
+            <select class="fs" onchange="setDraft('visibility', this.value)">
+              <option value="public" ${d.visibility==='public'?'selected':''}>공개 (즉시 노출)</option>
+              <option value="hidden" ${d.visibility==='hidden'?'selected':''}>비공개 (임시 저장)</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:flex-end; padding-bottom:8px">
+            <div class="tgl-wrap" onclick="toggleDraft('pinned')">
+              <div class="tgl ${d.pinned?'on':''}"></div>
+              <span style="font-size:13px; font-weight:600; color:var(--t1)">📌 상단 고정하기</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl">공지 제목</label>
+          <input class="fi" id="notice-title" placeholder="제목을 입력하세요" value="${d.title}" style="font-size:15px; font-weight:600">
+        </div>
+
+        <div class="fg">
+          <label class="fl">공지 내용 (에디터)</label>
+          <div class="editor-wrap">
+            <div class="editor-toolbar">
+              <button class="e-btn" onclick="document.execCommand('bold',false,null)" title="굵게"><b>B</b></button>
+              <button class="e-btn" onclick="document.execCommand('italic',false,null)" title="기울임"><i>I</i></button>
+              <button class="e-btn" onclick="document.execCommand('underline',false,null)" title="밑줄"><u>U</u></button>
+              <div style="width:1px; height:16px; background:var(--border); margin:0 4px"></div>
+              <button class="e-btn" onclick="document.execCommand('insertUnorderedList',false,null)" title="글머리 기호">•</button>
+              <button class="e-btn" onclick="document.execCommand('insertOrderedList',false,null)" title="번호 매기기">1.</button>
+              <div style="width:1px; height:16px; background:var(--border); margin:0 4px"></div>
+              <button class="e-btn" onclick="let url=prompt('링크 URL을 입력하세요');if(url)document.execCommand('createLink',false,url)" title="링크 삽입">🔗</button>
+            </div>
+            <div class="editor-content" contenteditable="true" id="notice-content" placeholder="이곳에 공지사항 내용을 작성하세요...">${d.content}</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>`
+}
+
+// ─── 참여기업 & 면접일정 뷰 (기존 유지) ─────────────────────────
 function renderCompanies(){
   return `<div>
     <div class="ph flex jb aic">
@@ -391,7 +494,6 @@ function renderCompanies(){
   </div>`
 }
 
-// ─── 3. 면접일정 뷰 ───────────────────────────────
 function renderSchedule(){
   return `<div>
     <div class="ph flex jb aic">
@@ -401,34 +503,19 @@ function renderSchedule(){
          <button class="btn btn-blue">자동 매칭 실행</button>
       </div>
     </div>
-    
-    <div class="stats">
-      <div class="stat"><div class="stat-l">총 면접 건수</div><div class="stat-v">0</div><div class="stat-s">건 (예정)</div></div>
-      <div class="stat"><div class="stat-l">매칭 완료</div><div class="stat-v" style="color:var(--green)">0</div><div class="stat-s">건</div></div>
-      <div class="stat"><div class="stat-l">미배정(실패)</div><div class="stat-v" style="color:var(--red)">0</div><div class="stat-s">건</div></div>
-      <div class="stat"><div class="stat-l">대기중</div><div class="stat-v" style="color:var(--t3)">-</div><div class="stat-s">-</div></div>
-    </div>
-
-    <div class="card">
-      <div class="empty">
-        <div class="empty-ico">📅</div>
-        <div class="empty-t">아직 확정된 면접 일정이 없습니다.</div>
-        <div class="empty-s">우측 상단의 '자동 매칭 실행' 버튼을 눌러 일정을 배정해주세요.</div>
-      </div>
-    </div>
+    <div class="card"><div class="empty"><div class="empty-ico">📅</div><div class="empty-t">아직 확정된 면접 일정이 없습니다.</div></div></div>
   </div>`
 }
 
 // ═══════════════════════════════════════════
-// RENDER (엔트리 포인트)
+// INITIAL RENDER
 // ═══════════════════════════════════════════
 function render(){
   const app=document.getElementById('app')
   if(S.view==='login') app.innerHTML=renderLogin()
-  else if(S.view==='prog-select') app.innerHTML=renderProgSelectView() // 신규 추가된 View 라우팅
+  else if(S.view==='prog-select') app.innerHTML=renderProgSelectView()
   else if(S.view==='admin') app.innerHTML=renderAdmin()
   
-  // input 값을 유지하기 위한 처리 (로그인 화면일 때만)
   if(S.view==='login'){
      const em=document.querySelector('input[type="email"]')
      const pw=document.querySelector('input[type="password"]')
@@ -436,7 +523,6 @@ function render(){
      if(pw)pw.value=S.loginPw
   }
 }
-
 render()
 </script>
 </body>
