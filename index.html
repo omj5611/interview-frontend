@@ -62,6 +62,7 @@ a{text-decoration:none;color:inherit}
 .fi:focus{border-color:var(--blue);background:var(--card)}
 .fs{width:100%;height:40px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--t1);background:var(--card2);outline:none;cursor:pointer;appearance:none}
 .fs:focus{border-color:var(--blue);background:var(--card)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 /* === CARD === */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--sh)}
@@ -141,7 +142,6 @@ tr.clickable{cursor:pointer; transition:background .1s}
 // DATA
 // ═══════════════════════════════════════════
 const WEEKDAYS=['일','월','화','수','목','금','토']
-const MONTHS=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
 
 const ACCOUNTS={
   'admin@intern.kr':   {role:'admin',  id:'admin', pw:'1234'},
@@ -151,9 +151,13 @@ const ACCOUNTS={
 
 const PROGRAMS=[
   {id:'p1',name:'2025 하반기 인턴형 프로그램',category:'인턴형',
-   interviewStart:'2025-08-04',interviewEnd:'2025-08-15',status:'active'},
+   interviewStart:'2025-08-04',interviewEnd:'2025-08-15',
+   companyDeadline:'2025-07-28',studentDeadline:'2025-08-01',
+   status:'active'},
   {id:'p3',name:'2025 상반기 인턴형 프로그램',category:'인턴형',
-   interviewStart:'2025-03-03',interviewEnd:'2025-03-14',status:'done'},
+   interviewStart:'2025-03-03',interviewEnd:'2025-03-14',
+   companyDeadline:'2025-02-24',studentDeadline:'2025-02-28',
+   status:'done'},
 ]
 
 const DB={
@@ -175,10 +179,8 @@ const S={
   user:null, prog:null,
   loginRole:'admin', loginEmail:'', loginPw:'', loginErr:'',
   progTypeFilter:'인턴형',
-  // 공지사항 탭 서브 뷰 상태 (list, write, detail)
   noticeView: 'list', 
   selectedNoticeId: null,
-  // 임시 작성중인 공지 데이터
   draftNotice: { target: 'all', title: '', content: '', pinned: false, visibility: 'public' }
 }
 
@@ -288,10 +290,12 @@ function renderShell(sidebar,main){
 // ═══════════════════════════════════════════
 // ADMIN DASHBOARD
 // ═══════════════════════════════════════════
+// 면접설정 탭 추가 및 참여기업 -> 면접관리 이름 변경
 const ADMIN_NAV=[
   {id:'notice',label:'공지',ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
-  {id:'companies',label:'참여기업',ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
+  {id:'management',label:'면접관리',ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
   {id:'schedule',label:'면접일정',ico:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
+  {id:'settings',label:'면접설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
 ]
 
 function renderAdmin(){
@@ -306,8 +310,9 @@ function renderAdmin(){
     else if (S.noticeView === 'detail') main = renderNoticeDetail();
     else main = renderNoticeList();
   }
-  else if(S.tab==='companies') main=renderCompanies()
+  else if(S.tab==='management') main=renderManagement()
   else if(S.tab==='schedule') main=renderSchedule()
+  else if(S.tab==='settings') main=renderSettings()
   
   return renderShell(sidebar,main)
 }
@@ -318,11 +323,11 @@ function setTab(t){
   render();
 }
 
-// ─── 1. 공지사항 리스트 뷰 ───────────────────────────────
+// ─── 1. 공지사항 뷰 (기존 로직 유지) ─────────────────────────
 function openNoticeDetail(id) {
   S.selectedNoticeId = id;
   const notice = DB.notices.find(n => n.id === id);
-  if (notice) notice.views += 1; // 클릭 시 조회수 1 증가
+  if (notice) notice.views += 1;
   S.noticeView = 'detail';
   render();
 }
@@ -330,7 +335,6 @@ function openNoticeDetail(id) {
 function renderNoticeList(){
   const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
   const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
-
   const sortedNotices = [...DB.notices].sort((a,b) => {
     if(a.pinned === b.pinned) return b.id - a.id;
     return a.pinned ? -1 : 1;
@@ -380,7 +384,6 @@ function renderNoticeList(){
   </div>`
 }
 
-// ─── 1-1. 공지사항 상세 뷰 ─────────────────────────
 function renderNoticeDetail() {
   const n = DB.notices.find(x => x.id === S.selectedNoticeId);
   if(!n) { S.noticeView = 'list'; return renderNoticeList(); }
@@ -395,7 +398,6 @@ function renderNoticeDetail() {
         <button class="btn btn-ghost" onclick="S.noticeView='list';render()">← 목록으로</button>
       </div>
     </div>
-    
     <div class="card" style="max-width: 900px">
       <div class="cb" style="padding: 28px 32px">
         <div class="flex gap2 mb2">
@@ -403,9 +405,7 @@ function renderNoticeDetail() {
           <span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span>
           <span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]} 대상</span>
         </div>
-        
         <div style="font-size:22px; font-weight:800; color:var(--t1); margin-top:8px">${n.title}</div>
-        
         <div class="flex gap3 mt3" style="font-size:13px; color:var(--t2)">
           <div class="flex aic gap2">
             <div style="width:24px; height:24px; border-radius:50%; background:var(--card2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold">${n.author[0]}</div>
@@ -416,17 +416,13 @@ function renderNoticeDetail() {
           <div style="width:4px; height:4px; border-radius:50%; background:var(--border2); margin-top:10px"></div>
           <span style="margin-top:2px">조회수 ${n.views.toLocaleString()}</span>
         </div>
-        
         <div class="divider"></div>
-        
         <div style="font-size:15px; line-height:1.8; color:var(--t1); min-height: 300px; white-space: pre-wrap;">${n.content}</div>
-        
       </div>
     </div>
   </div>`
 }
 
-// ─── 1-2. 공지사항 작성 뷰 (에디터) ─────────────────────────
 function openNoticeWrite(){
   S.draftNotice = { target: 'all', title: '', content: '', pinned: false, visibility: 'public' };
   S.noticeView = 'write';
@@ -439,20 +435,14 @@ function setDraft(key, val) { S.draftNotice[key] = val; render(); }
 function saveNotice() {
   const title = document.getElementById('notice-title').value.trim();
   const content = document.getElementById('notice-content').innerHTML.trim();
-  
   if(!title) { alert('제목을 입력해주세요.'); return; }
   
   const newId = DB.notices.length > 0 ? Math.max(...DB.notices.map(n=>n.id)) + 1 : 1;
   const newNotice = {
-    id: newId,
-    title: title,
-    content: content,
-    author: '운영진',
+    id: newId, title: title, content: content, author: '운영진',
     date: fmtDate(new Date().toISOString().split('T')[0]),
-    visibility: S.draftNotice.visibility,
-    target: S.draftNotice.target,
-    pinned: S.draftNotice.pinned,
-    views: 0
+    visibility: S.draftNotice.visibility, target: S.draftNotice.target,
+    pinned: S.draftNotice.pinned, views: 0
   };
   
   DB.notices.push(newNotice);
@@ -470,10 +460,8 @@ function renderNoticeWrite(){
         <button class="btn btn-blue" onclick="saveNotice()">등록 완료</button>
       </div>
     </div>
-    
     <div class="card" style="max-width: 900px">
       <div class="cb">
-        
         <div class="flex gap3 mb4" style="flex-wrap:wrap">
           <div style="flex:1; min-width:200px">
             <label class="fl">노출 대상</label>
@@ -497,12 +485,10 @@ function renderNoticeWrite(){
             </div>
           </div>
         </div>
-
         <div class="fg">
           <label class="fl">공지 제목</label>
           <input class="fi" id="notice-title" placeholder="제목을 입력하세요" value="${d.title}" style="font-size:15px; font-weight:600">
         </div>
-
         <div class="fg">
           <label class="fl">공지 내용 (에디터)</label>
           <div class="editor-wrap">
@@ -519,17 +505,16 @@ function renderNoticeWrite(){
             <div class="editor-content" contenteditable="true" id="notice-content" placeholder="이곳에 공지사항 내용을 작성하세요...">${d.content}</div>
           </div>
         </div>
-
       </div>
     </div>
   </div>`
 }
 
-// ─── 참여기업 & 면접일정 뷰 (기존 유지) ─────────────────────────
-function renderCompanies(){
+// ─── 2. 면접관리 뷰 (기존 참여기업 관리) ─────────────────────────
+function renderManagement(){
   return `<div>
     <div class="ph flex jb aic">
-      <div><div class="ph-t">참여기업 관리</div><div class="ph-s">${S.prog.name}에 참여 중인 기업 목록</div></div>
+      <div><div class="ph-t">면접관리</div><div class="ph-s">${S.prog.name}에 참여 중인 기업 및 면접 제출 현황 관리</div></div>
       <button class="btn btn-blue">기업 추가</button>
     </div>
     <div class="card">
@@ -553,6 +538,7 @@ function renderCompanies(){
   </div>`
 }
 
+// ─── 3. 면접일정 뷰 ─────────────────────────
 function renderSchedule(){
   return `<div>
     <div class="ph flex jb aic">
@@ -563,6 +549,58 @@ function renderSchedule(){
       </div>
     </div>
     <div class="card"><div class="empty"><div class="empty-ico">📅</div><div class="empty-t">아직 확정된 면접 일정이 없습니다.</div></div></div>
+  </div>`
+}
+
+// ─── 4. 면접설정 뷰 (신규 추가) ─────────────────────────
+function saveSettings() {
+  S.prog.interviewStart = document.getElementById('set-start').value;
+  S.prog.interviewEnd = document.getElementById('set-end').value;
+  S.prog.companyDeadline = document.getElementById('set-co-deadline').value;
+  S.prog.studentDeadline = document.getElementById('set-st-deadline').value;
+  
+  alert('면접 설정이 성공적으로 저장되었습니다.');
+  render();
+}
+
+function renderSettings(){
+  const p = S.prog;
+  return `<div>
+    <div class="ph flex jb aic">
+      <div><div class="ph-t">면접설정</div><div class="ph-s">${p.name}의 면접 기간 및 마감일을 설정합니다.</div></div>
+    </div>
+    
+    <div class="card" style="max-width: 600px">
+      <div class="cb">
+        <div style="font-size:14px; font-weight:700; color:var(--blue); margin-bottom:16px; padding-bottom:8px; border-bottom:1.5px solid var(--border)">🗓 면접 진행 기간</div>
+        <div class="frow">
+          <div class="fg">
+            <label class="fl">면접 시작일</label>
+            <input class="fi" type="date" id="set-start" value="${p.interviewStart || ''}">
+          </div>
+          <div class="fg">
+            <label class="fl">면접 종료일</label>
+            <input class="fi" type="date" id="set-end" value="${p.interviewEnd || ''}">
+          </div>
+        </div>
+
+        <div style="font-size:14px; font-weight:700; color:var(--orange); margin-top:10px; margin-bottom:16px; padding-bottom:8px; border-bottom:1.5px solid var(--border)">⏳ 제출 마감일</div>
+        <div class="frow">
+          <div class="fg">
+            <label class="fl">기업 시간표 제출 마감일</label>
+            <input class="fi" type="date" id="set-co-deadline" value="${p.companyDeadline || ''}">
+          </div>
+          <div class="fg">
+            <label class="fl">학생 면접시간 선택 마감일</label>
+            <input class="fi" type="date" id="set-st-deadline" value="${p.studentDeadline || ''}">
+          </div>
+        </div>
+
+        <div style="margin-top:20px">
+          <button class="btn btn-blue w-full btn-lg" onclick="saveSettings()">설정 저장하기</button>
+        </div>
+      </div>
+    </div>
   </div>`
 }
 
