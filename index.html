@@ -85,6 +85,7 @@ th{font-size:11.5px;font-weight:700;color:var(--t3);text-transform:uppercase;let
 td{font-size:13px;color:var(--t1);padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(49,130,246,.02)}
+tr.clickable{cursor:pointer; transition:background .1s}
 
 /* === LOGIN & PROG SELECT === */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#EEF4FF 0%,#F7F8FA 55%,#F0FFF4 100%)}
@@ -129,6 +130,7 @@ tr:hover td{background:rgba(49,130,246,.02)}
 .flex{display:flex}.aic{align-items:center}.jb{justify-content:space-between}.gap2{gap:8px}.gap3{gap:12px}
 .w-full{width:100%}
 .empty{text-align:center;padding:44px 20px;color:var(--t3)}
+.divider{height:1px; background:var(--border); margin:20px 0;}
 </style>
 </head>
 <body>
@@ -160,8 +162,8 @@ const DB={
     {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr',mode:'offline',type:'group',submitted:true},
   ],
   notices:[
-    {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '면접 일정 가이드라인입니다...', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
-    {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: 'DB 서버 점검이 있습니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
+    {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '<strong>면접 일정 가이드라인입니다.</strong><br><br>참여하시는 모든 기업 및 지원자 분들은 본 안내문을 필독해주시기 바랍니다.<br><ul><li>면접 10분 전 화상 링크 접속</li><li>장비 사전 테스트 요망</li></ul>', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
+    {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: '안정적인 서비스 제공을 위해 DB 서버 점검이 있을 예정입니다.<br>해당 시간에는 서비스 이용이 일시 중단됩니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
   ]
 }
 
@@ -173,8 +175,9 @@ const S={
   user:null, prog:null,
   loginRole:'admin', loginEmail:'', loginPw:'', loginErr:'',
   progTypeFilter:'인턴형',
-  // 공지사항 탭 서브 뷰 상태 (list or write)
+  // 공지사항 탭 서브 뷰 상태 (list, write, detail)
   noticeView: 'list', 
+  selectedNoticeId: null,
   // 임시 작성중인 공지 데이터
   draftNotice: { target: 'all', title: '', content: '', pinned: false, visibility: 'public' }
 }
@@ -231,7 +234,7 @@ function doLogin(){
   else { S.prog = PROGRAMS[0]; S.view = acc.role; S.tab = acc.role==='company'?'co-settings':'st-status'; }
   render()
 }
-function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,loginEmail:'',loginPw:'',loginErr:'',noticeView:'list'});render()}
+function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,loginEmail:'',loginPw:'',loginErr:'',noticeView:'list',selectedNoticeId:null});render()}
 
 function renderProgSelectView(){
   const statusLabel={active:'진행중',upcoming:'예정',done:'완료'}
@@ -298,7 +301,11 @@ function renderAdmin(){
   </div>`
   
   let main=''
-  if(S.tab==='notice') main = S.noticeView==='write' ? renderNoticeWrite() : renderNoticeList()
+  if(S.tab==='notice') {
+    if (S.noticeView === 'write') main = renderNoticeWrite();
+    else if (S.noticeView === 'detail') main = renderNoticeDetail();
+    else main = renderNoticeList();
+  }
   else if(S.tab==='companies') main=renderCompanies()
   else if(S.tab==='schedule') main=renderSchedule()
   
@@ -307,16 +314,23 @@ function renderAdmin(){
 
 function setTab(t){
   S.tab=t; 
-  if(t==='notice') S.noticeView='list'; // 탭 변경시 항상 리스트로 복귀
+  if(t==='notice') S.noticeView='list'; 
   render();
 }
 
 // ─── 1. 공지사항 리스트 뷰 ───────────────────────────────
+function openNoticeDetail(id) {
+  S.selectedNoticeId = id;
+  const notice = DB.notices.find(n => n.id === id);
+  if (notice) notice.views += 1; // 클릭 시 조회수 1 증가
+  S.noticeView = 'detail';
+  render();
+}
+
 function renderNoticeList(){
   const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
   const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
 
-  // 정렬: 상단고정 우선, 그다음 ID 역순(최신순)
   const sortedNotices = [...DB.notices].sort((a,b) => {
     if(a.pinned === b.pinned) return b.id - a.id;
     return a.pinned ? -1 : 1;
@@ -344,12 +358,12 @@ function renderNoticeList(){
           <tbody>
             ${sortedNotices.length === 0 ? `<tr><td colspan="7" class="empty"><div class="empty-t">등록된 공지사항이 없습니다.</div></td></tr>` : ''}
             ${sortedNotices.map(n => `
-            <tr style="${n.pinned ? 'background-color: var(--blue2);' : ''}">
+            <tr class="clickable" onclick="openNoticeDetail(${n.id})" style="${n.pinned ? 'background-color: var(--blue2);' : ''}">
               <td style="text-align:center; color:var(--t3); font-weight:600">${n.pinned ? '—' : n.id}</td>
               <td style="text-align:center"><span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span></td>
               <td style="text-align:center"><span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]}</span></td>
               <td>
-                <div class="flex aic gap2" style="cursor:pointer; font-weight:${n.pinned?'700':'500'}">
+                <div class="flex aic gap2" style="font-weight:${n.pinned?'700':'500'}">
                   ${n.pinned ? '<span style="color:var(--blue); font-size:12px">📌 [상단고정]</span>' : ''}
                   ${n.title}
                 </div>
@@ -366,7 +380,53 @@ function renderNoticeList(){
   </div>`
 }
 
-// ─── 1-1. 공지사항 작성 뷰 (에디터) ─────────────────────────
+// ─── 1-1. 공지사항 상세 뷰 ─────────────────────────
+function renderNoticeDetail() {
+  const n = DB.notices.find(x => x.id === S.selectedNoticeId);
+  if(!n) { S.noticeView = 'list'; return renderNoticeList(); }
+
+  const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
+  const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
+
+  return `<div>
+    <div class="ph flex jb aic">
+      <div><div class="ph-t">공지사항 상세</div></div>
+      <div class="flex gap2">
+        <button class="btn btn-ghost" onclick="S.noticeView='list';render()">← 목록으로</button>
+      </div>
+    </div>
+    
+    <div class="card" style="max-width: 900px">
+      <div class="cb" style="padding: 28px 32px">
+        <div class="flex gap2 mb2">
+          ${n.pinned ? '<span class="badge b-blue">📌 상단고정</span>' : ''}
+          <span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span>
+          <span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]} 대상</span>
+        </div>
+        
+        <div style="font-size:22px; font-weight:800; color:var(--t1); margin-top:8px">${n.title}</div>
+        
+        <div class="flex gap3 mt3" style="font-size:13px; color:var(--t2)">
+          <div class="flex aic gap2">
+            <div style="width:24px; height:24px; border-radius:50%; background:var(--card2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold">${n.author[0]}</div>
+            <span>${n.author}</span>
+          </div>
+          <div style="width:4px; height:4px; border-radius:50%; background:var(--border2); margin-top:10px"></div>
+          <span style="margin-top:2px">${n.date}</span>
+          <div style="width:4px; height:4px; border-radius:50%; background:var(--border2); margin-top:10px"></div>
+          <span style="margin-top:2px">조회수 ${n.views.toLocaleString()}</span>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div style="font-size:15px; line-height:1.8; color:var(--t1); min-height: 300px; white-space: pre-wrap;">${n.content}</div>
+        
+      </div>
+    </div>
+  </div>`
+}
+
+// ─── 1-2. 공지사항 작성 뷰 (에디터) ─────────────────────────
 function openNoticeWrite(){
   S.draftNotice = { target: 'all', title: '', content: '', pinned: false, visibility: 'public' };
   S.noticeView = 'write';
@@ -398,7 +458,6 @@ function saveNotice() {
   DB.notices.push(newNotice);
   S.noticeView = 'list';
   render();
-  // alert 대신 부드러운 알림을 위해 timeout 처리 생략
 }
 
 function renderNoticeWrite(){
