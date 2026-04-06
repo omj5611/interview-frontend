@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>면접 일정 자동 매칭 시스템 v2</title>
+
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -64,11 +69,12 @@ a{text-decoration:none;color:inherit}
 .fs:focus{border-color:var(--blue);background:var(--card)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* === CARD === */
+/* === CARD & GRID === */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--sh)}
 .ch{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ct{font-size:15px;font-weight:700;color:var(--t1)}
 .cb{padding:18px}
+.company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
 
 /* === BADGE === */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:999px;font-size:11.5px;font-weight:700;flex-shrink:0}
@@ -162,12 +168,19 @@ const PROGRAMS=[
 
 const DB={
   companies:[
-    {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr',mode:'online',type:'1on1',submitted:true},
-    {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr',mode:'offline',type:'group',submitted:true},
+    {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr',mode:'online',type:'1on1', status:'select_done'},
+    {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr',mode:'offline',type:'group', status:'selecting'},
+    {id:'c3',name:'크래프톤',industry:'게임',email:'krafton@intern.kr',mode:'online',type:'1on1', status:'before_select'},
+  ],
+  students:[
+    {id:'s1', apps:['c1', 'c2', 'c3'], avail:{'c1':['2025-08-04'], 'c2':['2025-08-05']}},
+    {id:'s2', apps:['c1'], avail:{}},
+    {id:'s3', apps:['c1', 'c2'], avail:{'c1':['2025-08-04']}},
+    {id:'s4', apps:['c1', 'c3'], avail:{'c1':['2025-08-05'], 'c3':['2025-08-05']}},
   ],
   notices:[
-    {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '<strong>면접 일정 가이드라인입니다.</strong><br><br>참여하시는 모든 기업 및 지원자 분들은 본 안내문을 필독해주시기 바랍니다.<br><ul><li>면접 10분 전 화상 링크 접속</li><li>장비 사전 테스트 요망</li></ul>', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
-    {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: '안정적인 서비스 제공을 위해 DB 서버 점검이 있을 예정입니다.<br>해당 시간에는 서비스 이용이 일시 중단됩니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
+    {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '<strong>면접 일정 가이드라인입니다.</strong>', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
+    {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: 'DB 서버 점검이 있을 예정입니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
   ]
 }
 
@@ -290,11 +303,10 @@ function renderShell(sidebar,main){
 // ═══════════════════════════════════════════
 // ADMIN DASHBOARD
 // ═══════════════════════════════════════════
-// 면접설정 탭 추가 및 참여기업 -> 면접관리 이름 변경
+// 면접일정 메뉴가 삭제되고, 참여기업 -> 면접관리로 변경됨
 const ADMIN_NAV=[
   {id:'notice',label:'공지',ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
   {id:'management',label:'면접관리',ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
-  {id:'schedule',label:'면접일정',ico:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'},
   {id:'settings',label:'면접설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
 ]
 
@@ -311,7 +323,6 @@ function renderAdmin(){
     else main = renderNoticeList();
   }
   else if(S.tab==='management') main=renderManagement()
-  else if(S.tab==='schedule') main=renderSchedule()
   else if(S.tab==='settings') main=renderSettings()
   
   return renderShell(sidebar,main)
@@ -510,52 +521,79 @@ function renderNoticeWrite(){
   </div>`
 }
 
-// ─── 2. 면접관리 뷰 (기존 참여기업 관리) ─────────────────────────
+// ─── 2. 면접관리 뷰 (신규 카드 UI) ─────────────────────────
 function renderManagement(){
+  const statusLabel = {
+    'before_select': '일정 선택 전',
+    'select_done': '일정 선택 완료',
+    'selecting': '선발중',
+    'selection_complete': '선발 완료'
+  };
+  const statusColor = {
+    'before_select': 'b-gray',
+    'select_done': 'b-blue',
+    'selecting': 'b-green',
+    'selection_complete': 'b-purple'
+  };
+
   return `<div>
     <div class="ph flex jb aic">
       <div><div class="ph-t">면접관리</div><div class="ph-s">${S.prog.name}에 참여 중인 기업 및 면접 제출 현황 관리</div></div>
       <button class="btn btn-blue">기업 추가</button>
     </div>
-    <div class="card">
-      <div class="tw">
-        <table>
-          <thead><tr><th>기업명</th><th>산업군</th><th>면접 방식</th><th>면접 형태</th><th>일정 제출 상태</th></tr></thead>
-          <tbody>
-            ${DB.companies.map(co => `
-            <tr>
-              <td style="font-weight: 700">${co.name}</td>
-              <td style="color: var(--t2)">${co.industry}</td>
-              <td><span class="badge ${co.mode==='online'?'b-blue':'b-green'}">${co.mode==='online'?'비대면(화상)':'대면'}</span></td>
-              <td><span class="badge ${co.type==='1on1'?'b-purple':'b-orange'}">${co.type==='1on1'?'1:1 면접':'그룹 면접'}</span></td>
-              <td><span class="badge ${co.submitted?'b-green':'b-orange'}">${co.submitted?'제출완료':'미제출'}</span></td>
-            </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
+    
+    <div class="company-grid">
+      ${DB.companies.map(co => {
+        // 면접자 데이터 계산 로직
+        const coStudents = DB.students.filter(s => s.apps.includes(co.id));
+        const totalStudents = coStudents.length;
+        const submittedStudents = coStudents.filter(s => s.avail[co.id] && s.avail[co.id].length > 0).length;
+        
+        return `
+        <div class="card" style="padding:20px; transition: transform 0.15s, box-shadow 0.15s; cursor:pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--sh2)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--sh)'">
+          <div class="flex jb aic mb3">
+            <div style="font-size:18px; font-weight:800; color:var(--t1)">${co.name}</div>
+            <span class="badge ${statusColor[co.status]}">${statusLabel[co.status]}</span>
+          </div>
+          
+          <div class="flex gap2 mb3">
+            <span class="badge ${co.mode==='online'?'b-blue':'b-green'}">${co.mode==='online'?'비대면(화상)':'대면'}</span>
+            <span class="badge ${co.type==='1on1'?'b-purple':'b-orange'}">${co.type==='1on1'?'1:1 면접':'그룹 면접'}</span>
+          </div>
+          
+          <div style="background:var(--card2); border-radius:var(--r); padding:12px; border:1px solid var(--border)">
+            <div class="flex aic jb mb2">
+              <span style="font-size:12px; font-weight:700; color:var(--t3)">🗓 면접 일정</span>
+              <span style="font-size:13px; font-weight:600; color:var(--t1)">${S.prog.interviewStart} ~ ${S.prog.interviewEnd}</span>
+            </div>
+            <div class="flex aic jb mb2">
+              <span style="font-size:12px; font-weight:700; color:var(--t3)">👥 면접자 수</span>
+              <span style="font-size:13px; font-weight:600; color:var(--t1)">${totalStudents}명</span>
+            </div>
+            <div class="flex aic jb">
+              <span style="font-size:12px; font-weight:700; color:var(--t3)">✅ 학생 제출 상태</span>
+              <span style="font-size:12px; font-weight:600; color:${submittedStudents===totalStudents && totalStudents>0 ? 'var(--green)' : 'var(--orange)'}">
+                ${submittedStudents}/${totalStudents} (면접자 ${totalStudents}명중 ${submittedStudents}명 제출)
+              </span>
+            </div>
+          </div>
+        </div>
+        `
+      }).join('')}
     </div>
   </div>`
 }
 
-// ─── 3. 면접일정 뷰 ─────────────────────────
-function renderSchedule(){
-  return `<div>
-    <div class="ph flex jb aic">
-      <div><div class="ph-t">면접일정 관리</div><div class="ph-s">전체 면접 일정 현황 및 매칭 결과</div></div>
-      <div class="flex gap2">
-         <button class="btn btn-ghost">일정표 다운로드</button>
-         <button class="btn btn-blue">자동 매칭 실행</button>
-      </div>
-    </div>
-    <div class="card"><div class="empty"><div class="empty-ico">📅</div><div class="empty-t">아직 확정된 면접 일정이 없습니다.</div></div></div>
-  </div>`
-}
-
-// ─── 4. 면접설정 뷰 (신규 추가) ─────────────────────────
+// ─── 3. 면접설정 뷰 (항공권 스타일 Date Range Picker 추가) ─────────────────────────
 function saveSettings() {
-  S.prog.interviewStart = document.getElementById('set-start').value;
-  S.prog.interviewEnd = document.getElementById('set-end').value;
+  const rangeVal = document.getElementById('set-interview-range').value;
+  const dates = rangeVal.split(' ~ '); // flatpickr range separator
+
+  if (dates.length > 0 && dates[0]) {
+    S.prog.interviewStart = dates[0];
+    S.prog.interviewEnd = dates[1] || dates[0]; // 하루만 선택했을 경우
+  }
+
   S.prog.companyDeadline = document.getElementById('set-co-deadline').value;
   S.prog.studentDeadline = document.getElementById('set-st-deadline').value;
   
@@ -565,26 +603,23 @@ function saveSettings() {
 
 function renderSettings(){
   const p = S.prog;
+  const defaultRange = (p.interviewStart && p.interviewEnd) ? `${p.interviewStart} ~ ${p.interviewEnd}` : '';
+  
   return `<div>
     <div class="ph flex jb aic">
       <div><div class="ph-t">면접설정</div><div class="ph-s">${p.name}의 면접 기간 및 마감일을 설정합니다.</div></div>
     </div>
     
-    <div class="card" style="max-width: 600px">
+    <div class="card" style="max-width: 640px">
       <div class="cb">
-        <div style="font-size:14px; font-weight:700; color:var(--blue); margin-bottom:16px; padding-bottom:8px; border-bottom:1.5px solid var(--border)">🗓 면접 진행 기간</div>
-        <div class="frow">
-          <div class="fg">
-            <label class="fl">면접 시작일</label>
-            <input class="fi" type="date" id="set-start" value="${p.interviewStart || ''}">
-          </div>
-          <div class="fg">
-            <label class="fl">면접 종료일</label>
-            <input class="fi" type="date" id="set-end" value="${p.interviewEnd || ''}">
-          </div>
+        <div style="font-size:14px; font-weight:700; color:var(--blue); margin-bottom:16px; padding-bottom:8px; border-bottom:1.5px solid var(--border)">🗓 면접 진행 기간 (항공권 스타일)</div>
+        <div class="fg">
+          <label class="fl">면접 기간 선택 (시작일 ~ 종료일)</label>
+          <input class="fi" type="text" id="set-interview-range" placeholder="날짜 범위를 선택하세요" value="${defaultRange}" style="font-size:14px; font-weight:600; cursor:pointer; background-image:url('data:image/svg+xml;utf8,<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\" stroke=\"%236B7280\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\" stroke=\"%236B7280\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\" stroke=\"%236B7280\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\" stroke=\"%236B7280\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>'); background-repeat:no-repeat; background-position:right 12px center;">
+          <div style="font-size:11.5px; color:var(--t3); margin-top:6px">클릭하여 시작일과 종료일을 이어서 선택해주세요.</div>
         </div>
 
-        <div style="font-size:14px; font-weight:700; color:var(--orange); margin-top:10px; margin-bottom:16px; padding-bottom:8px; border-bottom:1.5px solid var(--border)">⏳ 제출 마감일</div>
+        <div style="font-size:14px; font-weight:700; color:var(--orange); margin-top:24px; margin-bottom:16px; padding-bottom:8px; border-bottom:1.5px solid var(--border)">⏳ 제출 마감일</div>
         <div class="frow">
           <div class="fg">
             <label class="fl">기업 시간표 제출 마감일</label>
@@ -618,6 +653,22 @@ function render(){
      const pw=document.querySelector('input[type="password"]')
      if(em)em.value=S.loginEmail
      if(pw)pw.value=S.loginPw
+  }
+
+  // 렌더링 후 면접설정 탭이면 Flatpickr (달력 범위 선택기) 활성화
+  if(S.view==='admin' && S.tab==='settings') {
+     setTimeout(() => {
+        flatpickr("#set-interview-range", {
+           mode: "range",
+           locale: "ko", // 한국어 설정
+           dateFormat: "Y-m-d",
+           minDate: "today", // 오늘 이전 날짜 선택 방지 (옵션)
+           defaultDate: (S.prog.interviewStart && S.prog.interviewEnd) ? [S.prog.interviewStart, S.prog.interviewEnd] : null,
+           locale: {
+              rangeSeparator: " ~ "
+           }
+        });
+     }, 0);
   }
 }
 render()
