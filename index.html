@@ -223,20 +223,20 @@ const PROGRAMS=[
 
 const DB={
   companies:[
-    {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr', managerEmail:'hr@kakao.com', managerPhone:'010-1111-2222', mode:'online',type:'1on1', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'12:00'}], '2025-08-06':[{start:'09:00',end:'11:00'}]}},
-    {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr', managerEmail:'hr@naver.com', managerPhone:'010-3333-4444', mode:'offline', address:'경기도 성남시 분당구 네이버 그린팩토리', type:'group', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
-    {id:'c3',name:'우아한형제들',industry:'IT/서비스',email:'woowa@intern.kr', managerEmail:'hr@woowa.com', managerPhone:'010-5555-6666', mode:'online',type:'1on1', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
-    {id:'c4',name:'당근마켓',industry:'IT/커머스',email:'daangn@intern.kr', managerEmail:'hr@daangn.com', managerPhone:'010-7777-8888', mode:'online',type:'1on1', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
+    {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr', managerEmail:'hr@kakao.com', managerPhone:'010-1111-2222', mode:'online',type:'1on1', slotMinutes:20, status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'12:00'}], '2025-08-06':[{start:'09:00',end:'11:00'}]}},
+    {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr', managerEmail:'hr@naver.com', managerPhone:'010-3333-4444', mode:'offline', address:'경기도 성남시 분당구 네이버 그린팩토리', type:'group', slotMinutes:30, status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
+    {id:'c3',name:'우아한형제들',industry:'IT/서비스',email:'woowa@intern.kr', managerEmail:'hr@woowa.com', managerPhone:'010-5555-6666', mode:'online',type:'1on1', slotMinutes:15, status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
+    {id:'c4',name:'당근마켓',industry:'IT/커머스',email:'daangn@intern.kr', managerEmail:'hr@daangn.com', managerPhone:'010-7777-8888', mode:'online',type:'1on1', slotMinutes:20, status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
   ],
   students:[
     {
-      id:'s1', apps:['c1', 'c2'], name:'김민준', birth:'2000-03-15', phone:'010-1234-5678', email:'minjun@intern.kr', addr:'서울 강남구 역삼동', edLevel:'대학교 재학', school:'한국대학교', faculty:'공과대학', dept:'컴퓨터공학과', appDate:'2025-07-20', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'Y', motivation:'실무 경험을 통해 성장하고 싶습니다.', vision:'훌륭한 개발자', experience:'동아리 프로젝트', portfolio:'https://google.com', resume:'https://google.com', avail:{'c1':['2025-08-05'], 'c2':['2025-08-05']}, interviewStatus:{'c1':'pass'}, 
+      id:'s1', apps:['c1', 'c2'], name:'김민준', birth:'2000-03-15', phone:'010-1234-5678', email:'minjun@intern.kr', addr:'서울 강남구 역삼동', edLevel:'대학교 재학', school:'한국대학교', faculty:'공과대학', dept:'컴퓨터공학과', appDate:'2025-07-20', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'Y', motivation:'실무 경험을 통해 성장하고 싶습니다.', vision:'훌륭한 개발자', experience:'동아리 프로젝트', portfolioLink:'https://google.com', resumeLink:'https://google.com', avail:{'c1':['2025-08-05'], 'c2':['2025-08-05']}, interviewStatus:{'c1':'pass'}, 
       reports:{
         'c1': {
           title: '카카오엔터테인먼트 1차 직무 면접 리포트',
           date: '2025-08-05',
-          time: '10:00 ~ 10:30',
-          duration: '30분 15초',
+          time: '10:00 ~ 10:20',
+          duration: '20분 15초',
           keywords: ['문제해결능력 우수', '논리적 커뮤니케이션', '도전적 태도', '실무 경험 보유'],
           transcript: [
             { speaker: '면접관', text: '안녕하세요, 김민준 지원자님. 먼저 간단한 자기소개 부탁드립니다.' },
@@ -251,14 +251,17 @@ const DB={
         }
       }
     },
-    {id:'s2', apps:['c1'], name:'이서연', birth:'2001-07-22', phone:'010-2345-6789', email:'seoyeon@intern.kr', addr:'서울 마포구', edLevel:'대학교 재학', school:'서울대학교', faculty:'미술대학', dept:'시각디자인학과', appDate:'2025-07-21', participationCount:'1', nationalEmpSupport:'Y', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'UX/UI 역량을 펼치고 싶습니다.', vision:'수석 디자이너', experience:'외주 경험', portfolio:'', resume:'', avail:{'c1':['2025-08-05']}, interviewStatus:{}, reports:{}},
-    {id:'s3', apps:['c2'], name:'박지호', birth:'1999-11-05', phone:'010-3456-7890', email:'jiho@intern.kr', addr:'경기 성남시', edLevel:'대학교 졸업', school:'카이스트', faculty:'공과대학', dept:'전산학부', appDate:'2025-07-22', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'웹툰 플랫폼 아키텍처에 관심이 많습니다.', vision:'최고의 백엔드 엔지니어', experience:'개인 프로젝트 배포', portfolio:'', resume:'', avail:{'c2':['2025-08-05']}, interviewStatus:{}, reports:{}},
-    {id:'s4', apps:['c3'], name:'최유나', birth:'2002-04-18', phone:'010-4567-8901', email:'yuna@intern.kr', addr:'서울 송파구', edLevel:'대학교 재학', school:'이화여대', faculty:'경영대학', dept:'경영학과', appDate:'2025-07-23', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'O2O 서비스 기획을 배우고 싶습니다.', vision:'서비스 기획자', experience:'마케팅 학회', portfolio:'', resume:'', avail:{'c3':['2025-08-05']}, interviewStatus:{}, reports:{}},
-    {id:'s5', apps:['c4'], name:'정도현', birth:'2000-09-30', phone:'010-5678-9012', email:'dohyun@intern.kr', addr:'서울 동작구', edLevel:'대학교 재학', school:'서강대', faculty:'공과대학', dept:'소프트웨어학부', appDate:'2025-07-24', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'중고거래 플랫폼 성장에 기여하고 싶습니다.', vision:'iOS 개발자', experience:'앱스토어 출시', portfolio:'', resume:'', avail:{'c4':['2025-08-05']}, interviewStatus:{}, reports:{}},
+    {id:'s2', apps:['c1'], name:'이서연', birth:'2001-07-22', phone:'010-2345-6789', email:'seoyeon@intern.kr', addr:'서울 마포구', edLevel:'대학교 재학', school:'서울대학교', faculty:'미술대학', dept:'시각디자인학과', appDate:'2025-07-21', participationCount:'1', nationalEmpSupport:'Y', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'UX/UI 역량을 펼치고 싶습니다.', vision:'수석 디자이너', experience:'외주 경험', portfolioLink:'', resumeLink:'', avail:{'c1':['2025-08-05']}, interviewStatus:{}, reports:{}},
+    {id:'s3', apps:['c2'], name:'박지호', birth:'1999-11-05', phone:'010-3456-7890', email:'jiho@intern.kr', addr:'경기 성남시', edLevel:'대학교 졸업', school:'카이스트', faculty:'공과대학', dept:'전산학부', appDate:'2025-07-22', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'웹툰 플랫폼 아키텍처에 관심이 많습니다.', vision:'최고의 백엔드 엔지니어', experience:'개인 프로젝트 배포', portfolioLink:'', resumeLink:'', avail:{'c2':['2025-08-05']}, interviewStatus:{}, reports:{}},
+    {id:'s4', apps:['c3'], name:'최유나', birth:'2002-04-18', phone:'010-4567-8901', email:'yuna@intern.kr', addr:'서울 송파구', edLevel:'대학교 재학', school:'이화여대', faculty:'경영대학', dept:'경영학과', appDate:'2025-07-23', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'O2O 서비스 기획을 배우고 싶습니다.', vision:'서비스 기획자', experience:'마케팅 학회', portfolioLink:'', resumeLink:'', avail:{'c3':['2025-08-05']}, interviewStatus:{}, reports:{}},
+    {id:'s5', apps:['c4'], name:'정도현', birth:'2000-09-30', phone:'010-5678-9012', email:'dohyun@intern.kr', addr:'서울 동작구', edLevel:'대학교 재학', school:'서강대', faculty:'공과대학', dept:'소프트웨어학부', appDate:'2025-07-24', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'중고거래 플랫폼 성장에 기여하고 싶습니다.', vision:'iOS 개발자', experience:'앱스토어 출시', portfolioLink:'', resumeLink:'', avail:{'c4':['2025-08-05']}, interviewStatus:{}, reports:{}},
   ],
   notices:[
     {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '<strong>면접 일정 가이드라인입니다.</strong><br><br>참여하시는 모든 기업 및 면접자 분들은 본 안내문을 필독해주시기 바랍니다.<br><ul><li>면접 10분 전 화상 링크 접속</li><li>장비 사전 테스트 요망</li></ul>', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
     {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: '안정적인 서비스 제공을 위해 DB 서버 점검이 있을 예정입니다.<br>해당 시간에는 서비스 이용이 일시 중단됩니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
+  ],
+  inquiries:[
+    {id: 1, coId: 'c1', title: '면접 일정 수정 가능한가요?', content: '제출 후 수정이 필요한데 어떻게 해야하나요?', date: '2025-07-21', status: 'answered', reply: '운영진에게 직접 연락 부탁드립니다.', replyDate: '2025-07-21'}
   ]
 }
 
@@ -270,15 +273,19 @@ const S={
   loginRole:'admin', loginEmail:'admin@intern.kr', loginPw:'1234', loginErr:'',
   progTypeFilter:'인턴형',
   
-  // Notice State
+  // Notice & Inquiry State
   noticeView: 'list', 
   selectedNoticeId: null,
   draftNotice: { target: 'all', title: '', content: '', pinned: false, visibility: 'public' },
+  inquiryView: 'list',
+  selectedInquiryId: null,
 
-  // Admin Company Dashboard States
+  // Admin Dashboard States
   adminSubView: 'grid', // 'grid', 'co_dash', 'timetable'
+  timetableTab: 'online', // 'online', 'offline'
   activeCoId: null,
   coTab: 'settings', // 'settings', 'applicants'
+  coApplicantTab: 'scheduled', // 'scheduled' (면접 예정), 'completed' (면접 완료)
 
   // Video Chat Dash State
   activeVideoStId: null,
@@ -401,7 +408,7 @@ function doLogin(){
   S.view = 'prog-select'; S.progTypeFilter = '인턴형';
   render()
 }
-function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,modal:null,adminSubView:'grid',activeCoId:null,activeVideoStId:null,noticeView:'list',selectedNoticeId:null,stDetailTab:'info'});render()}
+function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,modal:null,adminSubView:'grid',activeCoId:null,activeVideoStId:null,noticeView:'list',selectedNoticeId:null,inquiryView:'list',selectedInquiryId:null,stDetailTab:'info',coApplicantTab:'scheduled'});render()}
 
 function renderProgSelectView(){
   const statusLabel={active:'진행중',upcoming:'예정',done:'완료'}
@@ -433,8 +440,8 @@ function renderProgSelectView(){
 
 function enterDashboard(progId) {
   S.prog = PROGRAMS.find(x => x.id === progId);
-  if(S.user.role === 'admin') { S.view = 'admin'; S.tab = 'management'; S.adminSubView = 'grid'; S.noticeView = 'list'; }
-  else if(S.user.role === 'company') { S.view = 'company'; S.tab = 'co-applicants'; }
+  if(S.user.role === 'admin') { S.view = 'admin'; S.tab = 'management'; S.adminSubView = 'grid'; S.noticeView = 'list'; S.inquiryView = 'list'; }
+  else if(S.user.role === 'company') { S.view = 'company'; S.tab = 'co-settings'; S.coApplicantTab = 'scheduled'; S.noticeView = 'list'; S.inquiryView = 'list'; }
   else if(S.user.role === 'student') { S.view = 'student'; S.tab = 'st-status'; }
   render();
 }
@@ -469,12 +476,13 @@ const ADMIN_NAV=[
   {id:'notice',label:'공지사항',ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'management',label:'면접관리',ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'settings',label:'면접설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
+  {id:'inquiry',label:'문의 관리',ico:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'}
 ]
 
 function renderAdmin(){
   const sidebar=`<div class="nav-section">
     <div class="nav-label">대시보드 메뉴</div>
-    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';S.adminSubView='grid';S.noticeView='list';render()"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
+    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';S.adminSubView='grid';S.noticeView='list';S.inquiryView='list';render()"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
   </div>`
   
   let main=''
@@ -489,6 +497,7 @@ function renderAdmin(){
       else main = renderManagementGrid()
   }
   else if(S.tab==='settings') main = renderSettings()
+  else if(S.tab==='inquiry') main = renderAdminInquiry()
   
   return renderShell(sidebar,main)
 }
@@ -505,7 +514,14 @@ function openNoticeDetail(id) {
 function renderNoticeList(){
   const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
   const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
-  const sortedNotices = [...DB.notices].sort((a,b) => {
+  
+  // Admin sees all. Company sees target 'all' or 'company'.
+  let displayNotices = [...DB.notices];
+  if(S.user.role === 'company') {
+      displayNotices = displayNotices.filter(n => n.target === 'all' || n.target === 'company');
+  }
+
+  const sortedNotices = displayNotices.sort((a,b) => {
     if(a.pinned === b.pinned) return b.id - a.id;
     return a.pinned ? -1 : 1;
   });
@@ -513,16 +529,17 @@ function renderNoticeList(){
   return `<div>
     <div class="ph flex jb aic">
       <div><div class="ph-t">공지사항</div><div class="ph-s">프로그램 참여 기업 및 면접자들에게 전달할 안내사항</div></div>
+      ${S.user.role === 'admin' ? `
       <button class="btn btn-blue" onclick="openNoticeWrite()">
          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="margin-right:2px"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg> 공지사항 작성
-      </button>
+      </button>` : ''}
     </div>
     <div class="card">
       <div class="tw">
         <table>
           <thead><tr>
             <th style="width:60px; text-align:center">번호</th>
-            <th style="width:80px; text-align:center">노출여부</th>
+            ${S.user.role === 'admin' ? `<th style="width:80px; text-align:center">노출여부</th>` : ''}
             <th style="width:80px; text-align:center">대상</th>
             <th>제목</th>
             <th style="width:120px">작성자</th>
@@ -534,7 +551,7 @@ function renderNoticeList(){
             ${sortedNotices.map(n => `
             <tr class="clickable" onclick="openNoticeDetail(${n.id})" style="${n.pinned ? 'background-color: var(--blue2);' : ''}">
               <td style="text-align:center; color:var(--t3); font-weight:600">${n.pinned ? '—' : n.id}</td>
-              <td style="text-align:center"><span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span></td>
+              ${S.user.role === 'admin' ? `<td style="text-align:center"><span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span></td>` : ''}
               <td style="text-align:center"><span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]}</span></td>
               <td>
                 <div class="flex aic gap2" style="font-weight:${n.pinned?'700':'500'}">
@@ -572,7 +589,7 @@ function renderNoticeDetail() {
       <div class="cb" style="padding: 28px 32px">
         <div class="flex gap2 mb2">
           ${n.pinned ? '<span class="badge b-blue">📌 상단고정</span>' : ''}
-          <span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span>
+          ${S.user.role === 'admin' ? `<span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span>` : ''}
           <span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]} 대상</span>
         </div>
         <div style="font-size:22px; font-weight:800; color:var(--t1); margin-top:8px">${n.title}</div>
@@ -688,7 +705,6 @@ function runMatching() {
   const adminTracker = {}; // [date][time] = count (max 3)
   const companyTracker = {}; // [coId][date][time] = true
   const p = S.prog || PROGRAMS[0];
-  const slotMin = p.slotMinutes || 30;
 
   const generateIntervals = (start, end, step) => {
     const res = [];
@@ -701,6 +717,7 @@ function runMatching() {
   const cos = DB.companies.filter(c => c.submitted && c.status !== 'selection_complete');
 
   cos.forEach(co => {
+    const slotMin = co.slotMinutes || p.slotMinutes || 30; // 개별 기업 슬롯 반영
     const apps = DB.students.filter(s => s.apps.includes(co.id) && s.avail[co.id] && s.avail[co.id].length > 0);
     
     apps.forEach(st => {
@@ -719,14 +736,15 @@ function runMatching() {
             const adminCount = adminTracker[d][time] || 0;
             const coBusy = companyTracker[co.id][d][time];
 
-            // 운영진 동시간대 최대 3명 모니터링 제약 반영
-            if(adminCount < 3 && !coBusy) {
-              adminTracker[d][time] = adminCount + 1;
+            const isOnline = co.mode === 'online';
+            
+            // 대면(Offline)은 운영진 모니터링(최대 3명) 제한을 받지 않음
+            if ((!isOnline || adminCount < 3) && !coBusy) {
+              if (isOnline) adminTracker[d][time] = adminCount + 1;
               companyTracker[co.id][d][time] = true;
               
-              // 온라인인 경우 화상링크 자동 생성
-              const videoLink = co.mode === 'online' ? 'https://meet.intern.kr/room-' + Math.random().toString(36).substr(2, 6) : null;
-              const address = co.mode === 'offline' ? co.address : null;
+              const videoLink = isOnline ? 'https://meet.intern.kr/room-' + Math.random().toString(36).substr(2, 6) : null;
+              const address = !isOnline ? co.address : null;
               
               matches.push({ coId: co.id, coName: co.name, stId: st.id, stName: st.name, date: d, time: time, mode: co.mode, videoLink, address });
               assigned = true;
@@ -746,7 +764,8 @@ function runMatching() {
 
   S.matchResults = { matches, failed };
   S.adminSubView = 'timetable';
-  showToast('자동 매칭이 완료되었습니다! (동시간 3팀 제한 적용)');
+  S.timetableTab = 'online';
+  showToast('자동 매칭이 완료되었습니다! (비대면-동시간 3팀 제한 / 대면-제한없음)');
   render();
 }
 
@@ -759,18 +778,17 @@ function renderTimetable() {
   }
   
   const { matches, failed } = S.matchResults;
-  const dates = [...new Set(matches.map(m => m.date))].sort();
   
-  let html = `<div>
+  return `<div>
     <div class="ph flex jb aic">
       <div class="flex aic gap3">
         <button class="btn btn-ghost btn-sm" onclick="S.adminSubView='grid';render()">← 뒤로가기</button>
-        <div><div class="ph-t">확정 면접 타임테이블</div><div class="ph-s">운영진 모니터링 일정 (동시간 최대 3개 룸 운영)</div></div>
+        <div><div class="ph-t">확정 면접 타임테이블</div><div class="ph-s">비대면은 모니터링 일정(최대 3팀), 대면은 별도 시간표로 표시됩니다.</div></div>
       </div>
-    </div>`;
+    </div>
 
-  if(failed && failed.length > 0) {
-    html += `<div class="card mb4" style="border-left:4px solid var(--red)">
+    ${failed && failed.length > 0 ? `
+    <div class="card mb4" style="border-left:4px solid var(--red)">
       <div class="cb">
         <div style="font-weight:800; color:var(--red); margin-bottom:12px;">⚠ 매칭 실패 리스트 (총 ${failed.length}명) - 일정 수동 조정 요망</div>
         <div style="display:flex; flex-direction:column; gap:8px;">
@@ -784,8 +802,21 @@ function renderTimetable() {
           }).join('')}
         </div>
       </div>
-    </div>`;
-  }
+    </div>` : ''}
+
+    <div class="seg mb4" style="max-width:400px">
+      <button class="seg-btn ${S.timetableTab==='online'?'on':''}" onclick="S.timetableTab='online';render()">💻 비대면 면접 (모니터링)</button>
+      <button class="seg-btn ${S.timetableTab==='offline'?'on':''}" onclick="S.timetableTab='offline';render()">🏢 대면 면접 (오프라인)</button>
+    </div>
+
+    ${S.timetableTab === 'online' ? renderTimetableOnline(matches.filter(m=>m.mode==='online')) : renderTimetableOffline(matches.filter(m=>m.mode==='offline'))}
+  </div>`;
+}
+
+function renderTimetableOnline(onlineMatches) {
+  if (onlineMatches.length === 0) return `<div class="card"><div class="empty">확정된 비대면 면접 일정이 없습니다.</div></div>`;
+  const dates = [...new Set(onlineMatches.map(m => m.date))].sort();
+  let html = '';
 
   dates.forEach(d => {
     html += `<div style="font-size:16px; font-weight:800; color:var(--blue); margin-top:24px; margin-bottom:12px;">🗓 ${fmtDate(d)}</div>`;
@@ -795,7 +826,7 @@ function renderTimetable() {
       </thead>
       <tbody>`;
     
-    const dayMatches = matches.filter(m => m.date === d);
+    const dayMatches = onlineMatches.filter(m => m.date === d);
     const times = [...new Set(dayMatches.map(m => m.time))].sort();
 
     times.forEach(t => {
@@ -807,7 +838,7 @@ function renderTimetable() {
             html += `<td>
               <span class="badge b-purple" style="margin-bottom:4px">${match.coName}</span><br>
               <span style="font-weight:700; font-size:14px">${match.stName}</span> 면접자<br>
-              ${match.mode==='online' ? `<a href="${match.videoLink}" target="_blank" class="badge b-blue" style="margin-top:6px;text-decoration:none">🔗 화상방 입장</a>` : `<span class="badge b-green" style="margin-top:6px" title="${match.address}">🏢 대면 (주소등록됨)</span>`}
+              <a href="${match.videoLink}" target="_blank" class="badge b-blue" style="margin-top:6px;text-decoration:none">🔗 화상방 입장</a>
             </td>`;
          } else {
             html += `<td><span style="color:var(--t3)">- 대기 -</span></td>`;
@@ -815,12 +846,38 @@ function renderTimetable() {
       }
       html += `</tr>`;
     });
-    
     html += `</tbody></table></div></div>`;
   });
-  html += `</div>`;
   return html;
 }
+
+function renderTimetableOffline(offlineMatches) {
+  if (offlineMatches.length === 0) return `<div class="card"><div class="empty">확정된 대면 면접 일정이 없습니다.</div></div>`;
+  const dates = [...new Set(offlineMatches.map(m => m.date))].sort();
+  let html = '';
+
+  dates.forEach(d => {
+    html += `<div style="font-size:16px; font-weight:800; color:var(--green); margin-top:24px; margin-bottom:12px;">🗓 ${fmtDate(d)} (대면)</div>`;
+    html += `<div class="card"><div class="tw"><table>
+      <thead>
+        <tr><th style="width:100px; text-align:center">시간</th><th>기업명</th><th>면접자</th><th>면접 장소 (주소)</th></tr>
+      </thead>
+      <tbody>`;
+    
+    const dayMatches = offlineMatches.filter(m => m.date === d);
+    dayMatches.sort((a,b) => t2m(a.time) - t2m(b.time)).forEach(m => {
+      html += `<tr>
+        <td style="font-weight:800; text-align:center; color:var(--t2)">${m.time}</td>
+        <td><span class="badge b-green">${m.coName}</span></td>
+        <td style="font-weight:700">${m.stName}</td>
+        <td style="color:var(--t2)">${m.address || '미입력'}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div></div>`;
+  });
+  return html;
+}
+
 
 function renderManagementGrid(){
   const statusLabel = {'before_select': '일정 선택 전', 'select_done': '일정 선택 완료', 'selecting': '선발중', 'selection_complete': '선발 완료'};
@@ -842,7 +899,7 @@ function renderManagementGrid(){
         const total = coStudents.length;
         const submitted = coStudents.filter(s => s.avail && s.avail[co.id] && s.avail[co.id].length > 0).length;
         
-        return `<div class="card" onclick="S.adminSubView='co_dash';S.activeCoId='${co.id}';S.coTab='settings';render()" style="padding:20px; transition:transform .15s, box-shadow .15s; cursor:pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--sh2)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--sh)'">
+        return `<div class="card" onclick="S.adminSubView='co_dash';S.activeCoId='${co.id}';S.coTab='settings';S.coApplicantTab='scheduled';render()" style="padding:20px; transition:transform .15s, box-shadow .15s; cursor:pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--sh2)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--sh)'">
           <div class="flex jb aic mb3">
             <div style="font-size:18px; font-weight:800; color:var(--t1)">${co.name}</div>
             <span class="badge ${statusColor[co.status]}">${statusLabel[co.status]}</span>
@@ -902,6 +959,7 @@ function renderAdminCoDashSettings(co) {
         <div class="fg"><label class="fl">면접 방식</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)"><span class="badge ${modeClr(co.mode)}">${modeLbl(co.mode)}</span></div></div>
         <div class="fg"><label class="fl">면접 형태</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)"><span class="badge ${typeClr(co.type)}">${typeLbl(co.type)}</span></div></div>
       </div>
+      <div class="fg"><label class="fl">면접 당 진행 시간 (슬롯)</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--blue);font-weight:700">${co.slotMinutes || 30}분 단위</div></div>
       ${co.mode === 'online' 
         ? `<div class="fg"><label class="fl">화상 미팅 링크</label><div class="fi" style="display:flex;align-items:center;background:var(--card2);color:var(--blue);font-weight:600">안내: 화상링크는 매칭 시 면접자별로 자동 생성됩니다.</div></div>` 
         : `<div class="fg"><label class="fl">대면 면접 주소</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t1)">${co.address||'미입력'}</div></div>`
@@ -920,14 +978,24 @@ function renderAdminCoDashSettings(co) {
 }
 
 function renderAdminCoDashApplicants(co) {
-  const apps = DB.students.filter(s => s.apps && s.apps.includes(co.id));
+  if(!S.coApplicantTab) S.coApplicantTab = 'scheduled';
+  const allApps = DB.students.filter(s => s.apps && s.apps.includes(co.id));
+  
+  const apps = allApps.filter(s => {
+     const hasReport = s.reports && s.reports[co.id];
+     return S.coApplicantTab === 'scheduled' ? !hasReport : hasReport;
+  });
+
   return `<div>
     <div class="flex jb aic mb3">
-      <div style="font-weight:700; color:var(--t1)">총 ${apps.length}명의 면접자</div>
+      <div class="seg" style="max-width:240px">
+        <button class="seg-btn ${S.coApplicantTab==='scheduled'?'on':''}" onclick="S.coApplicantTab='scheduled';render()">면접 예정</button>
+        <button class="seg-btn ${S.coApplicantTab==='completed'?'on':''}" onclick="S.coApplicantTab='completed';render()">면접 완료</button>
+      </div>
       <button class="btn btn-outline-blue btn-sm" onclick="openAddSingleStudentModal('${co.id}')">+ 면접자 단건 등록</button>
     </div>
     <div class="company-grid">
-      ${apps.length===0?`<div class="card" style="grid-column:1/-1"><div class="empty">등록된 면접자가 없습니다.</div></div>`:''}
+      ${apps.length===0?`<div class="card" style="grid-column:1/-1"><div class="empty">해당하는 면접자가 없습니다.</div></div>`:''}
       ${apps.map(s => renderApplicantCard(s, co.id)).join('')}
     </div>
   </div>`
@@ -966,12 +1034,84 @@ function renderApplicantCard(s, coId) {
       <span style="font-size:13px; font-weight:700; color:var(--blue)">${matchText}</span>
     </div>
     <div class="flex gap2 mb2">
-      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.portfolio||'#'}')">포트폴리오</button>
-      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.resume||'#'}')">이력서</button>
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.portfolioLink||'#'}')">포트폴리오</button>
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.resumeLink||'#'}')">이력서</button>
     </div>
     <button class="btn btn-sm w-full ${hasReport ? 'btn-outline-blue' : 'btn-ghost'}" ${!hasReport ? 'disabled' : `onclick="event.stopPropagation(); openStudentDetailAdmin('${s.id}', '${coId}', 'report')"`}>
       ${hasReport ? '📄 면접 리포트 보기' : '면접 리포트 (미생성)'}
     </button>
+  </div>`;
+}
+
+// ─── 4. 문의 관리 뷰 (Admin) ─────────────────────────
+function openInquiryDetail(id) { S.selectedInquiryId = id; S.inquiryView = 'detail'; render(); }
+function submitReply(id) {
+  const replyContent = document.getElementById('inq-reply').value.trim();
+  if(!replyContent) return alert('답변을 입력하세요.');
+  const inq = DB.inquiries.find(x => x.id === id);
+  if(inq) {
+    inq.reply = replyContent;
+    inq.replyDate = fmtDate(new Date().toISOString().split('T')[0]);
+    inq.status = 'answered';
+  }
+  showToast('답변이 등록되었습니다.');
+  render();
+}
+
+function renderAdminInquiry() {
+  if (S.inquiryView === 'detail') {
+    const inq = DB.inquiries.find(x => x.id === S.selectedInquiryId);
+    const coName = getCo(inq.coId)?.name || '알수없음';
+    return `<div>
+      <div class="ph flex jb aic">
+        <div><div class="ph-t">문의 상세 및 답변</div></div>
+        <button class="btn btn-ghost" onclick="S.inquiryView='list';render()">← 목록으로</button>
+      </div>
+      <div class="card mb4" style="max-width:800px">
+        <div class="cb">
+          <div class="flex jb aic mb2">
+             <span class="badge b-purple">${coName}</span>
+             <span style="font-size:12px; color:var(--t3)">${inq.date}</span>
+          </div>
+          <div style="font-size:18px; font-weight:800; margin-bottom:12px">${inq.title}</div>
+          <div style="font-size:14px; line-height:1.6; color:var(--t1); padding:16px; background:var(--card2); border-radius:var(--r)">${inq.content}</div>
+        </div>
+      </div>
+      <div class="card" style="max-width:800px">
+        <div class="ch" style="background:var(--blue2)"><div class="ct" style="color:var(--blue)">운영진 답변</div></div>
+        <div class="cb">
+           ${inq.status === 'answered' ? `
+             <div style="font-size:12px; color:var(--t2); margin-bottom:8px">답변일: ${inq.replyDate}</div>
+             <div style="font-size:14px; line-height:1.6; white-space:pre-wrap">${inq.reply}</div>
+           ` : `
+             <textarea id="inq-reply" class="fta" style="min-height:120px; margin-bottom:12px" placeholder="답변 내용을 작성해주세요..."></textarea>
+             <div style="text-align:right"><button class="btn btn-blue" onclick="submitReply(${inq.id})">답변 등록</button></div>
+           `}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return `<div>
+    <div class="ph"><div class="ph-t">문의 관리</div><div class="ph-s">기업에서 등록한 문의사항을 확인하고 답변을 작성합니다.</div></div>
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:60px">상태</th><th style="width:140px">문의 기업</th><th>제목</th><th style="width:100px">등록일</th></tr></thead>
+          <tbody>
+            ${DB.inquiries.length===0 ? `<tr><td colspan="4" class="empty">등록된 문의가 없습니다.</td></tr>` : ''}
+            ${[...DB.inquiries].reverse().map(q => `
+              <tr class="clickable" onclick="openInquiryDetail(${q.id})">
+                <td><span class="badge ${q.status==='answered'?'b-green':'b-orange'}">${q.status==='answered'?'답변완료':'답변대기'}</span></td>
+                <td style="font-weight:600">${getCo(q.coId)?.name}</td>
+                <td>${q.title}</td>
+                <td style="color:var(--t2)">${q.date}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>`;
 }
 
@@ -1096,8 +1236,8 @@ function renderStudentInfoTab(s, co, otherApps, yn) {
       </div>
       
       <div class="flex gap2 mb4">
-         <button class="btn btn-outline-blue w-full" onclick="window.open('${s.portfolio||'#'}')">포트폴리오 열기</button>
-         <button class="btn btn-outline-blue w-full" onclick="window.open('${s.resume||'#'}')">이력서 열기</button>
+         <button class="btn btn-outline-blue w-full" onclick="window.open('${s.portfolioLink||'#'}')">포트폴리오 열기</button>
+         <button class="btn btn-outline-blue w-full" onclick="window.open('${s.resumeLink||'#'}')">이력서 열기</button>
       </div>
 
       ${otherApps.length > 0 ? `
@@ -1167,8 +1307,8 @@ function renderStudentReportTab(s, coId) {
   `;
 }
 
-function createEmptyStudent() { return { targetCompanyName: '', name: '', appDate: '', birth: '', addr: '', phone: '', email: '', edLevel: '', school: '', faculty: '', dept: '', participationCount: '0', nationalEmpSupport: 'N', empInsurance: 'N', privacyConsent: 'Y', anomalyCheck: 'N', hasAttachment: 'N', motivation: '', vision: '', experience: '', reports: {} }; }
-function updateManualDraft(idx, key, val) { S.manualDrafts[idx][key] = val; }
+function createEmptyStudent() { return { targetCompanyName: '', name: '', appDate: '', birth: '', addr: '', phone: '', email: '', edLevel: '', school: '', faculty: '', dept: '', participationCount: '0', nationalEmpSupport: 'N', empInsurance: 'N', privacyConsent: 'Y', anomalyCheck: 'N', hasAttachment: 'N', motivation: '', vision: '', experience: '', reports: {}, useDriveLink: false, portfolioLink: '', resumeLink: '', portfolioFileName: '', resumeFileName: '' }; }
+function updateManualDraft(idx, key, val) { S.manualDrafts[idx][key] = val; render(); }
 function addManualRow() { S.manualDrafts.push(createEmptyStudent()); render(); }
 function removeManualRow(idx) { if(S.manualDrafts.length > 1) { S.manualDrafts.splice(idx, 1); render(); } else alert('최소 1개의 입력폼은 필요합니다.'); }
 
@@ -1205,6 +1345,29 @@ function renderManualTab() {
         <div class="fg"><label class="fl">내용이상</label><select class="fs" onchange="updateManualDraft(${idx}, 'anomalyCheck', this.value)">${ynOptions}</select></div>
         <div class="fg"><label class="fl">첨부파일</label><select class="fs" onchange="updateManualDraft(${idx}, 'hasAttachment', this.value)">${ynOptions}</select></div>
       </div>
+      <div class="fg">
+        <div class="flex jb aic mb2">
+          <label class="fl" style="margin:0">포트폴리오 및 이력서 첨부</label>
+          <label style="font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px; color:var(--t2)">
+            <input type="checkbox" onchange="updateManualDraft(${idx}, 'useDriveLink', this.checked)" ${draft.useDriveLink ? 'checked' : ''}> 구글드라이브 링크로 업로드
+          </label>
+        </div>
+        <div class="frow">
+          ${draft.useDriveLink ? `
+            <input class="fi" placeholder="포트폴리오 링크 (URL)" value="${draft.portfolioLink}" oninput="updateManualDraft(${idx}, 'portfolioLink', this.value)">
+            <input class="fi" placeholder="이력서 링크 (URL)" value="${draft.resumeLink}" oninput="updateManualDraft(${idx}, 'resumeLink', this.value)">
+          ` : `
+            <div style="position:relative;">
+              <input type="file" id="pf_${idx}" style="display:none" onchange="updateManualDraft(${idx}, 'portfolioFileName', this.files[0]?this.files[0].name:'')">
+              <label for="pf_${idx}" class="fi" style="display:flex; align-items:center; cursor:pointer; color:${draft.portfolioFileName?'var(--t1)':'var(--t3)'}">${draft.portfolioFileName||'포트폴리오 파일 선택'}</label>
+            </div>
+            <div style="position:relative;">
+              <input type="file" id="rs_${idx}" style="display:none" onchange="updateManualDraft(${idx}, 'resumeFileName', this.files[0]?this.files[0].name:'')">
+              <label for="rs_${idx}" class="fi" style="display:flex; align-items:center; cursor:pointer; color:${draft.resumeFileName?'var(--t1)':'var(--t3)'}">${draft.resumeFileName||'이력서 파일 선택'}</label>
+            </div>
+          `}
+        </div>
+      </div>
       <div class="fg"><label class="fl">지원동기</label><textarea class="fta" oninput="updateManualDraft(${idx}, 'motivation', this.value)">${draft.motivation}</textarea></div>
       <div class="fg"><label class="fl">향후 비전 및 포부</label><textarea class="fta" oninput="updateManualDraft(${idx}, 'vision', this.value)">${draft.vision}</textarea></div>
       <div class="fg"><label class="fl">관련 경력(경험)</label><textarea class="fta" oninput="updateManualDraft(${idx}, 'experience', this.value)">${draft.experience}</textarea></div>
@@ -1218,7 +1381,15 @@ function saveManualData() {
   S.manualDrafts.forEach(d => {
     if(!d.name) return;
     const coId = d.targetCompanyName ? getOrCreateCompany(d.targetCompanyName) : null;
-    DB.students.push({ id: 's_' + Date.now() + Math.floor(Math.random()*1000), apps: coId ? [coId] : [], avail: {}, interviewStatus: {}, reports: {}, ...d });
+    
+    const pLink = d.useDriveLink ? d.portfolioLink : (d.portfolioFileName ? 'dummy_file_path' : '');
+    const rLink = d.useDriveLink ? d.resumeLink : (d.resumeFileName ? 'dummy_file_path' : '');
+
+    DB.students.push({ 
+      id: 's_' + Date.now() + Math.floor(Math.random()*1000), 
+      apps: coId ? [coId] : [], avail: {}, interviewStatus: {}, reports: {}, 
+      portfolioLink: pLink, resumeLink: rLink, ...d 
+    });
     count++;
   });
   if(count === 0) { alert('입력된 이름이 없습니다.'); return; }
@@ -1279,7 +1450,7 @@ function handleExcelUpload(e) {
           edLevel: row['학력'] || '', school: row['학교'] || '', faculty: row['학부'] || '', dept: row['학과'] || '', 
           participationCount: row['연간참여횟수'] || '0', nationalEmpSupport: row['국민취업지원제도참여여부'] || 'N', empInsurance: row['고용보험가입여부'] || 'N', privacyConsent: row['개인정보활용동의여부'] || 'N', anomalyCheck: row['확인내용이상여부'] || 'N', hasAttachment: row['첨부파일유무'] || 'N',
           motivation: row['지원동기'] || '', vision: row['향후 비전 및 포부(수행계획)'] || '', experience: row['관련 경력(경험)'] || '',
-          apps: [], avail: {}, interviewStatus: {}, reports: {}
+          apps: [], avail: {}, interviewStatus: {}, reports: {}, portfolioLink: '', resumeLink: ''
         };
       });
       render();
@@ -1299,6 +1470,8 @@ function saveExcelData() {
   showToast('엑셀 등록 완료'); closeAddDataModal();
 }
 
+
+// ─── 기업 면접 설정 ─────────────────────────
 function saveSettings() {
   const dates = document.getElementById('set-interview-range').value.split(' ~ ');
   if (dates.length > 0 && dates[0]) { S.prog.interviewStart = dates[0]; S.prog.interviewEnd = dates[1] || dates[0]; }
@@ -1330,9 +1503,10 @@ function renderSettings(){
 // COMPANY VIEW
 // ═══════════════════════════════════════════
 const CO_NAV=[
-  {id:'co-settings',label:'면접 설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
-  {id:'co-dates',label:'가능 날짜 선택',ico:'<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8"/>'},
+  {id:'co-notice',label:'공지사항',ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8"/>'},
+  {id:'co-settings',label:'면접 설정 및 일정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'co-applicants',label:'면접자 목록',ico:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'},
+  {id:'co-inquiry',label:'문의하기',ico:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'}
 ]
 
 function renderCompany(){
@@ -1351,120 +1525,300 @@ function renderCompany(){
   </div>
   <div class="nav-section">
     <div class="nav-label">기업 메뉴</div>
-    ${CO_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';render()">
+    ${CO_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';S.coApplicantTab='scheduled';S.noticeView='list';S.inquiryView='list';render()">
       <svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}
     </div>`).join('')}
   </div>`
   
   let main=''
-  if(S.tab==='co-settings') main=renderCoSettings()
-  else if(S.tab==='co-dates') main=renderCoDates()
-  else if(S.tab==='co-applicants') main=renderCoApplicants()
+  if(S.tab==='co-notice') {
+      if(S.noticeView === 'detail') main = renderNoticeDetail();
+      else main = renderNoticeList();
+  }
+  else if(S.tab==='co-settings') main=renderCoSettingsMerged()
+  else if(S.tab==='co-applicants') main=renderAdminCoDashApplicants(co)
+  else if(S.tab==='co-inquiry') main=renderCoInquiry()
 
   return renderShell(sidebar,main)
 }
 
 function co_set(k,v){const co=getCo(S.user.companyId); co[k]=v; render()}
-function co_save(){
-  const co = getCo(S.user.companyId);
-  co.managerEmail = document.getElementById('co-m-email').value;
-  co.managerPhone = document.getElementById('co-m-phone').value;
-  if(co.mode === 'offline') {
-    co.address = document.getElementById('co-m-addr') ? document.getElementById('co-m-addr').value : co.address;
-  }
-  co.submitted=true; showToast('기본 면접 설정이 저장되었습니다!'); S.tab='co-dates'; render();
-}
 
-function renderCoSettings(){
-  const co=getCo(S.user.companyId)
+// 통합된 기업 설정 뷰
+function renderCoSettingsMerged(){
+  const co=getCo(S.user.companyId);
+  const p=S.prog||PROGRAMS[0];
+  const dates=Object.keys(co.dateSlots||{}).sort();
+  if(!co.slotMinutes) co.slotMinutes = 30; // default
+  
   return`<div>
-  <div class="ph"><div class="ph-t">면접 설정</div><div class="ph-s">면접을 진행할 담당자 정보 및 면접 방식을 설정하세요</div></div>
-  <div style="max-width:540px">
-    <div class="card mb4">
-      <div class="cb">
-        <div class="fg"><label class="fl">기업명</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)">${co.name} (자동입력)</div></div>
-        <div class="frow">
-          <div class="fg"><label class="fl">담당자 이메일</label><input class="fi" id="co-m-email" value="${co.managerEmail||''}"></div>
-          <div class="fg"><label class="fl">담당자 전화번호</label><input class="fi" id="co-m-phone" value="${co.managerPhone||''}"></div>
-        </div>
-        <div class="divider"></div>
-        <div class="fg"><label class="fl">면접 방식</label>
-          <div class="seg" style="max-width:280px">
-            <button class="seg-btn ${co.mode==='offline'?'on':''}" onclick="co_set('mode','offline')">🏢 대면</button>
-            <button class="seg-btn ${co.mode==='online'?'on':''}" onclick="co_set('mode','online')">💻 비대면(화상)</button>
-          </div>
-        </div>
-        ${co.mode==='offline' ? `
-          <div class="fg"><label class="fl">면접 장소 (주소 선택/입력)</label>
-            <input class="fi" id="co-m-addr" value="${co.address||''}" placeholder="예: 서울시 강남구 테헤란로...">
-          </div>
-        ` : `
-          <div class="fg"><label class="fl">화상 미팅 링크</label>
-            <div class="fi" style="display:flex;align-items:center;background:var(--card2);color:var(--blue);font-weight:600">안내: 화상링크는 매칭 시 면접자별로 자동 생성됩니다.</div>
-          </div>
-        `}
-        <div class="fg"><label class="fl">면접 형태</label>
-          <div class="seg" style="max-width:280px">
-            <button class="seg-btn ${co.type==='1on1'?'on':''}" onclick="co_set('type','1on1')">👤 1:1 면접</button>
-            <button class="seg-btn ${co.type==='group'?'on':''}" onclick="co_set('type','group')">👥 그룹 면접</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button class="btn btn-blue btn-lg w-full" onclick="co_save()">설정 저장 후 날짜 선택하기 →</button>
-  </div></div>`
-}
-
-function renderCoDates(){
-  const co=getCo(S.user.companyId)
-  const dates=Object.keys(co.dateSlots||{}).sort()
-  const p=S.prog||PROGRAMS[0]
-  return`<div>
-  <div class="ph"><div class="ph-t">면접 가능 날짜 및 시간 선택</div><div class="ph-s">운영진이 지정한 기간(${fmtDate(p.interviewStart)} ~ ${fmtDate(p.interviewEnd)}) 내의 날짜만 선택 가능합니다.</div></div>
-  <div style="display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start">
-    <div>${renderCal({id:'co-cal',sel:dates})}</div>
-    <div>
+  <div class="ph"><div class="ph-t">면접 설정 및 일정 선택</div><div class="ph-s">담당자 정보 및 면접 방식, 진행 가능 일정을 한 번에 설정 후 제출해주세요. (기간: ${fmtDate(p.interviewStart)} ~ ${fmtDate(p.interviewEnd)})</div></div>
+  
+  <div style="display:flex; gap:20px; align-items:flex-start;">
+    
+    <!-- Left Column: Settings + Calendar -->
+    <div style="flex:1; max-width:380px; display:flex; flex-direction:column; gap:16px;">
       <div class="card">
-        <div class="ch"><div class="ct">선택된 날짜 및 시간대 설정 (${dates.length}일)</div></div>
         <div class="cb">
-          ${dates.length===0?`<div class="empty"><div class="empty-ico">📅</div><div class="empty-t">달력에서 면접을 진행할 날짜를 먼저 클릭해주세요</div></div>`:''}
-          ${dates.map(d=>{
-            const slots=co.dateSlots[d]||[]
-            return`<div style="margin-bottom:12px;padding:12px;border:1px solid var(--blue);border-radius:var(--r2);background:var(--blue2)">
-              <div class="flex jb aic mb2">
-                <div style="font-size:13.5px;font-weight:700;color:var(--blue)">${fmtDate(d)}</div>
-                <button onclick="calToggle('co-cal','${d}')" style="width:20px;height:20px;border-radius:50%;background:rgba(49,130,246,.15);border:none;color:var(--blue)">×</button>
-              </div>
-              ${slots.map((s,si)=>`<div class="flex aic gap2 mb2">
-                <input class="fi" type="time" value="${s.start}" oninput="coTimeEdit('${d}',${si},'start',this.value)" style="width:110px;height:34px">
-                <span>~</span>
-                <input class="fi" type="time" value="${s.end}" oninput="coTimeEdit('${d}',${si},'end',this.value)" style="width:110px;height:34px">
-                ${slots.length>1?`<button onclick="coRemoveSlot('${d}',${si})" style="padding:3px 7px;background:var(--red2);color:var(--red);border:none;border-radius:4px;font-size:11px">삭제</button>`:''}
-              </div>`).join('')}
-              <button onclick="coAddSlot('${d}')" class="btn btn-ghost btn-sm" style="font-size:11.5px">+ 시간대 추가</button>
-            </div>`
-          }).join('')}
+          <div class="frow">
+            <div class="fg"><label class="fl">담당자 이메일</label><input class="fi" id="co-m-email" value="${co.managerEmail||''}"></div>
+            <div class="fg"><label class="fl">담당자 전화번호</label><input class="fi" id="co-m-phone" value="${co.managerPhone||''}"></div>
+          </div>
+          <div class="fg"><label class="fl">면접 방식</label>
+            <div class="seg">
+              <button class="seg-btn ${co.mode==='offline'?'on':''}" onclick="co_set('mode','offline')">🏢 대면</button>
+              <button class="seg-btn ${co.mode==='online'?'on':''}" onclick="co_set('mode','online')">💻 비대면(화상)</button>
+            </div>
+          </div>
+          ${co.mode==='offline' ? `
+            <div class="fg"><label class="fl">면접 장소 (주소)</label>
+              <input class="fi" id="co-m-addr" value="${co.address||''}" placeholder="예: 서울시 강남구 테헤란로...">
+            </div>
+          ` : `
+            <div class="fg"><label class="fl">화상 미팅 링크</label>
+              <div class="fi" style="display:flex;align-items:center;background:var(--card2);color:var(--blue);font-weight:600;font-size:12px">화상링크는 매칭 시 면접자별로 자동 생성됩니다.</div>
+            </div>
+          `}
+          <div class="fg"><label class="fl">면접 형태</label>
+            <div class="seg">
+              <button class="seg-btn ${co.type==='1on1'?'on':''}" onclick="co_set('type','1on1')">👤 1:1 면접</button>
+              <button class="seg-btn ${co.type==='group'?'on':''}" onclick="co_set('type','group')">👥 그룹 면접</button>
+            </div>
+          </div>
+          <div class="fg"><label class="fl">1회 면접 진행 시간 (슬롯)</label>
+            <div class="seg" style="display:flex; flex-wrap:wrap; gap:4px; background:transparent; border:none;">
+              ${[10, 15, 20, 25, 30].map(min => `
+                 <button class="seg-btn ${co.slotMinutes===min?'on':''}" style="border:1.5px solid var(--border); border-radius:var(--r)" onclick="co_set('slotMinutes', ${min})">${min}분</button>
+              `).join('')}
+            </div>
+          </div>
         </div>
       </div>
-      <button class="btn btn-blue btn-lg w-full mt3" onclick="coSubmitDates()" ${dates.length===0?'disabled':''}>면접 정보 최종 제출 (${dates.length}일 선택됨)</button>
+      ${renderCal({id:'co-cal',sel:dates})}
     </div>
-  </div></div>`
+
+    <!-- Right Column: Time slots & Submit -->
+    <div style="flex:1; background:var(--card); border-radius:var(--r2); border:1px solid var(--border); display:flex; flex-direction:column; box-shadow:var(--sh);">
+      <div class="ch"><div class="ct">선택된 날짜 및 시간대 (${dates.length}일)</div></div>
+      <div style="flex:1; padding:18px; display:flex; flex-direction:column; gap:12px;">
+        ${dates.length===0?`<div class="empty" style="padding:20px"><div class="empty-ico">📅</div><div class="empty-t">좌측 달력에서 면접을 진행할 날짜를 먼저 클릭해주세요</div></div>`:''}
+        ${dates.map(d=>{
+          const slots=co.dateSlots[d]||[]
+          return`<div style="padding:12px;border:1.5px solid var(--blue);border-radius:var(--r2);background:var(--blue2)">
+            <div class="flex jb aic mb2">
+              <div style="font-size:13.5px;font-weight:700;color:var(--blue)">${fmtDate(d)}</div>
+              <button onclick="calToggle('co-cal','${d}')" style="width:20px;height:20px;border-radius:50%;background:rgba(49,130,246,.15);border:none;color:var(--blue)">×</button>
+            </div>
+            ${slots.map((s,si)=>`<div class="flex aic gap2 mb2">
+              <input class="fi" type="time" value="${s.start}" oninput="coTimeEdit('${d}',${si},'start',this.value)" style="width:110px;height:34px">
+              <span>~</span>
+              <input class="fi" type="time" value="${s.end}" oninput="coTimeEdit('${d}',${si},'end',this.value)" style="width:110px;height:34px">
+              ${slots.length>1?`<button onclick="coRemoveSlot('${d}',${si})" style="padding:3px 7px;background:var(--red2);color:var(--red);border:none;border-radius:4px;font-size:11px">삭제</button>`:''}
+            </div>`).join('')}
+            <button onclick="coAddSlot('${d}')" class="btn btn-ghost btn-sm" style="font-size:11.5px">+ 시간대 추가</button>
+          </div>`
+        }).join('')}
+      </div>
+      <div style="padding:18px; border-top:1px solid var(--border);">
+        <button class="btn btn-blue btn-lg w-full" onclick="coSubmitAll()" ${dates.length===0?'disabled':''}>면접 정보 및 일정 최종 제출</button>
+      </div>
+    </div>
+
+  </div>
+  </div>`
 }
+
 function coTimeEdit(d,si,k,v){getCo(S.user.companyId).dateSlots[d][si][k]=v;render()}
 function coAddSlot(d){getCo(S.user.companyId).dateSlots[d].push({start:'09:00',end:'12:00'});render()}
 function coRemoveSlot(d,si){getCo(S.user.companyId).dateSlots[d].splice(si,1);render()}
-function coSubmitDates(){getCo(S.user.companyId).status='select_done'; showToast('운영진에게 면접 일정이 제출되었습니다.'); S.tab='co-applicants'; render();}
 
-function renderCoApplicants(){
-  const co=getCo(S.user.companyId)
-  const apps=DB.students.filter(s=>s.apps&&s.apps.includes(co.id))
-  return`<div>
-  <div class="ph"><div class="ph-t">면접자 목록</div><div class="ph-s">${co.name}에 배정된 면접자 ${apps.length}명</div></div>
-  <div class="company-grid">
-    ${apps.map(s => renderApplicantCard(s, co.id)).join('')}
-  </div></div>`
+function coSubmitAll() {
+  const co = getCo(S.user.companyId);
+  co.managerEmail = document.getElementById('co-m-email').value;
+  co.managerPhone = document.getElementById('co-m-phone').value;
+  if(co.mode === 'offline') co.address = document.getElementById('co-m-addr') ? document.getElementById('co-m-addr').value : co.address;
+  
+  co.status = 'select_done';
+  co.submitted = true;
+  showToast('운영진에게 모든 면접 설정이 제출되었습니다.');
+  S.tab = 'co-applicants';
+  render();
 }
 
+// ─── 4. 문의 관리 (기업용) ─────────────────────────
+function openCoInquiryWrite() {
+  S.modal = { type: 'co-write-inquiry' };
+  render();
+}
+
+function submitCoInquiry() {
+  const title = document.getElementById('inq-w-title').value.trim();
+  const content = document.getElementById('inq-w-content').value.trim();
+  if(!title || !content) return alert('제목과 내용을 모두 입력해주세요.');
+
+  const newId = DB.inquiries.length > 0 ? Math.max(...DB.inquiries.map(i=>i.id)) + 1 : 1;
+  DB.inquiries.push({
+    id: newId, coId: S.user.companyId, title: title, content: content,
+    date: fmtDate(new Date().toISOString().split('T')[0]),
+    status: 'waiting', reply: '', replyDate: ''
+  });
+  
+  showToast('문의가 등록되었습니다.');
+  S.modal = null; S.inquiryView = 'list'; render();
+}
+
+function renderCoInquiry() {
+  if (S.inquiryView === 'detail') {
+    const inq = DB.inquiries.find(x => x.id === S.selectedInquiryId);
+    return `<div>
+      <div class="ph flex jb aic">
+        <div><div class="ph-t">나의 문의 상세</div></div>
+        <button class="btn btn-ghost" onclick="S.inquiryView='list';render()">← 목록으로</button>
+      </div>
+      <div class="card mb4" style="max-width:800px">
+        <div class="cb">
+          <div class="flex jb aic mb2">
+             <span class="badge ${inq.status==='answered'?'b-green':'b-orange'}">${inq.status==='answered'?'답변완료':'답변대기'}</span>
+             <span style="font-size:12px; color:var(--t3)">${inq.date}</span>
+          </div>
+          <div style="font-size:18px; font-weight:800; margin-bottom:12px">${inq.title}</div>
+          <div style="font-size:14px; line-height:1.6; color:var(--t1); padding:16px; background:var(--card2); border-radius:var(--r)">${inq.content}</div>
+        </div>
+      </div>
+      ${inq.status === 'answered' ? `
+      <div class="card" style="max-width:800px">
+        <div class="ch" style="background:var(--blue2)"><div class="ct" style="color:var(--blue)">운영진 답변</div></div>
+        <div class="cb">
+           <div style="font-size:12px; color:var(--t2); margin-bottom:8px">답변일: ${inq.replyDate}</div>
+           <div style="font-size:14px; line-height:1.6; white-space:pre-wrap">${inq.reply}</div>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }
+
+  const myInqs = DB.inquiries.filter(i => i.coId === S.user.companyId);
+  return `<div>
+    <div class="ph flex jb aic">
+       <div><div class="ph-t">문의하기</div><div class="ph-s">운영진에게 궁금한 사항을 남겨주세요.</div></div>
+       <button class="btn btn-blue" onclick="openCoInquiryWrite()">+ 문의 작성</button>
+    </div>
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:60px">상태</th><th>제목</th><th style="width:100px">등록일</th></tr></thead>
+          <tbody>
+            ${myInqs.length===0 ? `<tr><td colspan="3" class="empty">등록된 문의가 없습니다.</td></tr>` : ''}
+            ${[...myInqs].reverse().map(q => `
+              <tr class="clickable" onclick="S.selectedInquiryId=${q.id}; S.inquiryView='detail'; render()">
+                <td><span class="badge ${q.status==='answered'?'b-green':'b-orange'}">${q.status==='answered'?'답변완료':'답변대기'}</span></td>
+                <td style="font-weight:600">${q.title}</td>
+                <td style="color:var(--t2)">${q.date}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderVideoOverlay() {
+  const coId = (S.modal && S.modal.coId) ? S.modal.coId : S.user.companyId;
+  const co = getCo(coId);
+  
+  let scheduled = [];
+  if (S.matchResults && S.matchResults.matches) {
+    scheduled = S.matchResults.matches.filter(m => m.coId === co.id);
+  } else {
+    scheduled = DB.students.filter(s => s.apps.includes(co.id)).map(s => ({stId: s.id, stName: s.name, time: '미정 (매칭 전)'}));
+  }
+  
+  if(scheduled.length === 0) return `<div class="ov" onmousedown="if(event.target===this){S.modal=null;render()}"><div class="modal m-mid"><div class="mh"><div class="mt">화상 대시보드</div><button class="mcl" onclick="S.modal=null;render()">×</button></div><div class="mb-scroll"><div class="empty">배정된 면접자가 없습니다.</div></div></div></div>`;
+  
+  if(!S.activeVideoStId) S.activeVideoStId = scheduled[0].stId;
+  const activeSt = getSt(S.activeVideoStId);
+  
+  return `
+    <div class="ov" style="padding:0; background:rgba(0,0,0,0.85); z-index:9999;">
+      <div style="width:100vw; height:100vh; display:flex; flex-direction:column; background:var(--bg);">
+        <!-- Header -->
+        <div style="height:60px; background:var(--card); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0;">
+          <div style="font-size:18px; font-weight:800; display:flex; align-items:center; gap:8px;">
+            <span style="display:inline-block; width:10px; height:10px; background:var(--red); border-radius:50%;"></span>
+            🎙 화상 대시보드 - ${co.name}
+          </div>
+          <button class="btn btn-ghost" onclick="S.modal=null;render()">나가기 ✕</button>
+        </div>
+        
+        <!-- Content -->
+        <div style="display:flex; flex:1; gap:16px; padding:16px; overflow:hidden;">
+          
+          <!-- Left: Applicant List -->
+          <div style="width:260px; background:var(--card); border-radius:var(--r2); border:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0;">
+            <div style="padding:14px; border-bottom:1px solid var(--border); font-weight:800; font-size:15px; color:var(--blue)">면접 대상자 리스트</div>
+            <div style="flex:1; overflow-y:auto; padding:10px;">
+              ${scheduled.map(m => `
+                <div onclick="S.activeVideoStId='${m.stId}';render()" style="padding:12px; border-radius:var(--r); border:1px solid ${S.activeVideoStId===m.stId?'var(--blue)':'var(--border)'}; background:${S.activeVideoStId===m.stId?'var(--blue2)':'var(--card)'}; cursor:pointer; margin-bottom:8px;">
+                  <div style="font-weight:700; font-size:14px; color:${S.activeVideoStId===m.stId?'var(--blue)':'var(--t1)'}">${m.stName} 면접자</div>
+                  <div style="font-size:11px; color:var(--t2); margin-top:4px;">🕒 배정 시간: ${m.time}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <!-- Center: Video(2/3) & Detail(1/3) -->
+          <div style="flex:1; display:flex; flex-direction:column; gap:16px; min-width:0;">
+            <!-- BLACK BOX FOR VIDEO -->
+            <div style="flex:2; background:#000; border-radius:var(--r2); display:flex; align-items:center; justify-content:center; color:#555; font-size:15px; font-weight:600; position:relative; min-height:0;">
+              (화상 화면 영역 - 추후 기능 연동 예정)
+              <div style="position:absolute; top:16px; left:16px; background:rgba(255,255,255,0.1); color:#fff; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; border:1px solid rgba(255,255,255,0.2);">
+                현재 연결: ${activeSt.name} 면접자
+              </div>
+            </div>
+             
+            <!-- Detail Region -->
+            <div style="flex:1; background:var(--card); border-radius:var(--r2); border:1px solid var(--border); padding:20px; overflow-y:auto; min-height:0;">
+              <div style="font-weight:800; font-size:16px; margin-bottom:12px; color:var(--blue)">${activeSt.name} 상세 정보</div>
+              <div class="frow" style="align-items:flex-start">
+                <div>
+                   <div style="font-size:11px;color:var(--t3)">학교/학과</div>
+                   <div style="font-size:13px;font-weight:600;margin-bottom:8px">${activeSt.school||'-'} ${activeSt.dept||'-'}</div>
+                   <div style="font-size:11px;color:var(--t3)">관련 경험</div>
+                   <div style="font-size:13px;font-weight:600;margin-bottom:8px; max-height:40px; overflow:hidden; text-overflow:ellipsis">${activeSt.experience||'-'}</div>
+                </div>
+                <div>
+                   <div style="font-size:11px;color:var(--t3)">지원동기</div>
+                   <div style="font-size:13px;font-weight:600;margin-bottom:8px; max-height:80px; overflow:hidden; text-overflow:ellipsis">${activeSt.motivation||'-'}</div>
+                </div>
+              </div>
+              <div class="flex gap2 mt3">
+                <button class="btn btn-outline-blue btn-sm" onclick="window.open('${activeSt.portfolioLink||'#'}')">포트폴리오 조회</button>
+                <button class="btn btn-outline-blue btn-sm" onclick="window.open('${activeSt.resumeLink||'#'}')">이력서 열람</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Waiting Room Preview -->
+          <div style="width:240px; background:var(--card2); border-radius:var(--r2); border:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0;">
+             <div style="padding:14px; border-bottom:1px solid var(--border); font-weight:800; display:flex; align-items:center; gap:6px; font-size:14px;">
+               <span style="display:inline-block; width:8px; height:8px; background:var(--green); border-radius:50%;"></span> 대기방 미리보기 (소리X)
+             </div>
+             <div style="flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:10px;">
+               ${scheduled.filter(m => m.stId !== S.activeVideoStId).map(m => `
+                 <div style="background:#222; border-radius:8px; aspect-ratio:4/3; position:relative; display:flex; align-items:center; justify-content:center; color:#777; font-size:12px; border:1px solid #444;">
+                   <div style="position:absolute; bottom:6px; left:6px; font-size:11px; color:#fff; background:rgba(0,0,0,0.6); padding:2px 6px; border-radius:4px;">${m.stName} 대기중</div>
+                   🎥 화면
+                 </div>
+               `).join('')}
+               ${scheduled.length <= 1 ? `<div class="empty" style="padding:20px 0; font-size:12px">대기 중인 인원이 없습니다.</div>` : ''}
+             </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 // ═══════════════════════════════════════════
 // STUDENT VIEW
@@ -1551,6 +1905,28 @@ function renderStDates(){
   </div></div>`
 }
 
+function renderModalWrapper() {
+  const m = S.modal;
+  if(!m) return '';
+  if(m.type === 'co-write-inquiry') {
+    return `<div class="ov" onmousedown="if(event.target===this){S.modal=null;render()}">
+      <div class="modal m-mid">
+        <button class="mcl" onclick="S.modal=null;render()">×</button>
+        <div class="mh"><div class="mt">운영진에게 문의하기</div></div>
+        <div class="mb-scroll">
+          <div class="fg"><label class="fl">제목</label><input class="fi" id="inq-w-title" placeholder="문의 제목을 입력하세요."></div>
+          <div class="fg"><label class="fl">내용</label><textarea class="fta" id="inq-w-content" style="min-height:150px" placeholder="문의 내용을 상세히 작성해주세요."></textarea></div>
+        </div>
+        <div class="mf">
+          <button class="btn btn-ghost" onclick="S.modal=null;render()">취소</button>
+          <button class="btn btn-blue" onclick="submitCoInquiry()">문의 등록</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  return renderModal(); // Fallback for other modals
+}
+
 // ═══════════════════════════════════════════
 // INITIAL RENDER
 // ═══════════════════════════════════════════
@@ -1566,17 +1942,35 @@ function render(){
      const em=document.querySelector('input[type="email"]'); const pw=document.querySelector('input[type="password"]');
      if(em)em.value=S.loginEmail; if(pw)pw.value=S.loginPw;
   }
+  
+  // Custom Modal override for Company Inquiry Write
+  if(S.modal && S.modal.type === 'co-write-inquiry') {
+     document.body.insertAdjacentHTML('beforeend', renderModalWrapper());
+  }
 
-  if(S.view==='admin' && S.tab==='settings') {
+  if((S.view==='admin' || S.view==='company') && S.tab==='settings') {
+     // Admin settings tab logic
      setTimeout(() => {
-        flatpickr("#set-interview-range", {
-           mode: "range", locale: "ko", dateFormat: "Y-m-d", minDate: "today",
-           defaultDate: (S.prog.interviewStart && S.prog.interviewEnd) ? [S.prog.interviewStart, S.prog.interviewEnd] : null,
-           locale: { rangeSeparator: " ~ " }
-        });
+        const el = document.getElementById("set-interview-range");
+        if(el) {
+          flatpickr(el, {
+             mode: "range", locale: "ko", dateFormat: "Y-m-d", minDate: "today",
+             defaultDate: (S.prog && S.prog.interviewStart && S.prog.interviewEnd) ? [S.prog.interviewStart, S.prog.interviewEnd] : null,
+             locale: { rangeSeparator: " ~ " }
+          });
+        }
      }, 0);
   }
 }
+
+// 초기 호출 전 기존에 렌더링된 요소 중복 삽입 방지 (body end tag logic)
+const _render = render;
+render = function() {
+    const overlays = document.querySelectorAll('.ov');
+    overlays.forEach(o => { if(!o.closest('#app')) o.remove(); }); // remove floating modals
+    _render();
+}
+
 render()
 </script>
 </body>
