@@ -314,9 +314,6 @@ const DB={
   ]
 }
 
-// ═══════════════════════════════════════════
-// APP STATE & HELPERS
-// ═══════════════════════════════════════════
 const S={
   view:'login', tab:'', user:null, prog:null,
   loginRole:'admin', loginEmail:'admin@intern.kr', loginPw:'1234', loginErr:'',
@@ -608,7 +605,7 @@ function renderShell(sidebar,main){
 // ═══════════════════════════════════════════
 // 순서 변경: 면접 설정 / 면접 관리 / 공지사항 / 문의 및 지원
 const ADMIN_NAV=[
-  {id:'settings',label:'면접 설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
+  {id:'settings',label:'면접 설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'management',label:'면접 관리',ico:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'notice',label:'공지사항',ico:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'inquiry',label:'문의 및 지원',ico:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'}
@@ -1003,7 +1000,7 @@ function renderTimetable() {
             return `<div class="flex aic gap-3" style="padding:var(--sp-3); border:1px solid var(--gray-200); border-radius:var(--radius-md); background:var(--gray-50)">
               <div style="font-weight:700; width:160px; color:var(--gray-900)">${f.coName}</div>
               <div style="font-weight:500; width:120px; color:var(--gray-700)">${f.stName} 면접자</div>
-              ${co.mode === 'online' ? `<button class="btn btn-outline-blue btn-sm" onclick="S.modal={type:'video-overlay', coId:'${f.coId}'}; S.activeVideoStId='${f.stId}'; render()">🎙 화상미팅룸 입장</button>` : `<span class="badge b-green">대면 면접</span>`}
+              ${co.mode === 'online' ? `<button class="btn btn-outline-blue btn-sm" onclick="S.modal={type:'video-overlay', coId:'${f.coId}'}; S.activeVideoStId='${f.stId}'; render()">🎙 화상방 입장</button>` : `<span class="badge b-gray">대면 면접</span>`}
             </div>`
           }).join('')}
         </div>
@@ -1416,7 +1413,6 @@ function renderStudentBookingModal() {
     </div>
   `;
 }
-
 
 function renderModal() {
   const m = S.modal;
@@ -1867,6 +1863,103 @@ function renderModalWrapper() {
   }
   
   return renderModal();
+}
+
+function renderVideoOverlay() {
+  const coId = (S.modal && S.modal.coId) ? S.modal.coId : S.user.companyId;
+  const co = getCo(coId);
+  
+  let scheduled = [];
+  if (S.matchResults && S.matchResults.matches) {
+    scheduled = S.matchResults.matches.filter(m => m.coId === co.id);
+  } else {
+    scheduled = DB.students.filter(s => s.apps.includes(co.id)).map(s => ({stId: s.id, stName: s.name, time: 'Pending Scheduling'}));
+  }
+  
+  if(scheduled.length === 0) return `<div class="ov" onmousedown="if(event.target===this){S.modal=null;render()}"><div class="modal m-mid"><div class="mh"><div class="mt">세션 에러</div><button class="mcl" onclick="S.modal=null;render()">×</button></div><div class="mb-scroll"><div class="empty">연결 가능한 유효 세션 노드가 존재하지 않습니다.</div></div></div></div>`;
+  
+  if(!S.activeVideoStId) S.activeVideoStId = scheduled[0].stId;
+  const activeSt = getSt(S.activeVideoStId);
+  
+  return `
+    <div class="ov" style="padding:0; background:rgba(0,0,0,0.85); z-index:9999;">
+      <div style="width:100vw; height:100vh; display:flex; flex-direction:column; background:var(--gray-900);">
+        <!-- Dark Mode Header -->
+        <div style="height:64px; background:#111; border-bottom:1px solid #333; display:flex; align-items:center; justify-content:space-between; padding:0 var(--sp-6); flex-shrink:0;">
+          <div style="font-size:16px; font-weight:700; color:#fff; display:flex; align-items:center; gap:var(--sp-2);">
+            <span style="display:inline-block; width:8px; height:8px; background:var(--danger); border-radius:50%; box-shadow: 0 0 8px var(--danger)"></span>
+            Secure Video Protocol - ${co.name} Node
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="S.modal=null;render()">세션 강제 종료</button>
+        </div>
+        
+        <div style="display:flex; flex:1; gap:var(--sp-4); padding:var(--sp-4); overflow:hidden;">
+          
+          <!-- Left: List -->
+          <div style="width:280px; background:#1F2937; border-radius:var(--radius-lg); border:1px solid #374151; display:flex; flex-direction:column; overflow:hidden; flex-shrink:0;">
+            <div style="padding:var(--sp-4); border-bottom:1px solid #374151; font-weight:700; font-size:14px; color:#D1D5DB; text-transform:uppercase; letter-spacing:0.05em">Queue Array</div>
+            <div style="flex:1; overflow-y:auto; padding:var(--sp-3);">
+              ${scheduled.map(m => `
+                <div onclick="S.activeVideoStId='${m.stId}';render()" style="padding:var(--sp-3); border-radius:var(--radius-md); border:1px solid ${S.activeVideoStId===m.stId?'var(--primary)':'#374151'}; background:${S.activeVideoStId===m.stId?'rgba(37,99,235,0.15)':'#111827'}; cursor:pointer; margin-bottom:var(--sp-2); transition:all 0.2s;">
+                  <div style="font-weight:700; font-size:14px; color:${S.activeVideoStId===m.stId?'#60A5FA':'#F3F4F6'}">${m.stName} 타겟</div>
+                  <div style="font-size:11px; color:#9CA3AF; margin-top:4px;">🕒 Expected: ${m.time}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <!-- Center: Workspace -->
+          <div style="flex:1; display:flex; flex-direction:column; gap:var(--sp-4); min-width:0;">
+            <!-- VIDEO AREA -->
+            <div style="flex:2; background:#000; border-radius:var(--radius-lg); display:flex; align-items:center; justify-content:center; color:#4B5563; font-size:14px; font-weight:600; position:relative; min-height:0; border:1px solid #374151">
+              [ VIDEO RENDER FRAME : INACTIVE ]
+              <div style="position:absolute; top:var(--sp-4); left:var(--sp-4); background:rgba(0,0,0,0.6); color:#fff; padding:6px 12px; border-radius:var(--radius-sm); font-size:12px; font-weight:700; border:1px solid #374151; display:flex; align-items:center; gap:8px">
+                <span style="display:block; width:6px; height:6px; background:var(--success); border-radius:50%"></span> ${activeSt.name} Node Live
+              </div>
+            </div>
+             
+            <!-- DATA AREA -->
+            <div style="flex:1; background:#1F2937; border-radius:var(--radius-lg); border:1px solid #374151; padding:var(--sp-6); overflow-y:auto; min-height:0; color:#E5E7EB">
+              <div style="font-weight:800; font-size:16px; margin-bottom:var(--sp-4); color:#93C5FD; border-bottom:1px solid #374151; padding-bottom:8px">Metadata Viewer - ${activeSt.name}</div>
+              <div class="grid-2 gap-6" style="align-items:flex-start">
+                <div>
+                   <div style="font-size:11px;color:#9CA3AF; text-transform:uppercase; letter-spacing:0.05em">Academic Record</div>
+                   <div style="font-size:14px;font-weight:600;margin-bottom:var(--sp-3); color:#F9FAFB">${activeSt.school||'-'} ${activeSt.dept||'-'}</div>
+                   <div style="font-size:11px;color:#9CA3AF; text-transform:uppercase; letter-spacing:0.05em">Core Experience</div>
+                   <div style="font-size:14px;font-weight:400;margin-bottom:var(--sp-3); color:#E5E7EB; line-height:1.6">${activeSt.experience||'-'}</div>
+                </div>
+                <div>
+                   <div style="font-size:11px;color:#9CA3AF; text-transform:uppercase; letter-spacing:0.05em">Motivation Context</div>
+                   <div style="font-size:14px;font-weight:400;margin-bottom:var(--sp-3); color:#E5E7EB; line-height:1.6">${activeSt.motivation||'-'}</div>
+                </div>
+              </div>
+              <div class="flex gap-2 mt-2">
+                <button class="btn btn-secondary btn-sm" style="background:#374151; color:#fff; border:none" onclick="window.open('${activeSt.portfolioLink||'#'}')">포트폴리오 강제 열람 ↗</button>
+                <button class="btn btn-secondary btn-sm" style="background:#374151; color:#fff; border:none" onclick="window.open('${activeSt.resumeLink||'#'}')">이력서 강제 열람 ↗</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Peek Room -->
+          <div style="width:260px; background:#1F2937; border-radius:var(--radius-lg); border:1px solid #374151; display:flex; flex-direction:column; flex-shrink:0;">
+             <div style="padding:14px; border-bottom:1px solid #374151; font-weight:700; font-size:13px; color:#D1D5DB; display:flex; align-items:center; gap:8px;">
+               <span style="display:inline-block; width:8px; height:8px; background:var(--warning); border-radius:50%;"></span> 스탠바이 스니핑 (Mute)
+             </div>
+             <div style="flex:1; overflow-y:auto; padding:var(--sp-3); display:flex; flex-direction:column; gap:var(--sp-3);">
+               ${scheduled.filter(m => m.stId !== S.activeVideoStId).map(m => `
+                 <div style="background:#111; border-radius:var(--radius-md); aspect-ratio:4/3; position:relative; display:flex; align-items:center; justify-content:center; color:#4B5563; font-size:12px; border:1px solid #374151;">
+                   <div style="position:absolute; bottom:8px; left:8px; font-size:11px; color:#fff; background:rgba(0,0,0,0.7); padding:4px 8px; border-radius:var(--radius-sm); font-weight:600">${m.stName} 대기</div>
+                   [STREAM_WAIT]
+                 </div>
+               `).join('')}
+               ${scheduled.length <= 1 ? `<div class="empty" style="color:#6B7280">대기열 비어있음</div>` : ''}
+             </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function submitStInquiry() {
