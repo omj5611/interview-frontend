@@ -111,7 +111,7 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(49,130,246,.02)}
 tr.clickable{cursor:pointer; transition:background .1s}
 
-/* === MODAL === */
+/* === MODAL & OVERLAY === */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px; backdrop-filter:blur(3px)}
 .modal{background:var(--bg);border-radius:var(--r3);box-shadow:0 20px 60px rgba(0,0,0,.18);width:100%;max-height:95vh;display:flex;flex-direction:column;position:relative;animation:modalIn .2s ease; overflow:hidden}
 @keyframes modalIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
@@ -160,6 +160,22 @@ tr.clickable{cursor:pointer; transition:background .1s}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .chip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:999px;background:var(--blue2);border:1px solid rgba(49,130,246,.2);font-size:12px;font-weight:600;color:var(--blue)}
 .chip-x{cursor:pointer;font-size:13px;line-height:1;opacity:.6;margin-left:2px}.chip-x:hover{opacity:1}
+
+/* === TOGGLE SWITCH === */
+.tgl-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
+.tgl{width:36px;height:20px;border-radius:10px;background:var(--border2);position:relative;transition:background .2s;flex-shrink:0}
+.tgl.on{background:var(--blue)}
+.tgl::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl.on::after{left:19px}
+
+/* === EDITOR === */
+.editor-wrap{border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--card);transition:border .15s}
+.editor-wrap:focus-within{border-color:var(--blue)}
+.editor-toolbar{background:var(--card2);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center}
+.e-btn{width:28px;height:28px;border-radius:4px;border:none;background:transparent;color:var(--t2);font-size:14px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.e-btn:hover{background:var(--border);color:var(--t1)}
+.editor-content{min-height:300px;padding:16px;outline:none;font-size:14px;line-height:1.7;color:var(--t1)}
+.editor-content:empty::before{content:attr(placeholder);color:var(--t3);pointer-events:none;display:block}
 
 /* === MISC === */
 .ph{margin-bottom:22px}.ph-t{font-size:21px;font-weight:900;color:var(--t1);letter-spacing:-.5px}.ph-s{font-size:13px;color:var(--t3);margin-top:3px}
@@ -213,13 +229,37 @@ const DB={
     {id:'c4',name:'당근마켓',industry:'IT/커머스',email:'daangn@intern.kr', managerEmail:'hr@daangn.com', managerPhone:'010-7777-8888', mode:'online',type:'1on1', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'11:00'}]}},
   ],
   students:[
-    {id:'s1', apps:['c1', 'c2'], name:'김민준', birth:'2000-03-15', phone:'010-1234-5678', email:'minjun@intern.kr', addr:'서울 강남구 역삼동', edLevel:'대학교 재학', school:'한국대학교', faculty:'공과대학', dept:'컴퓨터공학과', appDate:'2025-07-20', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'Y', motivation:'실무 경험을 통해 성장하고 싶습니다.', vision:'훌륭한 개발자', experience:'동아리 프로젝트', portfolio:'https://google.com', resume:'https://google.com', avail:{'c1':['2025-08-05'], 'c2':['2025-08-05']}, interviewStatus:{'c1':'pass'}, reports:{'c1':'https://google.com'}},
+    {
+      id:'s1', apps:['c1', 'c2'], name:'김민준', birth:'2000-03-15', phone:'010-1234-5678', email:'minjun@intern.kr', addr:'서울 강남구 역삼동', edLevel:'대학교 재학', school:'한국대학교', faculty:'공과대학', dept:'컴퓨터공학과', appDate:'2025-07-20', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'Y', motivation:'실무 경험을 통해 성장하고 싶습니다.', vision:'훌륭한 개발자', experience:'동아리 프로젝트', portfolio:'https://google.com', resume:'https://google.com', avail:{'c1':['2025-08-05'], 'c2':['2025-08-05']}, interviewStatus:{'c1':'pass'}, 
+      reports:{
+        'c1': {
+          title: '카카오엔터테인먼트 1차 직무 면접 리포트',
+          date: '2025-08-05',
+          time: '10:00 ~ 10:30',
+          duration: '30분 15초',
+          keywords: ['문제해결능력 우수', '논리적 커뮤니케이션', '도전적 태도', '실무 경험 보유'],
+          transcript: [
+            { speaker: '면접관', text: '안녕하세요, 김민준 지원자님. 먼저 간단한 자기소개 부탁드립니다.' },
+            { speaker: '면접자', text: '네, 안녕하세요! 저는 꾸준한 성장을 추구하는 개발자 김민준입니다. 지난 1년간 교내 개발 동아리에서 백엔드 파트를 맡아 3번의 프로젝트를 성공적으로 런칭한 경험이 있습니다.' },
+            { speaker: '면접관', text: '프로젝트 중에 가장 어려웠던 점은 무엇이었고, 어떻게 해결하셨나요?' },
+            { speaker: '면접자', text: '트래픽이 몰렸을 때 서버가 다운되는 문제가 있었습니다. 이를 해결하기 위해 병목 지점을 분석하고 쿼리 최적화 및 캐싱을 도입하여 응답 속도를 40% 개선한 경험이 있습니다.' },
+            { speaker: '면접관', text: '카카오엔터테인먼트에 지원하신 특별한 이유가 있을까요?' },
+            { speaker: '면접자', text: '평소 다양한 콘텐츠를 즐겨 사용하며, 글로벌로 뻗어나가는 콘텐츠 플랫폼의 기술적 챌린지에 동참하고 싶어 지원했습니다.' }
+          ],
+          aiSummary: '지원자는 백엔드 개발 경험이 풍부하며, 특히 트래픽 최적화 및 문제 해결 과정에서 논리적이고 체계적인 접근 방식을 보여주었습니다. 교내 동아리 프로젝트를 리딩하며 실무에 준하는 협업 능력을 길렀으며, 당사 서비스에 대한 높은 이해도와 열정을 보입니다.',
+          aiEvaluation: '• 강점: 기술적 문제 상황을 정확히 인지하고 데이터 기반으로 해결하는 능력이 탁월함.\n• 보완점: 인프라 아키텍처에 대한 이해도를 넓히면 더욱 훌륭한 풀스택 개발자로 성장할 잠재력이 있음.\n• 종합: 직무 적합도가 높고 즉시 투입 가능한 역량을 갖추어 매우 긍정적으로 평가됨.'
+        }
+      }
+    },
     {id:'s2', apps:['c1'], name:'이서연', birth:'2001-07-22', phone:'010-2345-6789', email:'seoyeon@intern.kr', addr:'서울 마포구', edLevel:'대학교 재학', school:'서울대학교', faculty:'미술대학', dept:'시각디자인학과', appDate:'2025-07-21', participationCount:'1', nationalEmpSupport:'Y', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'UX/UI 역량을 펼치고 싶습니다.', vision:'수석 디자이너', experience:'외주 경험', portfolio:'', resume:'', avail:{'c1':['2025-08-05']}, interviewStatus:{}, reports:{}},
     {id:'s3', apps:['c2'], name:'박지호', birth:'1999-11-05', phone:'010-3456-7890', email:'jiho@intern.kr', addr:'경기 성남시', edLevel:'대학교 졸업', school:'카이스트', faculty:'공과대학', dept:'전산학부', appDate:'2025-07-22', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'웹툰 플랫폼 아키텍처에 관심이 많습니다.', vision:'최고의 백엔드 엔지니어', experience:'개인 프로젝트 배포', portfolio:'', resume:'', avail:{'c2':['2025-08-05']}, interviewStatus:{}, reports:{}},
     {id:'s4', apps:['c3'], name:'최유나', birth:'2002-04-18', phone:'010-4567-8901', email:'yuna@intern.kr', addr:'서울 송파구', edLevel:'대학교 재학', school:'이화여대', faculty:'경영대학', dept:'경영학과', appDate:'2025-07-23', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'O2O 서비스 기획을 배우고 싶습니다.', vision:'서비스 기획자', experience:'마케팅 학회', portfolio:'', resume:'', avail:{'c3':['2025-08-05']}, interviewStatus:{}, reports:{}},
     {id:'s5', apps:['c4'], name:'정도현', birth:'2000-09-30', phone:'010-5678-9012', email:'dohyun@intern.kr', addr:'서울 동작구', edLevel:'대학교 재학', school:'서강대', faculty:'공과대학', dept:'소프트웨어학부', appDate:'2025-07-24', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'중고거래 플랫폼 성장에 기여하고 싶습니다.', vision:'iOS 개발자', experience:'앱스토어 출시', portfolio:'', resume:'', avail:{'c4':['2025-08-05']}, interviewStatus:{}, reports:{}},
   ],
-  notices:[]
+  notices:[
+    {id: 2, title: '[필독] 2025 인턴형 면접 일정 관련 전체 안내', content: '<strong>면접 일정 가이드라인입니다.</strong><br><br>참여하시는 모든 기업 및 면접자 분들은 본 안내문을 필독해주시기 바랍니다.<br><ul><li>면접 10분 전 화상 링크 접속</li><li>장비 사전 테스트 요망</li></ul>', author: '운영진', date: '2025-07-20', visibility: 'public', target: 'all', pinned: true, views: 142},
+    {id: 1, title: '시스템 점검 안내 (7/25 새벽 2시~4시)', content: '안정적인 서비스 제공을 위해 DB 서버 점검이 있을 예정입니다.<br>해당 시간에는 서비스 이용이 일시 중단됩니다.', author: '시스템관리자', date: '2025-07-18', visibility: 'public', target: 'company', pinned: false, views: 35}
+  ]
 }
 
 // ═══════════════════════════════════════════
@@ -230,6 +270,11 @@ const S={
   loginRole:'admin', loginEmail:'admin@intern.kr', loginPw:'1234', loginErr:'',
   progTypeFilter:'인턴형',
   
+  // Notice State
+  noticeView: 'list', 
+  selectedNoticeId: null,
+  draftNotice: { target: 'all', title: '', content: '', pinned: false, visibility: 'public' },
+
   // Admin Company Dashboard States
   adminSubView: 'grid', // 'grid', 'co_dash', 'timetable'
   activeCoId: null,
@@ -240,10 +285,11 @@ const S={
 
   modal: null,
   addDataTab: 'manual', manualDrafts: [], excelParsedData: null,
+  stDetailTab: 'info', // 'info' or 'report'
   calStates: {}, toasts: [], matchResults: null
 }
 
-const fmtDate=d=>{if(!d)return'';const dt=new Date(d+'T00:00:00');return`${dt.getMonth()+1}월 ${dt.getDate()}일(${WEEKDAYS[dt.getDay()]})`}
+const fmtDate=d=>{if(!d)return'';const dt=new Date(d+'T00:00:00');return`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
 const fmtShort=d=>{if(!d)return'';const dt=new Date(d+'T00:00:00');return`${dt.getMonth()+1}/${dt.getDate()}`}
 const t2m=t=>{const[h,m]=t.split(':').map(Number);return h*60+m}
 const m2t=m=>`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`
@@ -355,7 +401,7 @@ function doLogin(){
   S.view = 'prog-select'; S.progTypeFilter = '인턴형';
   render()
 }
-function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,modal:null,adminSubView:'grid',activeCoId:null,activeVideoStId:null});render()}
+function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,modal:null,adminSubView:'grid',activeCoId:null,activeVideoStId:null,noticeView:'list',selectedNoticeId:null,stDetailTab:'info'});render()}
 
 function renderProgSelectView(){
   const statusLabel={active:'진행중',upcoming:'예정',done:'완료'}
@@ -387,7 +433,7 @@ function renderProgSelectView(){
 
 function enterDashboard(progId) {
   S.prog = PROGRAMS.find(x => x.id === progId);
-  if(S.user.role === 'admin') { S.view = 'admin'; S.tab = 'management'; S.adminSubView = 'grid'; }
+  if(S.user.role === 'admin') { S.view = 'admin'; S.tab = 'management'; S.adminSubView = 'grid'; S.noticeView = 'list'; }
   else if(S.user.role === 'company') { S.view = 'company'; S.tab = 'co-applicants'; }
   else if(S.user.role === 'student') { S.view = 'student'; S.tab = 'st-status'; }
   render();
@@ -428,11 +474,15 @@ const ADMIN_NAV=[
 function renderAdmin(){
   const sidebar=`<div class="nav-section">
     <div class="nav-label">대시보드 메뉴</div>
-    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';S.adminSubView='grid';render()"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
+    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';S.adminSubView='grid';S.noticeView='list';render()"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
   </div>`
   
   let main=''
-  if(S.tab==='notice') main = `<div class="ph"><div class="ph-t">공지사항</div></div><div class="card"><div class="empty">공지사항 관리 (생략됨)</div></div>`
+  if(S.tab==='notice') {
+      if (S.noticeView === 'write') main = renderNoticeWrite();
+      else if (S.noticeView === 'detail') main = renderNoticeDetail();
+      else main = renderNoticeList();
+  }
   else if(S.tab==='management') {
       if(S.adminSubView === 'co_dash') main = renderAdminCompanyDashboard()
       else if(S.adminSubView === 'timetable') main = renderTimetable()
@@ -443,6 +493,195 @@ function renderAdmin(){
   return renderShell(sidebar,main)
 }
 
+// ─── 1. 공지사항 뷰 (기존 기능 복구) ─────────────────────────
+function openNoticeDetail(id) {
+  S.selectedNoticeId = id;
+  const notice = DB.notices.find(n => n.id === id);
+  if (notice) notice.views += 1;
+  S.noticeView = 'detail';
+  render();
+}
+
+function renderNoticeList(){
+  const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
+  const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
+  const sortedNotices = [...DB.notices].sort((a,b) => {
+    if(a.pinned === b.pinned) return b.id - a.id;
+    return a.pinned ? -1 : 1;
+  });
+
+  return `<div>
+    <div class="ph flex jb aic">
+      <div><div class="ph-t">공지사항</div><div class="ph-s">프로그램 참여 기업 및 면접자들에게 전달할 안내사항</div></div>
+      <button class="btn btn-blue" onclick="openNoticeWrite()">
+         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="margin-right:2px"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg> 공지사항 작성
+      </button>
+    </div>
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th style="width:60px; text-align:center">번호</th>
+            <th style="width:80px; text-align:center">노출여부</th>
+            <th style="width:80px; text-align:center">대상</th>
+            <th>제목</th>
+            <th style="width:120px">작성자</th>
+            <th style="width:100px">작성일</th>
+            <th style="width:80px; text-align:right">조회수</th>
+          </tr></thead>
+          <tbody>
+            ${sortedNotices.length === 0 ? `<tr><td colspan="7" class="empty"><div class="empty-t">등록된 공지사항이 없습니다.</div></td></tr>` : ''}
+            ${sortedNotices.map(n => `
+            <tr class="clickable" onclick="openNoticeDetail(${n.id})" style="${n.pinned ? 'background-color: var(--blue2);' : ''}">
+              <td style="text-align:center; color:var(--t3); font-weight:600">${n.pinned ? '—' : n.id}</td>
+              <td style="text-align:center"><span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span></td>
+              <td style="text-align:center"><span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]}</span></td>
+              <td>
+                <div class="flex aic gap2" style="font-weight:${n.pinned?'700':'500'}">
+                  ${n.pinned ? '<span style="color:var(--blue); font-size:12px">📌 [상단고정]</span>' : ''}
+                  ${n.title}
+                </div>
+              </td>
+              <td>${n.author}</td>
+              <td style="color:var(--t2)">${n.date}</td>
+              <td style="text-align:right; color:var(--t2)">${n.views.toLocaleString()}</td>
+            </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`
+}
+
+function renderNoticeDetail() {
+  const n = DB.notices.find(x => x.id === S.selectedNoticeId);
+  if(!n) { S.noticeView = 'list'; return renderNoticeList(); }
+
+  const targetLabel = { 'all': '전체', 'company': '기업', 'student': '면접자' };
+  const targetBadge = { 'all': 'b-purple', 'company': 'b-blue', 'student': 'b-orange' };
+
+  return `<div>
+    <div class="ph flex jb aic">
+      <div><div class="ph-t">공지사항 상세</div></div>
+      <div class="flex gap2">
+        <button class="btn btn-ghost" onclick="S.noticeView='list';render()">← 목록으로</button>
+      </div>
+    </div>
+    <div class="card" style="max-width: 900px">
+      <div class="cb" style="padding: 28px 32px">
+        <div class="flex gap2 mb2">
+          ${n.pinned ? '<span class="badge b-blue">📌 상단고정</span>' : ''}
+          <span class="badge ${n.visibility==='public'?'b-green':'b-gray'}">${n.visibility==='public'?'공개':'비공개'}</span>
+          <span class="badge ${targetBadge[n.target]}">${targetLabel[n.target]} 대상</span>
+        </div>
+        <div style="font-size:22px; font-weight:800; color:var(--t1); margin-top:8px">${n.title}</div>
+        <div class="flex gap3 mt3" style="font-size:13px; color:var(--t2)">
+          <div class="flex aic gap2">
+            <div style="width:24px; height:24px; border-radius:50%; background:var(--card2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold">${n.author[0]}</div>
+            <span>${n.author}</span>
+          </div>
+          <div style="width:4px; height:4px; border-radius:50%; background:var(--border2); margin-top:10px"></div>
+          <span style="margin-top:2px">${n.date}</span>
+          <div style="width:4px; height:4px; border-radius:50%; background:var(--border2); margin-top:10px"></div>
+          <span style="margin-top:2px">조회수 ${n.views.toLocaleString()}</span>
+        </div>
+        <div class="divider"></div>
+        <div style="font-size:15px; line-height:1.8; color:var(--t1); min-height: 300px; white-space: pre-wrap;">${n.content}</div>
+      </div>
+    </div>
+  </div>`
+}
+
+function openNoticeWrite(){
+  S.draftNotice = { target: 'all', title: '', content: '', pinned: false, visibility: 'public' };
+  S.noticeView = 'write';
+  render();
+}
+
+function toggleDraft(key) { S.draftNotice[key] = !S.draftNotice[key]; render(); }
+function setDraft(key, val) { S.draftNotice[key] = val; render(); }
+
+function saveNotice() {
+  const title = document.getElementById('notice-title').value.trim();
+  const content = document.getElementById('notice-content').innerHTML.trim();
+  if(!title) { alert('제목을 입력해주세요.'); return; }
+  
+  const newId = DB.notices.length > 0 ? Math.max(...DB.notices.map(n=>n.id)) + 1 : 1;
+  const newNotice = {
+    id: newId, title: title, content: content, author: '운영진',
+    date: fmtDate(new Date().toISOString().split('T')[0]),
+    visibility: S.draftNotice.visibility, target: S.draftNotice.target,
+    pinned: S.draftNotice.pinned, views: 0
+  };
+  
+  DB.notices.push(newNotice);
+  S.noticeView = 'list';
+  render();
+}
+
+function renderNoticeWrite(){
+  const d = S.draftNotice;
+  return `<div>
+    <div class="ph flex jb aic">
+      <div><div class="ph-t">공지사항 작성</div><div class="ph-s">새로운 공지사항을 등록합니다.</div></div>
+      <div class="flex gap2">
+        <button class="btn btn-ghost" onclick="S.noticeView='list';render()">취소</button>
+        <button class="btn btn-blue" onclick="saveNotice()">등록 완료</button>
+      </div>
+    </div>
+    <div class="card" style="max-width: 900px">
+      <div class="cb">
+        <div class="flex gap3 mb4" style="flex-wrap:wrap">
+          <div style="flex:1; min-width:200px">
+            <label class="fl">노출 대상</label>
+            <select class="fs" onchange="setDraft('target', this.value)">
+              <option value="all" ${d.target==='all'?'selected':''}>전체 (기업 및 면접자)</option>
+              <option value="company" ${d.target==='company'?'selected':''}>기업만</option>
+              <option value="student" ${d.target==='student'?'selected':''}>면접자만</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:200px">
+            <label class="fl">노출 여부 (공개 설정)</label>
+            <select class="fs" onchange="setDraft('visibility', this.value)">
+              <option value="public" ${d.visibility==='public'?'selected':''}>공개 (즉시 노출)</option>
+              <option value="hidden" ${d.visibility==='hidden'?'selected':''}>비공개 (임시 저장)</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:flex-end; padding-bottom:8px">
+            <div class="tgl-wrap" onclick="toggleDraft('pinned')">
+              <div class="tgl ${d.pinned?'on':''}"></div>
+              <span style="font-size:13px; font-weight:600; color:var(--t1)">📌 상단 고정하기</span>
+            </div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">공지 제목</label>
+          <input class="fi" id="notice-title" placeholder="제목을 입력하세요" value="${d.title}" style="font-size:15px; font-weight:600">
+        </div>
+        <div class="fg">
+          <label class="fl">공지 내용 (에디터)</label>
+          <div class="editor-wrap">
+            <div class="editor-toolbar">
+              <button class="e-btn" onclick="document.execCommand('bold',false,null)" title="굵게"><b>B</b></button>
+              <button class="e-btn" onclick="document.execCommand('italic',false,null)" title="기울임"><i>I</i></button>
+              <button class="e-btn" onclick="document.execCommand('underline',false,null)" title="밑줄"><u>U</u></button>
+              <div style="width:1px; height:16px; background:var(--border); margin:0 4px"></div>
+              <button class="e-btn" onclick="document.execCommand('insertUnorderedList',false,null)" title="글머리 기호">•</button>
+              <button class="e-btn" onclick="document.execCommand('insertOrderedList',false,null)" title="번호 매기기">1.</button>
+              <div style="width:1px; height:16px; background:var(--border); margin:0 4px"></div>
+              <button class="e-btn" onclick="let url=prompt('링크 URL을 입력하세요');if(url)document.execCommand('createLink',false,url)" title="링크 삽입">🔗</button>
+            </div>
+            <div class="editor-content" contenteditable="true" id="notice-content" placeholder="이곳에 공지사항 내용을 작성하세요...">${d.content}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`
+}
+
+
+// ─── 2. 면접관리 / 타임테이블 등 ─────────────────────────
 function runMatching() {
   const matches = [];
   const failed = [];
@@ -730,8 +969,8 @@ function renderApplicantCard(s, coId) {
       <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.portfolio||'#'}')">포트폴리오</button>
       <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.resume||'#'}')">이력서</button>
     </div>
-    <button class="btn btn-sm w-full ${hasReport ? 'btn-outline-blue' : 'btn-ghost'}" ${!hasReport ? 'disabled' : `onclick="event.stopPropagation(); window.open('${s.reports[coId]}')"`}>
-      ${hasReport ? '📄 면접 리포트 다운로드' : '면접 리포트 (미생성)'}
+    <button class="btn btn-sm w-full ${hasReport ? 'btn-outline-blue' : 'btn-ghost'}" ${!hasReport ? 'disabled' : `onclick="event.stopPropagation(); openStudentDetailAdmin('${s.id}', '${coId}', 'report')"`}>
+      ${hasReport ? '📄 면접 리포트 보기' : '면접 리포트 (미생성)'}
     </button>
   </div>`;
 }
@@ -750,7 +989,11 @@ function openAddSingleStudentModal(coId){
   render(); 
 }
 
-function openStudentDetailAdmin(stId, coId) { S.modal = { type: 'st-detail-admin', stId, coId }; render(); }
+function openStudentDetailAdmin(stId, coId, defaultTab = 'info') { 
+  S.modal = { type: 'st-detail-admin', stId, coId }; 
+  S.stDetailTab = defaultTab;
+  render(); 
+}
 
 function renderModal() {
   const m = S.modal;
@@ -783,78 +1026,145 @@ function renderModal() {
     const co = getCo(m.coId);
     const otherApps = s.apps.filter(id => id !== m.coId).map(id => getCo(id)?.name).filter(Boolean);
     const yn = val => val==='Y' ? '예 (Y)' : '아니오 (N)';
+    
     return `<div class="ov" onmousedown="if(event.target===this)closeAddDataModal()">
       <div class="modal m-huge">
         <button class="mcl" onclick="closeAddDataModal()">×</button>
-        <div class="mh">
-          <div class="flex aic gap3">
+        <div class="mh" style="padding-bottom:12px">
+          <div class="flex aic gap3 mb3">
             <div class="avatar" style="width:52px;height:52px;font-size:20px">${s.name[0]}</div>
             <div><div class="mt">${s.name} 면접자 상세정보</div><div style="font-size:13px;color:var(--t3);margin-top:4px">${co.name} 배정</div></div>
           </div>
+          <div class="seg" style="max-width:320px;">
+            <button class="seg-btn ${S.stDetailTab==='info'?'on':''}" onclick="S.stDetailTab='info';render()">지원 정보</button>
+            <button class="seg-btn ${S.stDetailTab==='report'?'on':''}" onclick="S.stDetailTab='report';render()">면접 리포트</button>
+          </div>
         </div>
         <div class="mb-scroll">
-          <div class="frow" style="align-items:start">
-            <div>
-              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📌 기본 인적사항</div>
-              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
-                <div class="frow">
-                  <div><div style="font-size:11px;color:var(--t3)">이름</div><div style="font-size:14px;font-weight:700;margin-bottom:8px">${s.name}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">생년월일</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.birth||'-'}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">전화번호</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.phone||'-'}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">이메일</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.email||'-'}</div></div>
-                  <div style="grid-column:1/-1"><div style="font-size:11px;color:var(--t3)">주소</div><div style="font-size:14px;font-weight:600">${s.addr||'-'}</div></div>
-                </div>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">🎓 학력 사항</div>
-              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
-                <div class="frow">
-                  <div><div style="font-size:11px;color:var(--t3)">학력</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.edLevel||'-'}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">학교명</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.school||'-'}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">학부</div><div style="font-size:14px;font-weight:600">${s.faculty||'-'}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">학과</div><div style="font-size:14px;font-weight:600">${s.dept||'-'}</div></div>
-                </div>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📑 행정 및 부가 정보</div>
-              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border)">
-                <div class="frow">
-                  <div><div style="font-size:11px;color:var(--t3)">신청일자</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${s.appDate||'-'}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">연간참여횟수</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${s.participationCount||'0'}회</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">국민취업제도참여</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.nationalEmpSupport)}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">고용보험가입</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.empInsurance)}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">개인정보동의</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.privacyConsent)}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">내용이상여부</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.anomalyCheck)}</div></div>
-                  <div><div style="font-size:11px;color:var(--t3)">첨부파일유무</div><div style="font-size:13px;font-weight:600">${yn(s.hasAttachment)}</div></div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📝 지원서 내용</div>
-              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
-                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">지원동기</div>
-                <div style="font-size:13px;line-height:1.6;margin-bottom:12px;white-space:pre-wrap">${s.motivation||'-'}</div>
-                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">향후 비전 및 포부 (수행계획)</div>
-                <div style="font-size:13px;line-height:1.6;margin-bottom:12px;white-space:pre-wrap">${s.vision||'-'}</div>
-                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">관련 경력(경험)</div>
-                <div style="font-size:13px;line-height:1.6;white-space:pre-wrap">${s.experience||'-'}</div>
-              </div>
-              
-              <div class="flex gap2 mb4">
-                 <button class="btn btn-outline-blue w-full" onclick="window.open('${s.portfolio||'#'}')">포트폴리오 열기</button>
-                 <button class="btn btn-outline-blue w-full" onclick="window.open('${s.resume||'#'}')">이력서 열기</button>
-              </div>
-
-              ${otherApps.length > 0 ? `
-              <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:10px">🏢 타 기업 지원 현황</div>
-              <div style="background:var(--orange2); border-radius:var(--r); padding:16px; border:1px solid rgba(245,158,11,.2)">
-                <div style="font-size:13px;color:var(--t1)">이 면접자는 <strong>${otherApps.join(', ')}</strong> 에도 지원했습니다.</div>
-              </div>` : ''}
-            </div>
-          </div>
+          ${S.stDetailTab === 'info' ? renderStudentInfoTab(s, co, otherApps, yn) : renderStudentReportTab(s, m.coId)}
         </div>
       </div>
     </div>`
   }
+}
+
+function renderStudentInfoTab(s, co, otherApps, yn) {
+  return `<div class="frow" style="align-items:start">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📌 기본 인적사항</div>
+      <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
+        <div class="frow">
+          <div><div style="font-size:11px;color:var(--t3)">이름</div><div style="font-size:14px;font-weight:700;margin-bottom:8px">${s.name}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">생년월일</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.birth||'-'}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">전화번호</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.phone||'-'}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">이메일</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.email||'-'}</div></div>
+          <div style="grid-column:1/-1"><div style="font-size:11px;color:var(--t3)">주소</div><div style="font-size:14px;font-weight:600">${s.addr||'-'}</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">🎓 학력 사항</div>
+      <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
+        <div class="frow">
+          <div><div style="font-size:11px;color:var(--t3)">학력</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.edLevel||'-'}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">학교명</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.school||'-'}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">학부</div><div style="font-size:14px;font-weight:600">${s.faculty||'-'}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">학과</div><div style="font-size:14px;font-weight:600">${s.dept||'-'}</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📑 행정 및 부가 정보</div>
+      <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border)">
+        <div class="frow">
+          <div><div style="font-size:11px;color:var(--t3)">신청일자</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${s.appDate||'-'}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">연간참여횟수</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${s.participationCount||'0'}회</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">국민취업제도참여</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.nationalEmpSupport)}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">고용보험가입</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.empInsurance)}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">개인정보동의</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.privacyConsent)}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">내용이상여부</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.anomalyCheck)}</div></div>
+          <div><div style="font-size:11px;color:var(--t3)">첨부파일유무</div><div style="font-size:13px;font-weight:600">${yn(s.hasAttachment)}</div></div>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📝 지원서 내용</div>
+      <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:4px">지원동기</div>
+        <div style="font-size:13px;line-height:1.6;margin-bottom:12px;white-space:pre-wrap">${s.motivation||'-'}</div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:4px">향후 비전 및 포부 (수행계획)</div>
+        <div style="font-size:13px;line-height:1.6;margin-bottom:12px;white-space:pre-wrap">${s.vision||'-'}</div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:4px">관련 경력(경험)</div>
+        <div style="font-size:13px;line-height:1.6;white-space:pre-wrap">${s.experience||'-'}</div>
+      </div>
+      
+      <div class="flex gap2 mb4">
+         <button class="btn btn-outline-blue w-full" onclick="window.open('${s.portfolio||'#'}')">포트폴리오 열기</button>
+         <button class="btn btn-outline-blue w-full" onclick="window.open('${s.resume||'#'}')">이력서 열기</button>
+      </div>
+
+      ${otherApps.length > 0 ? `
+      <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:10px">🏢 타 기업 지원 현황</div>
+      <div style="background:var(--orange2); border-radius:var(--r); padding:16px; border:1px solid rgba(245,158,11,.2)">
+        <div style="font-size:13px;color:var(--t1)">이 면접자는 <strong>${otherApps.join(', ')}</strong> 에도 지원했습니다.</div>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderStudentReportTab(s, coId) {
+  const report = s.reports && s.reports[coId];
+  if (!report || typeof report === 'string' || Object.keys(report).length === 0) {
+     return `<div class="card" style="padding:60px;text-align:center;background:transparent;border:1px dashed var(--border2)">
+        <div class="empty-ico" style="font-size:36px;margin-bottom:12px">📄</div>
+        <div style="font-size:16px;font-weight:700;color:var(--t1)">면접 리포트가 없습니다.</div>
+        <div style="font-size:13px;color:var(--t3);margin-top:8px">면접 진행 후 AI가 내용을 분석하여 자동으로 생성합니다.</div>
+     </div>`;
+  }
+
+  return `
+  <div class="ph flex jb aic">
+     <div>
+       <div class="ph-t" style="font-size:18px">${report.title}</div>
+       <div class="ph-s" style="margin-top:6px; color:var(--t2)">일시: ${report.date} ${report.time} &nbsp;|&nbsp; 기록 시간: ${report.duration}</div>
+     </div>
+     <button class="btn btn-outline-blue" onclick="alert('AI 요약 및 평가 PDF 다운로드가 시작됩니다.')">📄 AI 요약/평가 PDF 다운로드</button>
+  </div>
+  <div style="display:flex; gap:20px; align-items:flex-start;">
+     <!-- Left Column: STT & Keywords -->
+     <div style="flex:2; display:flex; flex-direction:column; gap:16px;">
+        <div class="card">
+           <div class="ch"><div class="ct">면접자 평가 키워드</div></div>
+           <div class="cb flex gap2 flex-wrap" style="padding:14px 18px">
+              ${report.keywords.map(k => `<span class="badge b-blue" style="font-size:12.5px; padding:6px 12px">${k}</span>`).join('')}
+           </div>
+        </div>
+        <div class="card">
+           <div class="ch"><div class="ct">음성 기록 (STT)</div></div>
+           <div class="cb" style="height:400px; overflow-y:auto; display:flex; flex-direction:column; gap:14px; background:var(--bg)">
+              ${report.transcript.map(t => `
+                 <div style="display:flex; gap:12px; align-items:flex-start;">
+                    <div style="width:36px; height:36px; border-radius:50%; background:${t.speaker==='면접관'?'var(--card2)':'var(--blue2)'}; color:${t.speaker==='면접관'?'var(--t2)':'var(--blue)'}; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0">${t.speaker.substring(0,1)}</div>
+                    <div style="background:${t.speaker==='면접관'?'var(--card2)':'var(--card)'}; padding:10px 14px; border-radius:var(--r); font-size:13px; color:var(--t1); line-height:1.6; border:1px solid ${t.speaker==='면접관'?'var(--border)':'rgba(49,130,246,0.15)'}; max-width:85%">
+                       <div style="font-size:11px; font-weight:700; color:${t.speaker==='면접관'?'var(--t3)':'var(--blue)'}; margin-bottom:4px">${t.speaker}</div>
+                       ${t.text}
+                    </div>
+                 </div>
+              `).join('')}
+           </div>
+        </div>
+     </div>
+     
+     <!-- Right Column: AI Summary & Evaluation -->
+     <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+        <div class="card">
+           <div class="ch" style="background:var(--blue2); border-bottom:1px solid rgba(49,130,246,0.1)"><div class="ct" style="color:var(--blue)">✨ AI 요약 내용</div></div>
+           <div class="cb" style="font-size:13px; line-height:1.7; color:var(--t1); white-space:pre-wrap;">${report.aiSummary}</div>
+        </div>
+        <div class="card">
+           <div class="ch" style="background:var(--blue2); border-bottom:1px solid rgba(49,130,246,0.1)"><div class="ct" style="color:var(--blue)">💡 AI 평가</div></div>
+           <div class="cb" style="font-size:13px; line-height:1.7; color:var(--t1); white-space:pre-wrap;">${report.aiEvaluation}</div>
+        </div>
+     </div>
+  </div>
+  `;
 }
 
 function createEmptyStudent() { return { targetCompanyName: '', name: '', appDate: '', birth: '', addr: '', phone: '', email: '', edLevel: '', school: '', faculty: '', dept: '', participationCount: '0', nationalEmpSupport: 'N', empInsurance: 'N', privacyConsent: 'Y', anomalyCheck: 'N', hasAttachment: 'N', motivation: '', vision: '', experience: '', reports: {} }; }
@@ -1120,7 +1430,7 @@ function renderCoDates(){
           ${dates.length===0?`<div class="empty"><div class="empty-ico">📅</div><div class="empty-t">달력에서 면접을 진행할 날짜를 먼저 클릭해주세요</div></div>`:''}
           ${dates.map(d=>{
             const slots=co.dateSlots[d]||[]
-            return`<div style="margin-bottom:12px;padding:12px;border:1.5px solid var(--blue);border-radius:var(--r2);background:var(--blue2)">
+            return`<div style="margin-bottom:12px;padding:12px;border:1px solid var(--blue);border-radius:var(--r2);background:var(--blue2)">
               <div class="flex jb aic mb2">
                 <div style="font-size:13.5px;font-weight:700;color:var(--blue)">${fmtDate(d)}</div>
                 <button onclick="calToggle('co-cal','${d}')" style="width:20px;height:20px;border-radius:50%;background:rgba(49,130,246,.15);border:none;color:var(--blue)">×</button>
@@ -1155,104 +1465,6 @@ function renderCoApplicants(){
   </div></div>`
 }
 
-function renderVideoOverlay() {
-  const coId = (S.modal && S.modal.coId) ? S.modal.coId : S.user.companyId;
-  const co = getCo(coId);
-  
-  let scheduled = [];
-  if (S.matchResults && S.matchResults.matches) {
-    scheduled = S.matchResults.matches.filter(m => m.coId === co.id);
-  } else {
-    // 매칭 전 폴백
-    scheduled = DB.students.filter(s => s.apps.includes(co.id)).map(s => ({stId: s.id, stName: s.name, time: '미정 (매칭 전)'}));
-  }
-  
-  if(scheduled.length === 0) return `<div class="ov" onmousedown="if(event.target===this){S.modal=null;render()}"><div class="modal m-mid"><div class="mh"><div class="mt">화상 대시보드</div><button class="mcl" onclick="S.modal=null;render()">×</button></div><div class="mb-scroll"><div class="empty">배정된 면접자가 없습니다.</div></div></div></div>`;
-  
-  if(!S.activeVideoStId) S.activeVideoStId = scheduled[0].stId;
-  const activeSt = getSt(S.activeVideoStId);
-  
-  return `
-    <div class="ov" style="padding:0; background:rgba(0,0,0,0.85); z-index:9999;">
-      <div style="width:100vw; height:100vh; display:flex; flex-direction:column; background:var(--bg);">
-        <!-- Header -->
-        <div style="height:60px; background:var(--card); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0;">
-          <div style="font-size:18px; font-weight:800; display:flex; align-items:center; gap:8px;">
-            <span style="display:inline-block; width:10px; height:10px; background:var(--red); border-radius:50%;"></span>
-            🎙 화상 대시보드 - ${co.name}
-          </div>
-          <button class="btn btn-ghost" onclick="S.modal=null;render()">나가기 ✕</button>
-        </div>
-        
-        <!-- Content -->
-        <div style="display:flex; flex:1; gap:16px; padding:16px; overflow:hidden;">
-          
-          <!-- Left: Applicant List -->
-          <div style="width:260px; background:var(--card); border-radius:var(--r2); border:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0;">
-            <div style="padding:14px; border-bottom:1px solid var(--border); font-weight:800; font-size:15px; color:var(--blue)">면접 대상자 리스트</div>
-            <div style="flex:1; overflow-y:auto; padding:10px;">
-              ${scheduled.map(m => `
-                <div onclick="S.activeVideoStId='${m.stId}';render()" style="padding:12px; border-radius:var(--r); border:1px solid ${S.activeVideoStId===m.stId?'var(--blue)':'var(--border)'}; background:${S.activeVideoStId===m.stId?'var(--blue2)':'var(--card)'}; cursor:pointer; margin-bottom:8px;">
-                  <div style="font-weight:700; font-size:14px; color:${S.activeVideoStId===m.stId?'var(--blue)':'var(--t1)'}">${m.stName} 면접자</div>
-                  <div style="font-size:11px; color:var(--t2); margin-top:4px;">🕒 배정 시간: ${m.time}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-          
-          <!-- Center: Video(2/3) & Detail(1/3) -->
-          <div style="flex:1; display:flex; flex-direction:column; gap:16px; min-width:0;">
-            <!-- BLACK BOX FOR VIDEO -->
-            <div style="flex:2; background:#000; border-radius:var(--r2); display:flex; align-items:center; justify-content:center; color:#555; font-size:15px; font-weight:600; position:relative; min-height:0;">
-              (화상 화면 영역 - 추후 기능 연동 예정)
-              <div style="position:absolute; top:16px; left:16px; background:rgba(255,255,255,0.1); color:#fff; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; border:1px solid rgba(255,255,255,0.2);">
-                현재 연결: ${activeSt.name} 면접자
-              </div>
-            </div>
-             
-            <!-- Detail Region -->
-            <div style="flex:1; background:var(--card); border-radius:var(--r2); border:1px solid var(--border); padding:20px; overflow-y:auto; min-height:0;">
-              <div style="font-weight:800; font-size:16px; margin-bottom:12px; color:var(--blue)">${activeSt.name} 상세 정보</div>
-              <div class="frow" style="align-items:flex-start">
-                <div>
-                   <div style="font-size:11px;color:var(--t3)">학교/학과</div>
-                   <div style="font-size:13px;font-weight:600;margin-bottom:8px">${activeSt.school||'-'} ${activeSt.dept||'-'}</div>
-                   <div style="font-size:11px;color:var(--t3)">관련 경험</div>
-                   <div style="font-size:13px;font-weight:600;margin-bottom:8px; max-height:40px; overflow:hidden; text-overflow:ellipsis">${activeSt.experience||'-'}</div>
-                </div>
-                <div>
-                   <div style="font-size:11px;color:var(--t3)">지원동기</div>
-                   <div style="font-size:13px;font-weight:600;margin-bottom:8px; max-height:80px; overflow:hidden; text-overflow:ellipsis">${activeSt.motivation||'-'}</div>
-                </div>
-              </div>
-              <div class="flex gap2 mt3">
-                <button class="btn btn-outline-blue btn-sm" onclick="window.open('${activeSt.portfolio||'#'}')">포트폴리오 조회</button>
-                <button class="btn btn-outline-blue btn-sm" onclick="window.open('${activeSt.resume||'#'}')">이력서 열람</button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Right: Waiting Room Preview -->
-          <div style="width:240px; background:var(--card2); border-radius:var(--r2); border:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0;">
-             <div style="padding:14px; border-bottom:1px solid var(--border); font-weight:800; display:flex; align-items:center; gap:6px; font-size:14px;">
-               <span style="display:inline-block; width:8px; height:8px; background:var(--green); border-radius:50%;"></span> 대기방 미리보기 (소리X)
-             </div>
-             <div style="flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:10px;">
-               ${scheduled.filter(m => m.stId !== S.activeVideoStId).map(m => `
-                 <div style="background:#222; border-radius:8px; aspect-ratio:4/3; position:relative; display:flex; align-items:center; justify-content:center; color:#777; font-size:12px; border:1px solid #444;">
-                   <div style="position:absolute; bottom:6px; left:6px; font-size:11px; color:#fff; background:rgba(0,0,0,0.6); padding:2px 6px; border-radius:4px;">${m.stName} 대기중</div>
-                   🎥 화면
-                 </div>
-               `).join('')}
-               ${scheduled.length <= 1 ? `<div class="empty" style="padding:20px 0; font-size:12px">대기 중인 인원이 없습니다.</div>` : ''}
-             </div>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  `;
-}
 
 // ═══════════════════════════════════════════
 // STUDENT VIEW
