@@ -82,8 +82,14 @@ a{text-decoration:none;color:inherit}
 .ct{font-size:15px;font-weight:700;color:var(--t1)}
 .cb{padding:18px}
 .company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.acard{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:15px;cursor:pointer;transition:all .15s}
-.acard:hover{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue2)}
+.acard{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:20px;cursor:pointer;transition:all .15s}
+.acard:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(49,130,246,.1);transform:translateY(-2px)}
+.acard-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.acard-name{font-size:16px;font-weight:800;color:var(--t1)}
+.acard-meta{font-size:12px;color:var(--t2);margin-top:4px}
+.acard-info{background:var(--card2);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.acard-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px}
+.acard-row:last-child{margin-bottom:0}
 
 /* === BADGE & AVATAR === */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:999px;font-size:11.5px;font-weight:700;flex-shrink:0}
@@ -108,6 +114,7 @@ tr:hover td{background:rgba(49,130,246,.02)}
 .modal{background:var(--bg);border-radius:var(--r3);box-shadow:0 20px 60px rgba(0,0,0,.18);width:100%;max-height:95vh;display:flex;flex-direction:column;position:relative;animation:modalIn .2s ease; overflow:hidden}
 @keyframes modalIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
 .m-huge{max-width:1100px; height:90vh}
+.m-mid{max-width:600px}
 .mcl{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--t2);z-index:10;transition:all .15s}
 .mcl:hover{background:var(--red2);color:var(--red);border-color:transparent}
 .mh{padding:20px 24px; background:var(--card); border-bottom:1px solid var(--border); flex-shrink:0}
@@ -151,27 +158,6 @@ tr:hover td{background:rgba(49,130,246,.02)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .chip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:999px;background:var(--blue2);border:1px solid rgba(49,130,246,.2);font-size:12px;font-weight:600;color:var(--blue)}
 .chip-x{cursor:pointer;font-size:13px;line-height:1;opacity:.6;margin-left:2px}.chip-x:hover{opacity:1}
-
-/* === STEPS & PROG HERO & ISECT === */
-.prog-hero{background:linear-gradient(135deg,#2563EB,#7C3AED);border-radius:var(--r2);padding:20px 24px;color:#fff;margin-bottom:22px}
-.prog-hero-name{font-size:20px;font-weight:900;letter-spacing:-.4px}
-.prog-hero-period{font-size:12.5px;opacity:.85;margin-top:4px}
-.prog-hero-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.prog-hero-badge{padding:3px 10px;background:rgba(255,255,255,.2);border-radius:999px;font-size:12px;font-weight:600}
-.steps{display:flex;align-items:center;gap:0;margin-bottom:22px}
-.step{display:flex;align-items:center;gap:7px}
-.step-n{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.step.done .step-n{background:var(--green);color:#fff}
-.step.active .step-n{background:var(--blue);color:#fff}
-.step.pending .step-n{background:var(--card2);color:var(--t3);border:1.5px solid var(--border)}
-.step-lbl{font-size:12px;font-weight:600;white-space:nowrap}
-.step.done .step-lbl{color:var(--t2)}.step.active .step-lbl{color:var(--blue)}.step.pending .step-lbl{color:var(--t3)}
-.step-line{flex:1;height:1.5px;background:var(--border);margin:0 4px;min-width:16px}
-.isect{background:var(--card2);border-radius:var(--r);padding:12px 13px;margin-bottom:10px}
-.ir{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
-.ir:last-child{border-bottom:none}
-.ik{font-size:12px;font-weight:600;color:var(--t3);min-width:100px;flex-shrink:0;padding-top:1px}
-.iv2{font-size:13px;color:var(--t1);flex:1;line-height:1.5}
 
 /* === MISC === */
 .ph{margin-bottom:22px}.ph-t{font-size:21px;font-weight:900;color:var(--t1);letter-spacing:-.5px}.ph-s{font-size:13px;color:var(--t3);margin-top:3px}
@@ -219,12 +205,12 @@ const PROGRAMS=[
 
 const DB={
   companies:[
-    {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr',mode:'online',type:'1on1', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'12:00'}], '2025-08-06':[{start:'09:00',end:'11:00'}]}},
-    {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr',mode:'offline',type:'group', status:'selecting', submitted:true, dateSlots:{'2025-08-06':[{start:'10:00',end:'13:00'}]}},
+    {id:'c1',name:'카카오엔터테인먼트',industry:'IT/콘텐츠',email:'kakao@intern.kr', managerEmail:'hr@kakao.com', managerPhone:'010-1111-2222', mode:'online',type:'1on1', status:'select_done', submitted:true, dateSlots:{'2025-08-05':[{start:'10:00',end:'12:00'}], '2025-08-06':[{start:'09:00',end:'11:00'}]}},
+    {id:'c2',name:'네이버웹툰',industry:'IT/플랫폼',email:'naver@intern.kr', managerEmail:'hr@naver.com', managerPhone:'010-3333-4444', mode:'offline',type:'group', status:'selecting', submitted:true, dateSlots:{'2025-08-06':[{start:'10:00',end:'13:00'}]}},
   ],
   students:[
-    {id:'s1', apps:['c1', 'c2'], name:'김민준', school:'한국대학교', dept:'컴퓨터공학과', appDate:'2025-07-20', edLevel:'대학교 재학', avail:{'c1':['2025-08-05']}, interviewStatus:{}},
-    {id:'s2', apps:['c1'], name:'이서연', school:'서울대학교', dept:'시각디자인학과', appDate:'2025-07-21', edLevel:'대학교 재학', avail:{}, interviewStatus:{}},
+    {id:'s1', apps:['c1', 'c2'], name:'김민준', birth:'2000-03-15', phone:'010-1234-5678', email:'minjun@intern.kr', addr:'서울 강남구 역삼동', edLevel:'대학교 재학', school:'한국대학교', faculty:'공과대학', dept:'컴퓨터공학과', appDate:'2025-07-20', participationCount:'0', nationalEmpSupport:'N', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'Y', motivation:'실무 경험을 통해 성장하고 싶습니다.', vision:'훌륭한 개발자', experience:'동아리 프로젝트', portfolio:'https://google.com', resume:'https://google.com', avail:{'c1':['2025-08-05']}, interviewStatus:{'c1':'pass'}},
+    {id:'s2', apps:['c1'], name:'이서연', birth:'2001-07-22', phone:'010-2345-6789', email:'seoyeon@intern.kr', addr:'서울 마포구', edLevel:'대학교 재학', school:'서울대학교', faculty:'미술대학', dept:'시각디자인학과', appDate:'2025-07-21', participationCount:'1', nationalEmpSupport:'Y', empInsurance:'N', privacyConsent:'Y', anomalyCheck:'N', hasAttachment:'N', motivation:'UX/UI 역량을 펼치고 싶습니다.', vision:'수석 디자이너', experience:'외주 경험', portfolio:'', resume:'', avail:{}, interviewStatus:{}},
   ],
   notices:[]
 }
@@ -237,6 +223,11 @@ const S={
   loginRole:'admin', loginEmail:'admin@intern.kr', loginPw:'1234', loginErr:'',
   progTypeFilter:'인턴형',
   
+  // Admin Company Dashboard States
+  adminSubView: 'grid', // 'grid' or 'co_dash'
+  activeCoId: null,
+  coTab: 'settings', // 'settings' or 'applicants'
+
   modal: null,
   addDataTab: 'manual', manualDrafts: [], excelParsedData: null,
   calStates: {}, toasts: [], matchResults: null
@@ -321,12 +312,6 @@ function calToggle(id,ds){
 // ═══════════════════════════════════════════
 // LOGIN VIEW & PROG SELECT
 // ═══════════════════════════════════════════
-const HINTS={
-  admin:[['운영진','admin@intern.kr','1234']],
-  company:[['카카오','kakao@intern.kr','1234']],
-  student:[['김민준','minjun@intern.kr','1234']],
-}
-
 function renderLogin(){
   return`<div class="login-wrap">
   <div class="login-card">
@@ -335,13 +320,13 @@ function renderLogin(){
     </div>
     <div class="fg"><div class="fl">역할 선택</div>
       <div class="role-grid">
-        ${[['admin','🛠️','운영진','프로그램 관리'],['company','🏢','기업','면접 설정'],['student','🎓','학생','날짜 선택']].map(([r,ico,n,d])=>`
+        ${[['admin','🛠️','운영진','프로그램 관리'],['company','🏢','기업','면접 설정'],['student','🎓','면접자','날짜 선택']].map(([r,ico,n,d])=>`
         <div class="role-btn ${S.loginRole===r?'sel':''}" onclick="S.loginRole='${r}';S.loginErr='';render()">
           <div class="role-icon">${ico}</div><div class="role-name">${n}</div><div class="role-desc">${d}</div>
         </div>`).join('')}
       </div>
     </div>
-    <div class="acct-hint"><strong>테스트 계정</strong><br>${HINTS[S.loginRole].map(([n,e,p])=>`${n}: <strong>${e}</strong> / ${p}`).join('<br>')}</div>
+    <div class="acct-hint"><strong>테스트 계정</strong><br>admin@intern.kr / kakao@intern.kr / minjun@intern.kr (PW: 1234)</div>
     <div class="fg"><label class="fl">이메일</label><input class="fi" type="email" value="${S.loginEmail}" oninput="S.loginEmail=this.value"></div>
     <div class="fg"><label class="fl">비밀번호</label><input class="fi" type="password" value="${S.loginPw}" oninput="S.loginPw=this.value" onkeydown="if(event.key==='Enter')doLogin()"></div>
     ${S.loginErr?`<div style="color:var(--red);margin-bottom:12px">${S.loginErr}</div>`:''}
@@ -360,7 +345,7 @@ function doLogin(){
   S.view = 'prog-select'; S.progTypeFilter = '인턴형';
   render()
 }
-function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,modal:null});render()}
+function doLogout(){Object.assign(S,{view:'login',tab:'',user:null,prog:null,modal:null,adminSubView:'grid',activeCoId:null});render()}
 
 function renderProgSelectView(){
   const statusLabel={active:'진행중',upcoming:'예정',done:'완료'}
@@ -392,7 +377,7 @@ function renderProgSelectView(){
 
 function enterDashboard(progId) {
   S.prog = PROGRAMS.find(x => x.id === progId);
-  if(S.user.role === 'admin') { S.view = 'admin'; S.tab = 'management'; }
+  if(S.user.role === 'admin') { S.view = 'admin'; S.tab = 'management'; S.adminSubView = 'grid'; }
   else if(S.user.role === 'company') { S.view = 'company'; S.tab = 'co-settings'; }
   else if(S.user.role === 'student') { S.view = 'student'; S.tab = 'st-status'; }
   render();
@@ -410,7 +395,7 @@ function renderShell(sidebar,main){
       <div style="flex:1"></div>
       ${S.view==='admin'?`<span class="badge b-teal">🛠 운영진</span>`:''}
       ${S.view==='company'?`<span style="font-weight:700">${getCo(S.user.companyId)?.name}</span><span class="badge b-blue">기업</span>`:''}
-      ${S.view==='student'?`<span style="font-weight:700">${getSt(S.user.studentId)?.name}</span><span class="badge b-purple">학생</span>`:''}
+      ${S.view==='student'?`<span style="font-weight:700">${getSt(S.user.studentId)?.name}</span><span class="badge b-purple">면접자</span>`:''}
       <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">로그아웃</button>
     </div>
@@ -432,26 +417,29 @@ const ADMIN_NAV=[
 function renderAdmin(){
   const sidebar=`<div class="nav-section">
     <div class="nav-label">대시보드 메뉴</div>
-    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';render()"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
+    ${ADMIN_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';S.adminSubView='grid';render()"><svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}</div>`).join('')}
   </div>`
   
   let main=''
   if(S.tab==='notice') main = `<div class="ph"><div class="ph-t">공지사항</div></div><div class="card"><div class="empty">공지사항 관리</div></div>`
-  else if(S.tab==='management') main = renderManagement()
+  else if(S.tab==='management') {
+      if(S.adminSubView === 'co_dash') main = renderAdminCompanyDashboard()
+      else main = renderManagementGrid()
+  }
   else if(S.tab==='settings') main = renderSettings()
   
   return renderShell(sidebar,main)
 }
 
-function renderManagement(){
+function renderManagementGrid(){
   const statusLabel = {'before_select': '일정 선택 전', 'select_done': '일정 선택 완료', 'selecting': '선발중', 'selection_complete': '선발 완료'};
   const statusColor = {'before_select': 'b-gray', 'select_done': 'b-blue', 'selecting': 'b-green', 'selection_complete': 'b-purple'};
 
   return `<div>
     <div class="ph flex jb aic">
-      <div><div class="ph-t">면접관리</div><div class="ph-s">${S.prog.name} 기업 및 지원자 현황</div></div>
+      <div><div class="ph-t">면접관리</div><div class="ph-s">${S.prog.name} 기업 및 면접자 현황 (카드를 클릭하여 상세 대시보드 진입)</div></div>
       <button class="btn btn-blue" onclick="openAddDataModal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="margin-right:4px"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg> 지원자 일괄 등록
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="margin-right:4px"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg> 면접자 일괄 등록
       </button>
     </div>
     
@@ -461,7 +449,7 @@ function renderManagement(){
         const total = coStudents.length;
         const submitted = coStudents.filter(s => s.avail && s.avail[co.id] && s.avail[co.id].length > 0).length;
         
-        return `<div class="card" style="padding:20px; transition:transform .15s, box-shadow .15s; cursor:pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--sh2)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--sh)'">
+        return `<div class="card" onclick="S.adminSubView='co_dash';S.activeCoId='${co.id}';S.coTab='settings';render()" style="padding:20px; transition:transform .15s, box-shadow .15s; cursor:pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--sh2)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--sh)'">
           <div class="flex jb aic mb3">
             <div style="font-size:18px; font-weight:800; color:var(--t1)">${co.name}</div>
             <span class="badge ${statusColor[co.status]}">${statusLabel[co.status]}</span>
@@ -473,7 +461,7 @@ function renderManagement(){
           <div style="background:var(--card2); border-radius:var(--r); padding:12px; border:1px solid var(--border)">
             <div class="flex aic jb mb2"><span style="font-size:12px; font-weight:700; color:var(--t3)">🗓 면접 일정</span><span style="font-size:13px; font-weight:600">${S.prog.interviewStart} ~ ${S.prog.interviewEnd}</span></div>
             <div class="flex aic jb mb2"><span style="font-size:12px; font-weight:700; color:var(--t3)">👥 면접자 수</span><span style="font-size:13px; font-weight:600">${total}명</span></div>
-            <div class="flex aic jb"><span style="font-size:12px; font-weight:700; color:var(--t3)">✅ 학생 제출 상태</span><span style="font-size:12px; font-weight:600; color:${submitted===total && total>0 ? 'var(--green)' : 'var(--orange)'}">${submitted}/${total} (면접자 ${total}명중 ${submitted}명 제출)</span></div>
+            <div class="flex aic jb"><span style="font-size:12px; font-weight:700; color:var(--t3)">✅ 면접자 제출 상태</span><span style="font-size:12px; font-weight:600; color:${submitted===total && total>0 ? 'var(--green)' : 'var(--orange)'}">${submitted}/${total} (면접자 ${total}명중 ${submitted}명 제출)</span></div>
           </div>
         </div>`
       }).join('')}
@@ -481,8 +469,125 @@ function renderManagement(){
   </div>`
 }
 
+// ─── 기업 상세 대시보드 (운영진 뷰) ─────────────────────────
+function renderAdminCompanyDashboard() {
+  const co = getCo(S.activeCoId);
+  if(!co) return '';
+  return `<div>
+    <div class="ph flex jb aic">
+      <div class="flex aic gap3">
+        <button class="btn btn-ghost btn-sm" onclick="S.adminSubView='grid';render()">← 뒤로가기</button>
+        <div>
+           <div class="ph-t">${co.name} 대시보드</div>
+           <div class="ph-s">기업 면접 설정 및 배정된 면접자 리스트 확인</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="seg mb4" style="max-width:320px">
+      <button class="seg-btn ${S.coTab==='settings'?'on':''}" onclick="S.coTab='settings';render()">면접 설정 (기업제출 뷰)</button>
+      <button class="seg-btn ${S.coTab==='applicants'?'on':''}" onclick="S.coTab='applicants';render()">면접자 리스트</button>
+    </div>
+
+    ${S.coTab === 'settings' ? renderAdminCoDashSettings(co) : renderAdminCoDashApplicants(co)}
+  </div>`
+}
+
+function renderAdminCoDashSettings(co) {
+  if(co.status === 'before_select' || !co.submitted) {
+    return `<div class="card"><div class="empty"><div class="empty-ico">🏢</div><div class="empty-t">일정 선택 전</div><div class="empty-s">기업 담당자가 아직 면접 설정을 제출하지 않았습니다.</div></div></div>`
+  }
+  const dates=Object.keys(co.dateSlots||{}).sort()
+  return `<div class="card" style="max-width: 640px">
+    <div class="ch"><div class="ct">기업 제출 면접 설정 정보</div></div>
+    <div class="cb">
+      <div class="frow">
+        <div class="fg"><label class="fl">담당자 이메일</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)">${co.managerEmail || '-'}</div></div>
+        <div class="fg"><label class="fl">담당자 전화번호</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)">${co.managerPhone || '-'}</div></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">면접 방식</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)"><span class="badge ${modeClr(co.mode)}">${modeLbl(co.mode)}</span></div></div>
+        <div class="fg"><label class="fl">면접 형태</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)"><span class="badge ${typeClr(co.type)}">${typeLbl(co.type)}</span></div></div>
+      </div>
+      ${co.mode === 'online' ? `<div class="fg"><label class="fl">화상 미팅 링크</label><div class="fi" style="display:flex;align-items:center;background:var(--bg)"><a href="${co.link}" target="_blank" style="color:var(--blue);font-weight:600">${co.link||'미등록'}</a></div></div>` : ''}
+      
+      <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:8px;margin-top:16px">제출된 면접 가능 날짜 및 시간</div>
+      ${dates.map(d=>{
+        const slots=co.dateSlots[d]||[]
+        return`<div style="margin-bottom:8px;padding:12px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg)">
+          <div style="font-size:13px;font-weight:700;margin-bottom:6px">${fmtDate(d)}</div>
+          ${slots.map(s=>`<div class="badge b-gray" style="margin-right:4px">${s.start} ~ ${s.end}</div>`).join('')}
+        </div>`
+      }).join('')}
+    </div>
+  </div>`
+}
+
+function renderAdminCoDashApplicants(co) {
+  const apps = DB.students.filter(s => s.apps && s.apps.includes(co.id));
+  return `<div>
+    <div class="flex jb aic mb3">
+      <div style="font-weight:700; color:var(--t1)">총 ${apps.length}명의 면접자</div>
+      <button class="btn btn-outline-blue btn-sm" onclick="openAddSingleStudentModal('${co.id}')">+ 면접자 단건 등록</button>
+    </div>
+    <div class="company-grid">
+      ${apps.length===0?`<div class="card" style="grid-column:1/-1"><div class="empty">등록된 면접자가 없습니다.</div></div>`:''}
+      ${apps.map(s => renderApplicantCard(s, co.id)).join('')}
+    </div>
+  </div>`
+}
+
+function renderApplicantCard(s, coId) {
+  const isSub = s.avail && s.avail[coId] && s.avail[coId].length > 0;
+  const statusMap = { 'wait': '면접 예정', 'fail': '불합격', 'pre': '예비합격', 'pass': '최종합격' };
+  const stStatus = (s.interviewStatus && s.interviewStatus[coId]) ? s.interviewStatus[coId] : 'wait';
+  const matchText = '일정 미정'; // 실제 매칭 로직 연동 시 변경 가능
+
+  return `<div class="acard" onclick="openStudentDetailAdmin('${s.id}', '${coId}')">
+    <div class="acard-hdr">
+      <div>
+        <div class="acard-name">${s.name}</div>
+        <div class="acard-meta">${s.birth || '생년월일 미상'} | ${s.edLevel || '학력 미상'}</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end">
+        <span class="badge ${isSub?'b-blue':'b-gray'}">${isSub?'제출완료':'미제출'}</span>
+        <span class="badge ${stStatus==='pass'?'b-purple':stStatus==='wait'?'b-green':stStatus==='pre'?'b-orange':'b-red'}">${statusMap[stStatus]}</span>
+      </div>
+    </div>
+    <div class="acard-info">
+      <div class="acard-row"><span style="color:var(--t3)">전화번호</span><span style="font-weight:600">${s.phone||'-'}</span></div>
+      <div class="acard-row"><span style="color:var(--t3)">이메일</span><span style="font-weight:600">${s.email||'-'}</span></div>
+      <div class="acard-row"><span style="color:var(--t3)">소속</span><span style="font-weight:600">${s.faculty||'-'} ${s.dept||'-'}</span></div>
+    </div>
+    <div class="flex jb aic mb3" style="padding:0 4px">
+      <span style="font-size:12px; font-weight:700; color:var(--t3)">면접 일정</span>
+      <span style="font-size:13px; font-weight:700; color:var(--blue)">${matchText}</span>
+    </div>
+    <div class="flex gap2">
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.portfolio||'#'}')">포트폴리오</button>
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation(); window.open('${s.resume||'#'}')">이력서</button>
+    </div>
+  </div>`;
+}
+
+// ─── 데이터 등록 모달 (직접 입력 / 엑셀 업로드) ─────────────────────────
 function openAddDataModal(){ S.modal = { type: 'add-data' }; S.addDataTab = 'manual'; S.manualDrafts = [createEmptyStudent()]; S.excelParsedData = null; render(); }
 function closeAddDataModal(){ S.modal = null; render(); }
+function openAddSingleStudentModal(coId){ 
+  const co = getCo(coId);
+  S.modal = { type: 'add-data' }; 
+  S.addDataTab = 'manual'; 
+  const draft = createEmptyStudent();
+  draft.targetCompanyName = co.name;
+  S.manualDrafts = [draft]; 
+  S.excelParsedData = null; 
+  render(); 
+}
+
+function openStudentDetailAdmin(stId, coId) {
+  S.modal = { type: 'st-detail-admin', stId, coId };
+  render();
+}
 
 function renderModal() {
   const m = S.modal;
@@ -491,7 +596,7 @@ function renderModal() {
       <div class="modal m-huge">
         <button class="mcl" onclick="closeAddDataModal()">×</button>
         <div class="mh">
-          <div class="mt">지원자 등록</div>
+          <div class="mt">면접자 등록</div>
           <div class="seg" style="max-width:400px; margin-top:20px">
             <button class="seg-btn ${S.addDataTab==='manual'?'on':''}" onclick="S.addDataTab='manual';render()">✍️ 직접 입력</button>
             <button class="seg-btn ${S.addDataTab==='excel'?'on':''}" onclick="S.addDataTab='excel';render()">📊 엑셀 일괄 등록</button>
@@ -509,26 +614,102 @@ function renderModal() {
       </div>
     </div>`
   }
+  
+  if(m.type === 'st-detail-admin') {
+    const s = getSt(m.stId);
+    const co = getCo(m.coId);
+    const otherApps = s.apps.filter(id => id !== m.coId).map(id => getCo(id)?.name).filter(Boolean);
+    const yn = val => val==='Y' ? '예 (Y)' : '아니오 (N)';
+    return `<div class="ov" onmousedown="if(event.target===this)closeAddDataModal()">
+      <div class="modal m-huge">
+        <button class="mcl" onclick="closeAddDataModal()">×</button>
+        <div class="mh">
+          <div class="flex aic gap3">
+            <div class="avatar" style="width:52px;height:52px;font-size:20px">${s.name[0]}</div>
+            <div><div class="mt">${s.name} 면접자 상세정보</div><div style="font-size:13px;color:var(--t3);margin-top:4px">${co.name} 배정</div></div>
+          </div>
+        </div>
+        <div class="mb-scroll">
+          <div class="frow" style="align-items:start">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📌 기본 인적사항</div>
+              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
+                <div class="frow">
+                  <div><div style="font-size:11px;color:var(--t3)">이름</div><div style="font-size:14px;font-weight:700;margin-bottom:8px">${s.name}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">생년월일</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.birth||'-'}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">전화번호</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.phone||'-'}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">이메일</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.email||'-'}</div></div>
+                  <div style="grid-column:1/-1"><div style="font-size:11px;color:var(--t3)">주소</div><div style="font-size:14px;font-weight:600">${s.addr||'-'}</div></div>
+                </div>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">🎓 학력 사항</div>
+              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
+                <div class="frow">
+                  <div><div style="font-size:11px;color:var(--t3)">학력</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.edLevel||'-'}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">학교명</div><div style="font-size:14px;font-weight:600;margin-bottom:8px">${s.school||'-'}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">학부</div><div style="font-size:14px;font-weight:600">${s.faculty||'-'}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">학과</div><div style="font-size:14px;font-weight:600">${s.dept||'-'}</div></div>
+                </div>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📑 행정 및 부가 정보</div>
+              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border)">
+                <div class="frow">
+                  <div><div style="font-size:11px;color:var(--t3)">신청일자</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${s.appDate||'-'}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">연간참여횟수</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${s.participationCount||'0'}회</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">국민취업제도참여</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.nationalEmpSupport)}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">고용보험가입</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.empInsurance)}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">개인정보동의</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.privacyConsent)}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">내용이상여부</div><div style="font-size:13px;font-weight:600;margin-bottom:8px">${yn(s.anomalyCheck)}</div></div>
+                  <div><div style="font-size:11px;color:var(--t3)">첨부파일유무</div><div style="font-size:13px;font-weight:600">${yn(s.hasAttachment)}</div></div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px">📝 지원서 내용</div>
+              <div style="background:var(--card2); border-radius:var(--r); padding:16px; border:1px solid var(--border); margin-bottom:20px">
+                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">지원동기</div>
+                <div style="font-size:13px;line-height:1.6;margin-bottom:12px;white-space:pre-wrap">${s.motivation||'-'}</div>
+                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">향후 비전 및 포부 (수행계획)</div>
+                <div style="font-size:13px;line-height:1.6;margin-bottom:12px;white-space:pre-wrap">${s.vision||'-'}</div>
+                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">관련 경력(경험)</div>
+                <div style="font-size:13px;line-height:1.6;white-space:pre-wrap">${s.experience||'-'}</div>
+              </div>
+              
+              <div class="flex gap2 mb4">
+                 <button class="btn btn-outline-blue w-full" onclick="window.open('${s.portfolio||'#'}')">포트폴리오 열기</button>
+                 <button class="btn btn-outline-blue w-full" onclick="window.open('${s.resume||'#'}')">이력서 열기</button>
+              </div>
+
+              ${otherApps.length > 0 ? `
+              <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:10px">🏢 타 기업 지원 현황</div>
+              <div style="background:var(--orange2); border-radius:var(--r); padding:16px; border:1px solid rgba(245,158,11,.2)">
+                <div style="font-size:13px;color:var(--t1)">이 면접자는 <strong>${otherApps.join(', ')}</strong> 에도 지원했습니다. (최대 3개 기업 중복 지원 허용)</div>
+              </div>` : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`
+  }
 }
 
-function createEmptyStudent() { return { targetCompanyId: '', name: '', appDate: '', birth: '', addr: '', phone: '', email: '', edLevel: '', school: '', faculty: '', dept: '', participationCount: '0', nationalEmpSupport: 'N', empInsurance: 'N', privacyConsent: 'Y', anomalyCheck: 'N', hasAttachment: 'N', motivation: '', vision: '', experience: '' }; }
+function createEmptyStudent() { return { targetCompanyName: '', name: '', appDate: '', birth: '', addr: '', phone: '', email: '', edLevel: '', school: '', faculty: '', dept: '', participationCount: '0', nationalEmpSupport: 'N', empInsurance: 'N', privacyConsent: 'Y', anomalyCheck: 'N', hasAttachment: 'N', motivation: '', vision: '', experience: '' }; }
 function updateManualDraft(idx, key, val) { S.manualDrafts[idx][key] = val; }
 function addManualRow() { S.manualDrafts.push(createEmptyStudent()); render(); }
 function removeManualRow(idx) { if(S.manualDrafts.length > 1) { S.manualDrafts.splice(idx, 1); render(); } else alert('최소 1개의 입력폼은 필요합니다.'); }
 
 function renderManualTab() {
-  const coOptions = `<option value="">-- 기업 선택 --</option>` + DB.companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
   const ynOptions = `<option value="Y">Y (예)</option><option value="N" selected>N (아니오)</option>`;
-
   return `<div>
     <div class="flex jb aic mb3">
-      <div style="font-weight:700; color:var(--blue)">총 ${S.manualDrafts.length}명의 지원자 작성 중</div>
-      <button class="btn btn-ghost btn-sm" onclick="addManualRow()">+ 지원자 폼 추가</button>
+      <div style="font-weight:700; color:var(--blue)">총 ${S.manualDrafts.length}명의 면접자 작성 중</div>
+      <button class="btn btn-ghost btn-sm" onclick="addManualRow()">+ 면접자 폼 추가</button>
     </div>
     ${S.manualDrafts.map((draft, idx) => `
     <div style="background:var(--card); border:1px solid var(--blue); border-radius:var(--r2); padding:20px; margin-bottom:20px;">
-      <div class="flex jb aic mb3" style="border-bottom:1px solid var(--border); padding-bottom:12px"><div style="font-size:15px; font-weight:800">지원자 #${idx+1}</div><button class="btn btn-red btn-sm" onclick="removeManualRow(${idx})">삭제</button></div>
-      <div class="fg"><label class="fl">지원 기업 (선택)</label><select class="fs" onchange="updateManualDraft(${idx}, 'targetCompanyId', this.value)">${coOptions}</select></div>
+      <div class="flex jb aic mb3" style="border-bottom:1px solid var(--border); padding-bottom:12px"><div style="font-size:15px; font-weight:800">면접자 #${idx+1}</div><button class="btn btn-red btn-sm" onclick="removeManualRow(${idx})">삭제</button></div>
+      <div class="fg"><label class="fl">지원 기업명 (직접 작성)</label><input class="fi" placeholder="기업명 입력 (예: 카카오엔터테인먼트)" value="${draft.targetCompanyName}" oninput="updateManualDraft(${idx}, 'targetCompanyName', this.value)"></div>
       <div class="frow3">
         <div class="fg"><label class="fl">이름</label><input class="fi" value="${draft.name}" oninput="updateManualDraft(${idx}, 'name', this.value)"></div>
         <div class="fg"><label class="fl">신청일자</label><input class="fi" type="date" value="${draft.appDate}" oninput="updateManualDraft(${idx}, 'appDate', this.value)"></div>
@@ -536,12 +717,12 @@ function renderManualTab() {
       </div>
       <div class="frow3">
         <div class="fg"><label class="fl">전화번호</label><input class="fi" value="${draft.phone}" oninput="updateManualDraft(${idx}, 'phone', this.value)"></div>
-        <div class="fg"><label class="fl">이메일</label><input class="fi" value="${draft.email}" oninput="updateManualDraft(${idx}, 'email', this.value)"></div>
+        <div class="fg"><label class="fl">이메일</label><input class="fi" type="email" value="${draft.email}" oninput="updateManualDraft(${idx}, 'email', this.value)"></div>
         <div class="fg"><label class="fl">주소</label><input class="fi" value="${draft.addr}" oninput="updateManualDraft(${idx}, 'addr', this.value)"></div>
       </div>
       <div class="frow">
-        <div class="fg"><label class="fl">학력 / 학교</label><div class="flex gap2"><input class="fi" value="${draft.edLevel}" oninput="updateManualDraft(${idx}, 'edLevel', this.value)"><input class="fi" value="${draft.school}" oninput="updateManualDraft(${idx}, 'school', this.value)"></div></div>
-        <div class="fg"><label class="fl">학부 / 학과</label><div class="flex gap2"><input class="fi" value="${draft.faculty}" oninput="updateManualDraft(${idx}, 'faculty', this.value)"><input class="fi" value="${draft.dept}" oninput="updateManualDraft(${idx}, 'dept', this.value)"></div></div>
+        <div class="fg"><label class="fl">학력 / 학교</label><div class="flex gap2"><input class="fi" placeholder="예: 대학교(4년제)" value="${draft.edLevel}" oninput="updateManualDraft(${idx}, 'edLevel', this.value)"><input class="fi" placeholder="학교명" value="${draft.school}" oninput="updateManualDraft(${idx}, 'school', this.value)"></div></div>
+        <div class="fg"><label class="fl">학부 / 학과</label><div class="flex gap2"><input class="fi" placeholder="학부명" value="${draft.faculty}" oninput="updateManualDraft(${idx}, 'faculty', this.value)"><input class="fi" placeholder="학과명" value="${draft.dept}" oninput="updateManualDraft(${idx}, 'dept', this.value)"></div></div>
       </div>
       <div class="frow" style="grid-template-columns: repeat(6, 1fr); gap:8px">
         <div class="fg"><label class="fl">연간참여</label><input class="fi" type="number" value="${draft.participationCount}" oninput="updateManualDraft(${idx}, 'participationCount', this.value)"></div>
@@ -552,6 +733,8 @@ function renderManualTab() {
         <div class="fg"><label class="fl">첨부파일</label><select class="fs" onchange="updateManualDraft(${idx}, 'hasAttachment', this.value)">${ynOptions}</select></div>
       </div>
       <div class="fg"><label class="fl">지원동기</label><textarea class="fta" oninput="updateManualDraft(${idx}, 'motivation', this.value)">${draft.motivation}</textarea></div>
+      <div class="fg"><label class="fl">향후 비전 및 포부</label><textarea class="fta" oninput="updateManualDraft(${idx}, 'vision', this.value)">${draft.vision}</textarea></div>
+      <div class="fg"><label class="fl">관련 경력(경험)</label><textarea class="fta" oninput="updateManualDraft(${idx}, 'experience', this.value)">${draft.experience}</textarea></div>
     </div>
     `).join('')}
   </div>`
@@ -561,32 +744,41 @@ function saveManualData() {
   let count = 0;
   S.manualDrafts.forEach(d => {
     if(!d.name) return;
-    DB.students.push({ id: 's_' + Date.now() + Math.floor(Math.random()*1000), apps: d.targetCompanyId ? [d.targetCompanyId] : [], avail: {}, interviewStatus: {}, ...d });
+    const coId = d.targetCompanyName ? getOrCreateCompany(d.targetCompanyName) : null;
+    DB.students.push({ id: 's_' + Date.now() + Math.floor(Math.random()*1000), apps: coId ? [coId] : [], avail: {}, interviewStatus: {}, ...d });
     count++;
   });
   if(count === 0) { alert('입력된 이름이 없습니다.'); return; }
-  showToast(`${count}명의 지원자 등록 완료`); closeAddDataModal();
+  showToast(`${count}명의 면접자 등록 완료`); closeAddDataModal();
 }
 
 function renderExcelTab() {
   let previewHtml = '';
   if (S.excelParsedData) {
     previewHtml = `
-      <div class="tw" style="margin-top:16px; max-height:400px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--r)">
+      <div style="font-size:13px; font-weight:700; color:var(--blue); margin-bottom:8px">미리보기 (총 ${S.excelParsedData.length}건) - 주요 항목만 표시됨</div>
+      <div class="tw" style="margin-top:8px; max-height:400px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--r)">
         <table>
-          <thead><tr><th>매핑 기업</th><th>이름</th><th>학교/학과</th><th>신청일자</th></tr></thead>
+          <thead><tr><th>매핑 기업</th><th>이름</th><th>생년월일</th><th>주소</th><th>휴대전화</th><th>학력</th><th>학교/학과</th><th>지원동기 요약</th></tr></thead>
           <tbody>
-            ${S.excelParsedData.map(r => `<tr><td><span class="badge b-purple">${r.targetCompanyName}</span></td><td style="font-weight:700">${r.name}</td><td>${r.school||'-'} ${r.dept||'-'}</td><td>${r.appDate || '-'}</td></tr>`).join('')}
+            ${S.excelParsedData.map(r => `<tr>
+              <td><span class="badge b-purple">${r.targetCompanyName}</span></td>
+              <td style="font-weight:700">${r.name}</td>
+              <td>${r.birth || '-'}</td>
+              <td style="max-width:100px; overflow:hidden; text-overflow:ellipsis">${r.addr || '-'}</td>
+              <td>${r.phone || '-'}</td>
+              <td>${r.edLevel || '-'}</td>
+              <td>${r.school||'-'} ${r.dept||'-'}</td>
+              <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">${r.motivation || '-'}</td>
+            </tr>`).join('')}
           </tbody>
         </table>
       </div>`;
   }
   return `<div>
-   <div style="font-size:13px; color:var(--t2); margin-bottom:16px; line-height:1.6; padding:12px; background:var(--card2); border-radius:var(--r)">
-      💡 <strong>엑셀 업로드 가이드:</strong><br>
-      - 첫 번째 행은 헤더(컬럼명)로 인식합니다. (파일 내 최상단 쓰레기값 1줄은 자동 무시됨)<br>
-      - '프로그램명' 열의 데이터(예: <code>[넥스트챌린지] 콘텐츠디자인</code>)에서 대괄호 안의 텍스트(<code>넥스트챌린지</code>)를 기업명으로 인식하여 자동 분류합니다.<br>
-      - 연번, 운영기관명 등 불필요한 데이터는 제외하고 저장됩니다.
+    <div style="font-size:13px; color:var(--t2); margin-bottom:16px; line-height:1.6; padding:12px; background:var(--card2); border-radius:var(--r)">
+      💡 <strong>엑셀 업로드 시 필수 포함 열:</strong><br>
+      이름, 생년월일, 주소, 휴대전화번호, 학력, 학교, 학부, 학과, 지원동기, 향후 비전 및 포부(수행계획), 관련 경력(경험)
     </div>
     <label class="file-drop-area" style="display:block">
       <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none" onchange="handleExcelUpload(event)">
@@ -610,7 +802,11 @@ function handleExcelUpload(e) {
         const companyName = match ? match[1].trim() : '미분류기업';
         return {
           id: 's_' + Date.now() + Math.random().toString(36).substr(2, 5), targetCompanyName: companyName,
-          name: row['이름'] || '이름없음', appDate: row['신청일자'] || '', school: row['학교'] || '', dept: row['학과'] || '', apps: [], avail: {}, interviewStatus: {}
+          name: row['이름'] || '이름없음', appDate: row['신청일자'] || '', birth: row['생년월일'] || '', addr: row['주소'] || '', phone: row['휴대전화번호'] || '', email: row['이메일'] || '',
+          edLevel: row['학력'] || '', school: row['학교'] || '', faculty: row['학부'] || '', dept: row['학과'] || '', 
+          participationCount: row['연간참여횟수'] || '0', nationalEmpSupport: row['국민취업지원제도참여여부'] || 'N', empInsurance: row['고용보험가입여부'] || 'N', privacyConsent: row['개인정보활용동의여부'] || 'N', anomalyCheck: row['확인내용이상여부'] || 'N', hasAttachment: row['첨부파일유무'] || 'N',
+          motivation: row['지원동기'] || '', vision: row['향후 비전 및 포부(수행계획)'] || '', experience: row['관련 경력(경험)'] || '',
+          apps: [], avail: {}, interviewStatus: {}
         };
       });
       render();
@@ -621,7 +817,7 @@ function handleExcelUpload(e) {
 
 function getOrCreateCompany(companyName) {
   let co = DB.companies.find(c => c.name === companyName);
-  if (!co) { co = { id: 'c_' + Date.now(), name: companyName, industry: '분류 전', mode: 'online', type: '1on1', status: 'before_select', submitted: false, dateSlots: {} }; DB.companies.push(co); }
+  if (!co) { co = { id: 'c_' + Date.now() + Math.floor(Math.random()*1000), name: companyName, industry: '분류 전', mode: 'online', type: '1on1', status: 'before_select', submitted: false, dateSlots: {} }; DB.companies.push(co); }
   return co.id;
 }
 function saveExcelData() {
@@ -661,10 +857,9 @@ function renderSettings(){
 // COMPANY VIEW
 // ═══════════════════════════════════════════
 const CO_NAV=[
-  {id:'co-settings',label:'면접 설정',ico:'<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2m9-9h-2M5 12H3m14.5-6.5-1.4 1.4M7.9 16.1l-1.4 1.4m11.1 0-1.4-1.4M7.9 7.9 6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'},
+  {id:'co-settings',label:'면접 설정',ico:'<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>'},
   {id:'co-dates',label:'가능 날짜 선택',ico:'<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8"/>'},
-  {id:'co-applicants',label:'지원자 목록',ico:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'},
-  {id:'co-schedule',label:'확정 일정',ico:'<path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'},
+  {id:'co-applicants',label:'면접자 목록',ico:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'},
 ]
 
 function renderCompany(){
@@ -689,20 +884,31 @@ function renderCompany(){
   if(S.tab==='co-settings') main=renderCoSettings()
   else if(S.tab==='co-dates') main=renderCoDates()
   else if(S.tab==='co-applicants') main=renderCoApplicants()
-  else if(S.tab==='co-schedule') main=renderCoSchedule()
   return renderShell(sidebar,main)
 }
 
 function co_set(k,v){const co=getCo(S.user.companyId); co[k]=v; render()}
-function co_save(){getCo(S.user.companyId).submitted=true; showToast('면접 설정이 저장되었습니다!'); S.tab='co-dates'; render();}
+function co_save(){
+  const co = getCo(S.user.companyId);
+  co.managerEmail = document.getElementById('co-m-email').value;
+  co.managerPhone = document.getElementById('co-m-phone').value;
+  co.link = document.getElementById('co-m-link') ? document.getElementById('co-m-link').value : co.link;
+  co.submitted=true; showToast('기본 면접 설정이 저장되었습니다!'); S.tab='co-dates'; render();
+}
 
 function renderCoSettings(){
   const co=getCo(S.user.companyId)
   return`<div>
-  <div class="ph"><div class="ph-t">면접 설정</div><div class="ph-s">면접 방식 및 형태를 설정하세요</div></div>
+  <div class="ph"><div class="ph-t">면접 설정</div><div class="ph-s">면접을 진행할 담당자 정보 및 면접 방식을 설정하세요</div></div>
   <div style="max-width:540px">
     <div class="card mb4">
       <div class="cb">
+        <div class="fg"><label class="fl">기업명</label><div class="fi" style="display:flex;align-items:center;background:var(--bg);color:var(--t2)">${co.name} (자동입력)</div></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">담당자 이메일</label><input class="fi" id="co-m-email" value="${co.managerEmail||''}"></div>
+          <div class="fg"><label class="fl">담당자 전화번호</label><input class="fi" id="co-m-phone" value="${co.managerPhone||''}"></div>
+        </div>
+        <div class="divider"></div>
         <div class="fg"><label class="fl">면접 방식</label>
           <div class="seg" style="max-width:280px">
             <button class="seg-btn ${co.mode==='offline'?'on':''}" onclick="co_set('mode','offline')">🏢 대면</button>
@@ -710,7 +916,7 @@ function renderCoSettings(){
           </div>
         </div>
         ${co.mode==='online'?`<div class="fg"><label class="fl">화상 미팅 링크</label>
-          <input class="fi" type="url" value="${co.link||''}" placeholder="https://meet.google.com/..." oninput="getCo('${co.id}').link=this.value">
+          <input class="fi" type="url" id="co-m-link" value="${co.link||''}" placeholder="https://meet.google.com/...">
         </div>`:''}
         <div class="fg"><label class="fl">면접 형태</label>
           <div class="seg" style="max-width:280px">
@@ -720,7 +926,7 @@ function renderCoSettings(){
         </div>
       </div>
     </div>
-    <button class="btn btn-blue btn-lg w-full" onclick="co_save()">설정 저장 완료</button>
+    <button class="btn btn-blue btn-lg w-full" onclick="co_save()">설정 저장 후 날짜 선택하기 →</button>
   </div></div>`
 }
 
@@ -729,14 +935,14 @@ function renderCoDates(){
   const dates=Object.keys(co.dateSlots||{}).sort()
   const p=S.prog||PROGRAMS[0]
   return`<div>
-  <div class="ph"><div class="ph-t">가능 날짜 선택</div><div class="ph-s">면접 기간(${fmtDate(p.interviewStart)} ~ ${fmtDate(p.interviewEnd)}) 내 날짜를 선택 후 시간대를 설정하세요</div></div>
+  <div class="ph"><div class="ph-t">면접 가능 날짜 및 시간 선택</div><div class="ph-s">운영진이 지정한 기간(${fmtDate(p.interviewStart)} ~ ${fmtDate(p.interviewEnd)}) 내의 날짜만 선택 가능합니다.</div></div>
   <div style="display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start">
     <div>${renderCal({id:'co-cal',sel:dates})}</div>
     <div>
       <div class="card">
         <div class="ch"><div class="ct">선택된 날짜 및 시간대 설정 (${dates.length}일)</div></div>
         <div class="cb">
-          ${dates.length===0?`<div class="empty"><div class="empty-ico">📅</div><div class="empty-t">날짜를 선택해주세요</div></div>`:''}
+          ${dates.length===0?`<div class="empty"><div class="empty-ico">📅</div><div class="empty-t">달력에서 면접을 진행할 날짜를 먼저 클릭해주세요</div></div>`:''}
           ${dates.map(d=>{
             const slots=co.dateSlots[d]||[]
             return`<div style="margin-bottom:12px;padding:12px;border:1.5px solid var(--blue);border-radius:var(--r2);background:var(--blue2)">
@@ -755,36 +961,23 @@ function renderCoDates(){
           }).join('')}
         </div>
       </div>
-      <button class="btn btn-blue btn-lg w-full mt3" onclick="coSubmitDates()" ${dates.length===0?'disabled':''}>날짜 제출 (${dates.length}일)</button>
+      <button class="btn btn-blue btn-lg w-full mt3" onclick="coSubmitDates()" ${dates.length===0?'disabled':''}>면접 정보 최종 제출 (${dates.length}일 선택됨)</button>
     </div>
   </div></div>`
 }
 function coTimeEdit(d,si,k,v){getCo(S.user.companyId).dateSlots[d][si][k]=v;render()}
 function coAddSlot(d){getCo(S.user.companyId).dateSlots[d].push({start:'09:00',end:'12:00'});render()}
 function coRemoveSlot(d,si){getCo(S.user.companyId).dateSlots[d].splice(si,1);render()}
-function coSubmitDates(){getCo(S.user.companyId).status='select_done'; showToast('면접 가능 날짜 제출 완료'); S.tab='co-applicants'; render();}
+function coSubmitDates(){getCo(S.user.companyId).status='select_done'; showToast('운영진에게 면접 일정이 제출되었습니다.'); S.tab='co-applicants'; render();}
 
 function renderCoApplicants(){
   const co=getCo(S.user.companyId)
   const apps=DB.students.filter(s=>s.apps&&s.apps.includes(co.id))
   return`<div>
-  <div class="ph"><div class="ph-t">지원자 목록</div><div class="ph-s">${co.name} 지원자 ${apps.length}명</div></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
-    ${apps.map(s=>`<div class="acard">
-      <div class="flex aic gap2 mb3">
-        <div class="avatar" style="width:40px;height:40px;font-size:15px">${s.name[0]}</div>
-        <div><div style="font-size:14px;font-weight:700">${s.name}</div><div style="font-size:11.5px;color:var(--t3)">${s.school||'-'} · ${s.dept||'-'}</div></div>
-      </div>
-      <div class="flex gap2 flex-wrap">
-        ${(s.avail[co.id]||[]).map(d=>`<span class="badge b-blue">${fmtShort(d)}</span>`).join('')}
-        ${!(s.avail[co.id]||[]).length?`<span class="badge b-orange">일정 미제출</span>`:''}
-      </div>
-    </div>`).join('')}
+  <div class="ph"><div class="ph-t">면접자 목록</div><div class="ph-s">${co.name}에 배정된 면접자 ${apps.length}명</div></div>
+  <div class="company-grid">
+    ${apps.map(s => renderApplicantCard(s, co.id)).join('')}
   </div></div>`
-}
-
-function renderCoSchedule(){
-  return`<div class="ph"><div class="ph-t">확정 일정</div></div><div class="empty"><div class="empty-ico">⏳</div><div class="empty-t">매칭이 아직 진행되지 않았습니다 (대기중)</div></div>`
 }
 
 
@@ -794,7 +987,6 @@ function renderCoSchedule(){
 const ST_NAV=[
   {id:'st-status',label:'지원 현황',ico:'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a1 1 0 0 0-1 1v0a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v0a1 1 0 0 0-1-1H9z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'},
   {id:'st-dates',label:'날짜 선택',ico:'<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8"/>'},
-  {id:'st-schedule',label:'확정 일정',ico:'<path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'},
 ]
 
 function renderStudent(){
@@ -807,7 +999,7 @@ function renderStudent(){
     </div>
   </div>
   <div class="nav-section">
-    <div class="nav-label">학생 메뉴</div>
+    <div class="nav-label">면접자 메뉴</div>
     ${ST_NAV.map(n=>`<div class="nav-item ${S.tab===n.id?'active':''}" onclick="S.tab='${n.id}';render()">
       <svg class="ni-icon" viewBox="0 0 24 24" fill="none">${n.ico}</svg>${n.label}
     </div>`).join('')}
@@ -815,7 +1007,6 @@ function renderStudent(){
   let main=''
   if(S.tab==='st-status') main=renderStStatus()
   else if(S.tab==='st-dates') main=renderStDates()
-  else if(S.tab==='st-schedule') main=renderStSchedule()
   return renderShell(sidebar,main)
 }
 
@@ -873,10 +1064,6 @@ function renderStDates(){
       <button class="btn btn-blue btn-lg w-full mt3" onclick="showToast('날짜 제출 완료');render()" ${myD.length===0?'disabled':''}>날짜 제출 (${myD.length}일)</button>
     </div>
   </div></div>`
-}
-
-function renderStSchedule(){
-  return`<div class="ph"><div class="ph-t">확정 일정</div></div><div class="empty"><div class="empty-ico">⏳</div><div class="empty-t">매칭이 아직 진행되지 않았습니다 (대기중)</div></div>`
 }
 
 // ═══════════════════════════════════════════
